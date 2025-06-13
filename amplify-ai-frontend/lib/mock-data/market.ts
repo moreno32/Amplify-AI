@@ -7,41 +7,45 @@ export const mockUser: User = {
   onboardingCompleted: true,
 };
 
-export const mockCompetitors = [
+export const mockCompetitors: Competitor[] = [
     {
-      id: 'comp_1',
-      name: 'TitanFit',
-      username: '@titanfit_club',
-      avatarUrl: 'https://picsum.photos/100/100?random=14',
-      followers: 25200,
-      engagementRate: 3.2,
-      recentPostImageUrl: 'https://picsum.photos/400/400?random=15',
+        name: "Gymbox",
+        logoUrl: "https://picsum.photos/100/100?random=10",
+        postImageUrl: "https://picsum.photos/400/300?random=11",
+        stats: [
+            { label: "Publicaciones/sem", value: "8", isBetter: true },
+            { label: "Engagement Prom.", value: "2.1%", isBetter: false },
+            { label: "Hashtag Dominante", value: "#outofthebox", isBetter: true },
+        ]
     },
     {
-      id: 'comp_2',
-      name: 'Femme Power',
-      username: '@femme.power.gym',
-      avatarUrl: 'https://picsum.photos/100/100?random=16',
-      followers: 12900,
-      engagementRate: 4.8,
-      recentPostImageUrl: 'https://picsum.photos/400/400?random=17',
+        name: "Third Space",
+        logoUrl: "https://picsum.photos/100/100?random=12",
+        postImageUrl: "https://picsum.photos/400/300?random=13",
+        stats: [
+            { label: "Publicaciones/sem", value: "5", isBetter: false },
+            { label: "Engagement Prom.", value: "3.5%", isBetter: true },
+            { label: "Hashtag Dominante", value: "#luxurytraining", isBetter: true },
+        ]
     },
     {
-      id: 'comp_3',
-      name: 'The Core Club',
-      username: '@thecoreclub',
-      avatarUrl: 'https://picsum.photos/100/100?random=18',
-      followers: 31500,
-      engagementRate: 4.5,
-      recentPostImageUrl: 'https://picsum.photos/400/400?random=19',
+        name: "Barry's",
+        logoUrl: "https://picsum.photos/100/100?random=14",
+        postImageUrl: "https://picsum.photos/400/300?random=15",
+        stats: [
+            { label: "Publicaciones/sem", value: "12", isBetter: true },
+            { label: "Engagement Prom.", value: "1.8%", isBetter: false },
+            { label: "Hashtag Dominante", value: "#redroom", isBetter: false },
+        ]
     },
     {
-      id: 'comp_4',
-      name: 'Lift House',
-      username: '@lifthouse.gym',
-      avatarUrl: 'https://picsum.photos/100/100?random=20',
-      followers: 85000,
-      engagementRate: 2.9,
-      recentPostImageUrl: 'https://picsum.photos/400/400?random=21',
-    },
-  ]; 
+        name: "F45 Training",
+        logoUrl: "https://picsum.photos/100/100?random=16",
+        postImageUrl: "https://picsum.photos/400/300?random=17",
+        stats: [
+            { label: "Publicaciones/sem", value: "7", isBetter: false },
+            { label: "Engagement Prom.", value: "2.9%", isBetter: true },
+            { label: "Hashtag Dominante", value: "#F45challenge", isBetter: true },
+        ]
+    }
+]; 

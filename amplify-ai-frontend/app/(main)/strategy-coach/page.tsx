@@ -4,7 +4,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
-import { mockCompetitors } from '@/lib/mock-data';
+import { mockCompetitors } from '@/lib/mock-data/market';
 import { CompetitorCard } from './components/CompetitorCard';
 import { MarketInsightCard } from './components/MarketInsightCard';
 
