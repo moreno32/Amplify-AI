@@ -88,9 +88,9 @@ export const mockBrandProfile: BrandProfile = {
     ],
     brandPhotos: [
         { id: 'ASSET::Photo::001', url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?fit=crop&w=500&q=80', alt: 'Mujer practicando yoga en la playa al amanecer' },
-        { id: 'ASSET::Photo::002', url: 'https://images.unsplash.com/photo-1599905292414-8e340705fb49?fit=crop&w=500&q=80', alt: 'Detalle de manos en posición de meditación' },
-        { id: 'ASSET::Photo::003', url: 'https://images.unsplash.com/photo-1575052814086-4989e741e54e?fit=crop&w=500&q=80', alt: 'Grupo de mujeres en una clase de yoga' },
-        { id: 'ASSET::Photo::004', url: 'https://images.unsplash.com/photo-1506126613408-4e65f2b4b4d4?fit=crop&w=500&q=80', alt: 'Persona meditando frente a una ventana grande' },
+        { id: 'ASSET::Photo::002', url: 'https://images.unsplash.com/photo-1558017487-957c794952c2?fit=crop&w=500&q=80', alt: 'Detalle de manos en posición de meditación' },
+        { id: 'ASSET::Photo::003', url: 'https://images.unsplash.com/photo-1549576490-001a3ac5c084?fit=crop&w=500&q=80', alt: 'Grupo de mujeres en una clase de yoga' },
+        { id: 'ASSET::Photo::004', url: 'https://images.unsplash.com/photo-1591291621265-b3a8a05c65f3?fit=crop&w=500&q=80', alt: 'Persona meditando frente a una ventana grande' },
         { id: 'ASSET::Photo::005', url: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?fit=crop&w=500&q=80', alt: 'Esterilla de yoga y accesorios en el estudio' },
         { id: 'ASSET::Photo::006', url: 'https://images.unsplash.com/photo-1593164842264-854604db2260?fit=crop&w=500&q=80', alt: 'Mujer sonriendo mientras sostiene una postura de yoga' },
     ],

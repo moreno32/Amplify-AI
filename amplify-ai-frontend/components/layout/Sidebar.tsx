@@ -47,7 +47,7 @@ export function Sidebar() {
     { href: '/analytics', icon: Lightbulb, label: 'Métricas', isActive: pathname.startsWith('/analytics') },
     { href: '/influencers', icon: Users, label: 'Influencers', isActive: pathname.startsWith('/influencers') },
     { href: '/strategy-coach', icon: BrainCircuit, label: 'Strategy Coach', isActive: pathname.startsWith('/strategy-coach') },
-    { href: '/settings', icon: Sparkles, label: 'Perfil de Marca', isActive: pathname.startsWith('/settings') },
+    { href: '/brand-profile', icon: Sparkles, label: 'Perfil de Marca', isActive: pathname.startsWith('/brand-profile') },
   ];
 
   return (

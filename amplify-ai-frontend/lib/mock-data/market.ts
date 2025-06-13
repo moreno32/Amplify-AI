@@ -40,8 +40,9 @@ export const mockCompetitors: Competitor[] = [
       name: 'MindBody Balance',
       username: '@mindbody.b',
       avatarUrl: 'https://images.unsplash.com/photo-1549492423-400259a5e5a9?w=100&h=100&fit=crop&q=80',
-      followers: 12000,
-      engagementRate: 3.9,
-      recentPostImageUrl: 'https://images.unsplash.com/photo-1591291621226-93f5a550ea06?w=400&h=400&fit=crop&q=80',
+      followers: 125000,
+      engagement: '2.8%',
+      recentPostImageUrl: 'https://images.unsplash.com/photo-1548647914-1b455018a3a0?w=400&h=400&fit=crop&q=80',
+      tags: ['Yoga Studio', 'Wellness', 'City Life'],
     },
   ]; 

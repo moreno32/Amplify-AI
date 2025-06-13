@@ -2,6 +2,7 @@ export type PostStatus = 'draft' | 'scheduled' | 'published' | 'idea';
 
 export interface Post {
   id: string;
+  dayOfWeek: string;
   date: string;
   time: string;
   content: string;
@@ -19,14 +20,17 @@ export interface User {
   onboardingCompleted: boolean;
 }
 
+export interface CompetitorStat {
+  label: string;
+  value: string;
+  isBetter: boolean;
+}
+
 export interface Competitor {
-  id: string;
   name: string;
-  username: string;
-  avatarUrl: string;
-  followers: number;
-  engagementRate: number;
-  recentPostImageUrl: string;
+  logoUrl: string;
+  postImageUrl: string;
+  stats: CompetitorStat[];
 }
 
 export interface Influencer {
@@ -107,4 +111,40 @@ export interface BrandProfile {
     logos: { id: string; url: string; name: string }[];
     brandPhotos: { id: string; url: string; alt: string }[];
   };
+}
+
+export interface PerformanceMetric {
+  id: string;
+  title: string;
+  value: string;
+  change: number;
+  changeType: 'increase' | 'decrease';
+  link?: {
+    href: string;
+    label: string;
+  };
+}
+
+export interface AiAction {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  buttonLabel: string;
+}
+
+export interface AiInsight {
+  id: string;
+  insight: string;
+  action?: {
+    href: string;
+    label: string;
+  };
+}
+
+export interface DashboardData {
+    performanceMetrics: PerformanceMetric[];
+    recommendedActions: AiAction[];
+    aiCoachInsights: AiInsight[];
+    upcomingPosts: Post[];
 } 
