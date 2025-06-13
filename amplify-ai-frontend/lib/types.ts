@@ -27,6 +27,7 @@ export interface CompetitorStat {
 }
 
 export interface Competitor {
+  id: string;
   name: string;
   logoUrl: string;
   postImageUrl: string;

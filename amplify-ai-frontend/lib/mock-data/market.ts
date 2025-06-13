@@ -9,6 +9,7 @@ export const mockUser: User = {
 
 export const mockCompetitors: Competitor[] = [
     {
+        id: "comp_1",
         name: "Gymbox",
         logoUrl: "https://picsum.photos/100/100?random=10",
         postImageUrl: "https://picsum.photos/400/300?random=11",
@@ -19,6 +20,7 @@ export const mockCompetitors: Competitor[] = [
         ]
     },
     {
+        id: "comp_2",
         name: "Third Space",
         logoUrl: "https://picsum.photos/100/100?random=12",
         postImageUrl: "https://picsum.photos/400/300?random=13",
@@ -29,6 +31,7 @@ export const mockCompetitors: Competitor[] = [
         ]
     },
     {
+        id: "comp_3",
         name: "Barry's",
         logoUrl: "https://picsum.photos/100/100?random=14",
         postImageUrl: "https://picsum.photos/400/300?random=15",
@@ -39,6 +42,7 @@ export const mockCompetitors: Competitor[] = [
         ]
     },
     {
+        id: "comp_4",
         name: "F45 Training",
         logoUrl: "https://picsum.photos/100/100?random=16",
         postImageUrl: "https://picsum.photos/400/300?random=17",
