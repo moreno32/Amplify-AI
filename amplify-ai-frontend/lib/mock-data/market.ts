@@ -7,6 +7,18 @@ export const mockUser: User = {
   onboardingCompleted: true,
 };
 
+export const mockUserWithStats: Competitor = {
+    id: "user_0",
+    name: "O2CW",
+    logoUrl: "https://picsum.photos/100/100?random=9",
+    postImageUrl: "https://picsum.photos/400/300?random=9",
+    stats: [
+        { label: "Publicaciones/sem", value: "6", isBetter: false },
+        { label: "Engagement Prom.", value: "2.8%", isBetter: false },
+        { label: "Hashtag Dominante", value: "#O2CWmovement", isBetter: false },
+    ]
+};
+
 export const mockCompetitors: Competitor[] = [
     {
         id: "comp_1",

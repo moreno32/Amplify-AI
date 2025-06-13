@@ -4,8 +4,8 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
-import { mockCompetitors } from '@/lib/mock-data/market';
-import { CompetitorCard } from './components/CompetitorCard';
+import { mockCompetitors, mockUserWithStats } from '@/lib/mock-data/market';
+import { CompetitorCard } from '@/app/(main)/analytics/components/CompetitorCard';
 import { MarketInsightCard } from './components/MarketInsightCard';
 
 export default function StrategyCoachPage() {
@@ -35,7 +35,11 @@ export default function StrategyCoachPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {mockCompetitors.map((competitor) => (
-                <CompetitorCard key={competitor.id} competitor={competitor} />
+                <CompetitorCard 
+                  key={competitor.id} 
+                  {...competitor}
+                  userStats={mockUserWithStats.stats}
+                />
               ))}
             </div>
           </div>
