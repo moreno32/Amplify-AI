@@ -1,6 +1,7 @@
-import { BrandProfile, BrandAsset } from '@/lib/types';
+import { BrandProfile } from '@/lib/types';
 
 export const mockBrandProfile: BrandProfile = {
+  name: "O2CW Boutique Gym",
   core: {
     promise: {
       id: 'CORE::Promise::001',

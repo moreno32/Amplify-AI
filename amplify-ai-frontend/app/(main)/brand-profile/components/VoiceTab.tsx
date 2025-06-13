@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BrandProfile } from '@/lib/types';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { mockBrandProfile } from '@/lib/mock-data/brand';
 
 interface VoiceTabProps {
   data: BrandProfile['voice'];

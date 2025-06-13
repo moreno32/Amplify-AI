@@ -6,9 +6,11 @@ import {
   Calendar,
   LayoutGrid,
   Lightbulb,
+  LineChart,
   MessageCircle,
-  Settings,
-  Sparkles,
+  Package,
+  PanelLeft,
+  ShoppingBag,
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -47,7 +49,7 @@ export function Sidebar() {
     { href: '/analytics', icon: Lightbulb, label: 'Métricas', isActive: pathname.startsWith('/analytics') },
     { href: '/influencers', icon: Users, label: 'Influencers', isActive: pathname.startsWith('/influencers') },
     { href: '/strategy-coach', icon: BrainCircuit, label: 'Strategy Coach', isActive: pathname.startsWith('/strategy-coach') },
-    { href: '/brand-profile', icon: Sparkles, label: 'Perfil de Marca', isActive: pathname.startsWith('/brand-profile') },
+    { href: '/brand-profile', icon: LineChart, label: 'Perfil de Marca', isActive: pathname.startsWith('/brand-profile') },
   ];
 
   return (

@@ -8,7 +8,7 @@ import {
   Rocket,
   Search,
 } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 const steps = [
   {
@@ -100,7 +100,11 @@ function WelcomeStep() {
 }
 
 export default function OnboardingPage() {
-  const [currentStep, setCurrentStep] = React.useState(0);
+  const [currentStep] = useState(0);
+  const [formData, setFormData] = useState({
+    businessName: '',
+    industry: '',
+  });
 
   const stepsContent = [<WelcomeStep key="welcome" />];
 

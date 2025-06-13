@@ -136,7 +136,7 @@ export function PostEditorModal({
                 size="sm"
                 value={activePlatform}
                 onValueChange={(value) => {
-                  if (value) setActivePlatform(value as any);
+                  if (value) setActivePlatform(value as 'instagram' | 'facebook');
                 }}
               >
                 <ToggleGroupItem value="instagram" aria-label="Instagram">

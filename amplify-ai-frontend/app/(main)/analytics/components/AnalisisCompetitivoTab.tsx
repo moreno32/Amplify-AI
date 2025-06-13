@@ -1,6 +1,7 @@
 import { AiInsightCard } from "./AiInsightCard";
 import { CompetitorCard } from "./CompetitorCard";
 import { competitiveAnalysisData } from "@/lib/mock-data/metrics";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 export function AnalisisCompetitivoTab() {
   const { user, competitors } = competitiveAnalysisData;
@@ -25,6 +26,20 @@ export function AnalisisCompetitivoTab() {
           />
         ))}
       </div>
+
+      <Card>
+        <CardHeader>
+          <h3 className="text-lg font-semibold">Análisis de Oportunidades</h3>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Basado en el análisis de tus competidores, hemos identificado
+            que su contenido más exitoso se centra en videos cortos (Reels)
+            que muestran &apos;un día en la vida&apos; de sus clientes y tutoriales
+            rápidos sobre el uso de equipamiento.
+          </p>
+        </CardContent>
+      </Card>
 
       <AiInsightCard
         title="Análisis Competitivo"

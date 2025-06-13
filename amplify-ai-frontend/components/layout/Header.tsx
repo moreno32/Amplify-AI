@@ -1,5 +1,6 @@
+'use client';
+
 import {
-  Bell,
   CircleUser,
   Home,
   LineChart,

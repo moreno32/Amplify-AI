@@ -71,6 +71,7 @@ export interface BrandAsset {
 }
 
 export interface BrandProfile {
+  name: string;
   core: {
     promise: { id: string; title: string; content: string };
     narrativeArchetypes: { id: string; title: string; content: string };
