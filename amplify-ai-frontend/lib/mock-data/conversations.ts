@@ -4,7 +4,7 @@ export const mockConversations: Conversation[] = [
   {
     id: 'conv_1',
     contactName: 'Laura Gomez',
-    contactAvatarUrl: '/avatars/09.png',
+    contactAvatarUrl: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&h=100&fit=crop&q=80',
     lastMessage: '¡Hola! ¿Tenéis clases de prueba?',
     timestamp: '2024-10-23T10:30:00.000Z',
     status: 'open',
@@ -21,7 +21,7 @@ export const mockConversations: Conversation[] = [
   {
     id: 'conv_2',
     contactName: 'Carlos Diaz',
-    contactAvatarUrl: '/avatars/10.png',
+    contactAvatarUrl: 'https://images.unsplash.com/photo-1547425260-76bc4ddd9f2a?w=100&h=100&fit=crop&q=80',
     lastMessage: 'Gracias por la ayuda, ¡sois geniales!',
     timestamp: '2024-10-22T15:45:00.000Z',
     status: 'resolved',
@@ -51,7 +51,7 @@ export const mockConversations: Conversation[] = [
   {
     id: 'conv_3',
     contactName: 'Anaïs Martin',
-    contactAvatarUrl: '/avatars/11.png',
+    contactAvatarUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&q=80',
     lastMessage: 'Do you offer services in English?',
     timestamp: '2024-10-23T11:05:00.000Z',
     status: 'unassigned',

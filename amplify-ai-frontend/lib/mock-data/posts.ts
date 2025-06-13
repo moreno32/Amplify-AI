@@ -8,7 +8,7 @@ export const mockPosts: Post[] = [
     content: 'Empezamos la semana con energía. ¿Listos para la clase de Vinyasa?',
     status: 'published',
     platform: 'instagram',
-    imageUrl: '/placeholders/post1.png',
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop&q=80',
   },
   {
     id: 'post_2',
@@ -26,7 +26,7 @@ export const mockPosts: Post[] = [
       'Clase especial de Hatha Yoga este viernes. ¡Plazas limitadas!',
     status: 'scheduled',
     platform: 'facebook',
-    imageUrl: '/placeholders/post2.png',
+    imageUrl: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=400&h=400&fit=crop&q=80',
   },
   {
     id: 'post_4',
@@ -35,6 +35,6 @@ export const mockPosts: Post[] = [
     content: 'Recordatorio: La constancia es la clave del progreso. #YogaLife',
     status: 'draft',
     platform: 'instagram',
-    imageUrl: '/placeholders/post3.png',
+    imageUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=400&h=400&fit=crop&q=80',
   },
 ]; 
