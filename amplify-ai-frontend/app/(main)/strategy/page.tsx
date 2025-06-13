@@ -78,7 +78,7 @@ export default function StrategyCoachPage() {
               <SelectItem value="overview">Visión General del Mercado</SelectItem>
               {mockCompetitors.map((c) => (
                 <SelectItem key={c.id} value={c.id}>
-                  Análisis de {c.username}
+                  Análisis de {c.name}
                 </SelectItem>
               ))}
             </SelectContent>

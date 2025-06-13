@@ -3,6 +3,7 @@ import { PerformanceMetric } from '@/lib/types';
 
 export const competitiveAnalysisData: { user: Competitor; competitors: Competitor[] } = {
   user: {
+    id: "user_brand",
     name: "Tu Marca",
     logoUrl: "/logo.svg", // Placeholder for user's logo
     postImageUrl: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500&q=80",
@@ -14,6 +15,7 @@ export const competitiveAnalysisData: { user: Competitor; competitors: Competito
   },
   competitors: [
     {
+      id: "rival1",
       name: "@rival1",
       logoUrl: "https://i.pravatar.cc/150?u=rival1",
       postImageUrl: "https://images.unsplash.com/photo-1554177255-61502b352de3?w=500&q=80",
@@ -24,6 +26,7 @@ export const competitiveAnalysisData: { user: Competitor; competitors: Competito
       ],
     },
     {
+      id: "competidor_x",
       name: "@competidor_x",
       logoUrl: "https://i.pravatar.cc/150?u=competidor_x",
       postImageUrl: "https://images.unsplash.com/photo-1520607162502-ac42dfa8e1ab?w=500&q=80",
