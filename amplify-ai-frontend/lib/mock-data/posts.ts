@@ -9,6 +9,7 @@ export const mockPosts: Post[] = [
     status: 'published',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop&q=80',
+    isOptimal: true,
   },
   {
     id: 'post_2',
@@ -17,6 +18,7 @@ export const mockPosts: Post[] = [
     content: 'Idea: Reel sobre 3 posturas para mejorar la flexibilidad.',
     status: 'idea',
     platform: 'instagram',
+    isOptimal: true,
   },
   {
     id: 'post_3',
@@ -27,6 +29,7 @@ export const mockPosts: Post[] = [
     status: 'scheduled',
     platform: 'facebook',
     imageUrl: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=400&h=400&fit=crop&q=80',
+    isOptimal: false,
   },
   {
     id: 'post_4',
@@ -36,5 +39,6 @@ export const mockPosts: Post[] = [
     status: 'draft',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=400&h=400&fit=crop&q=80',
+    isOptimal: true,
   },
 ]; 

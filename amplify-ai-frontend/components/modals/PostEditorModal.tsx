@@ -1,112 +1,28 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Post } from '@/lib/mock-data/types';
-import { ImageIcon, RefreshCcw, Upload, Wand2 } from 'lucide-react';
+import { Post } from '@/lib/types';
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Image from 'next/image';
+import { Badge } from '../ui/badge';
+import {
+  Calendar as CalendarIcon,
+  RefreshCcw,
+  Upload,
+  Wand2,
+} from 'lucide-react';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
+import { Instagram, Facebook } from 'lucide-react';
 import React from 'react';
-
-function PostPreview({ post }: { post: Post | null }) {
-  if (!post)
-    return (
-      <div className="hidden md:flex flex-col items-center justify-center h-full bg-muted/40 rounded-lg">
-        <ImageIcon className="h-16 w-16 text-muted-foreground" />
-        <p className="mt-2 text-muted-foreground">Vista Previa del Post</p>
-      </div>
-    );
-
-  return (
-    <div className="hidden md:flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-[350px] border rounded-2xl shadow-lg overflow-hidden bg-background">
-        <div className="p-3 flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-muted" />
-          <span className="font-semibold text-sm">tu_usuario</span>
-        </div>
-        <Image
-          src={post.imageUrl}
-          alt="Post preview"
-          width={400}
-          height={400}
-          className="w-full object-cover aspect-square"
-        />
-        <div className="p-3 text-sm">
-          <p>{post.copy}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function EditingWorkshop({ post }: { post: Post | null }) {
-  if (!post) return null;
-
-  return (
-    <div className="p-6 h-full flex flex-col">
-      <DialogHeader>
-        <DialogTitle className="flex items-center gap-2">
-          Editando Post <Badge>{post.status}</Badge>
-        </DialogTitle>
-      </DialogHeader>
-      <div className="flex-1 mt-4 space-y-6 overflow-y-auto">
-        <div>
-          <h3 className="font-semibold mb-2">Imagen del Post</h3>
-          <div className="relative w-full h-48 rounded-lg overflow-hidden">
-            <Image
-              src={post.imageUrl}
-              alt="Post image to edit"
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
-          <div className="flex gap-2 mt-2">
-            <Button variant="outline" size="sm">
-              <RefreshCcw className="mr-2 h-4 w-4" /> Regenerar con IA
-            </Button>
-            <Button variant="outline" size="sm">
-              <Upload className="mr-2 h-4 w-4" /> Cambiar Imagen
-            </Button>
-          </div>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-2">Copy del Post</h3>
-          <div className="relative">
-            <Textarea defaultValue={post.copy} className="h-48" />
-            <Button
-              size="icon"
-              variant="outline"
-              className="absolute top-2 right-2 rounded-full h-8 w-8"
-            >
-              <Wand2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-2">Programación</h3>
-          {/* DatePicker would go here */}
-          <p className="text-sm text-muted-foreground">
-            Programado para:{' '}
-            {new Date(post.scheduledAt).toLocaleString('es-ES')}
-          </p>
-        </div>
-      </div>
-      <DialogFooter className="mt-6">
-        <Button variant="ghost">Guardar como Borrador</Button>
-        <Button>
-          ✅ Aprobar y Programar
-        </Button>
-      </DialogFooter>
-    </div>
-  );
-}
 
 interface PostEditorModalProps {
   isOpen: boolean;
@@ -114,20 +30,134 @@ interface PostEditorModalProps {
   post: Post | null;
 }
 
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    })
+}
+
 export function PostEditorModal({
   isOpen,
   onOpenChange,
   post,
 }: PostEditorModalProps) {
+  const [activePlatform, setActivePlatform] = React.useState<'instagram' | 'facebook'>('instagram');
+
+  if (!post) return null;
+
+  const scheduleDate = new Date(`${post.date}T${post.time}`);
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 border-0 max-w-5xl h-[700px] grid grid-cols-1 md:grid-cols-[45%_55%] gap-0">
-        <div className="bg-muted/20">
-          <PostPreview post={post} />
+      <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            Editando Post <Badge variant="secondary">{post.status}</Badge>
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="grid grid-cols-2 gap-8 flex-1 overflow-hidden">
+          {/* Left Panel: Preview */}
+          <div className="bg-muted/40 rounded-lg flex flex-col items-center justify-center p-4 overflow-y-auto">
+            <div className='w-full max-w-[350px] border bg-background shadow-lg rounded-lg'>
+                {/* Instagram Header */}
+                <div className="flex items-center p-3">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src="https://images.unsplash.com/photo-1621847412523-04b9b43512d7?w=100&h=100&fit=crop&q=80" />
+                        <AvatarFallback>AI</AvatarFallback>
+                    </Avatar>
+                    <span className="ml-3 font-semibold text-sm">Amplify.AI</span>
+                </div>
+
+                {/* Image */}
+                {post.imageUrl && (
+                    <div className="relative aspect-square">
+                        <Image src={post.imageUrl} alt="Preview" fill className="object-cover" />
+                    </div>
+                )}
+                
+                {/* Actions and Copy */}
+                <div className="p-3">
+                    <p className="text-sm">
+                        <span className="font-semibold">Amplify.AI </span>
+                        {post.content}
+                    </p>
+                </div>
+            </div>
+          </div>
+
+          {/* Right Panel: Editor */}
+          <div className="flex flex-col gap-4 overflow-y-auto pr-2">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Imagen del Post</h3>
+              <div className="relative aspect-video w-full">
+                {post.imageUrl && (
+                  <Image
+                    src={post.imageUrl}
+                    alt="Post image"
+                    fill
+                    className="rounded-md object-cover"
+                  />
+                )}
+              </div>
+              <div className="flex gap-2 mt-2">
+                <Button variant="outline" size="sm">
+                  <RefreshCcw className="mr-2 h-4 w-4" /> Regenerar con IA
+                </Button>
+                <Button variant="outline" size="sm">
+                  <Upload className="mr-2 h-4 w-4" /> Cambiar
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Copy del Post</h3>
+              <div className="relative">
+                <Textarea defaultValue={post.content} rows={8} className='pr-10'/>
+                <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7">
+                    <Wand2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Programación</h3>
+                <p className='text-sm text-muted-foreground flex items-center gap-2'>
+                    <CalendarIcon className='h-4 w-4'/>
+                    Programado para: {formatDate(scheduleDate)} a las {post.time}
+                </p>
+            </div>
+
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Vista Previa</h3>
+                <ToggleGroup 
+                    type="single" 
+                    variant="outline"
+                    value={activePlatform}
+                    onValueChange={(value) => {
+                        if (value) setActivePlatform(value as any);
+                    }}
+                >
+                    <ToggleGroupItem value="instagram" aria-label="Instagram">
+                        <Instagram className="h-4 w-4 mr-2" />
+                        Instagram
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="facebook" aria-label="Facebook">
+                        <Facebook className="h-4 w-4 mr-2" />
+                        Facebook
+                    </ToggleGroupItem>
+                </ToggleGroup>
+            </div>
+          </div>
         </div>
-        <div className="bg-background rounded-r-lg">
-          <EditingWorkshop post={post} />
-        </div>
+
+        <DialogFooter>
+            <Button variant="ghost">Guardar como Borrador</Button>
+            <Button><RefreshCcw className="mr-2 h-4 w-4" /> Aprobar y Programar</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -42,6 +42,6 @@ export const mockCompetitors: Competitor[] = [
       avatarUrl: 'https://images.unsplash.com/photo-1549492423-400259a5e5a9?w=100&h=100&fit=crop&q=80',
       followers: 12000,
       engagementRate: 3.9,
-      recentPostImageUrl: 'https://images.unsplash.com/photo-1548690312-e3b511d5b110?w=400&h=400&fit=crop&q=80',
+      recentPostImageUrl: 'https://images.unsplash.com/photo-1591291621226-93f5a550ea06?w=400&h=400&fit=crop&q=80',
     },
   ]; 

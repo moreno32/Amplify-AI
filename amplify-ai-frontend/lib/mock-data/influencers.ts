@@ -15,7 +15,7 @@ export const mockInfluencers: Influencer[] = [
     id: 'inf_2',
     name: 'David Chen',
     username: '@davidchen.fit',
-    avatarUrl: 'https://images.unsplash.com/photo-1548690312-e3b511d5b110?w=100&h=100&fit=crop&q=80',
+    avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&q=80',
     followers: 48900,
     engagementRate: 3.1,
     affinityScore: 72,

@@ -3,6 +3,7 @@
 import {
   ChevronLeft,
   ChevronRight,
+  Lightbulb,
   List,
   PlusCircle,
   View,
@@ -17,21 +18,25 @@ import { CreateCampaignModal } from '@/components/modals/CreateCampaignModal';
 import React from 'react';
 import { PostEditorModal } from '@/components/modals/PostEditorModal';
 import { PostCard } from './components/PostCard';
+import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const daysOfWeek = [
-    { name: 'Lunes', date: '2024-10-21' },
-    { name: 'Martes', date: '2024-10-22' },
-    { name: 'Miércoles', date: '2024-10-23' },
-    { name: 'Jueves', date: '2024-10-24' },
-    { name: 'Viernes', date: '2024-10-25' },
-    { name: 'Sábado', date: '2024-10-26' },
-    { name: 'Domingo', date: '2024-10-27' },
+    { name: 'Lunes', date: '2024-10-21', optimal: false },
+    { name: 'Martes', date: '2024-10-22', optimal: true },
+    { name: 'Miércoles', date: '2024-10-23', optimal: false },
+    { name: 'Jueves', date: '2024-10-24', optimal: true },
+    { name: 'Viernes', date: '2024-10-25', optimal: false },
+    { name: 'Sábado', date: '2024-10-26', optimal: false },
+    { name: 'Domingo', date: '2024-10-27', optimal: true },
 ];
 
 export default function CalendarPage() {
   const [isCampaignModalOpen, setCampaignModalOpen] = React.useState(false);
   const [isEditorModalOpen, setEditorModalOpen] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState<Post | null>(null);
+  const [showHeatmap, setShowHeatmap] = React.useState(false);
 
   const handlePostClick = (post: Post) => {
     setSelectedPost(post);
@@ -54,6 +59,13 @@ export default function CalendarPage() {
       <header className="flex items-center justify-between pb-4">
         <h1 className="text-2xl font-bold">Calendario de Contenido</h1>
         <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-2">
+            <Switch id="heatmap-toggle" checked={showHeatmap} onCheckedChange={setShowHeatmap} />
+            <Label htmlFor="heatmap-toggle" className="flex items-center gap-2 text-sm">
+              <Lightbulb className="h-4 w-4 text-yellow-400" />
+              Horas Óptimas
+            </Label>
+          </div>
           <ToggleGroup type="single" defaultValue="semanal" variant="outline">
             <ToggleGroupItem value="mensual" aria-label="Vista mensual" disabled>
               <Workflow className="h-4 w-4" />
@@ -82,7 +94,13 @@ export default function CalendarPage() {
       </header>
       <div className="flex-1 grid grid-cols-7 gap-2">
         {daysOfWeek.map((day) => (
-          <div key={day.name} className="bg-muted/40 rounded-lg p-2">
+          <div 
+            key={day.name} 
+            className={cn(
+                "bg-muted/40 rounded-lg p-2 transition-colors",
+                showHeatmap && day.optimal && "bg-indigo-100 dark:bg-indigo-900/30"
+            )}
+          >
             <h3 className="font-semibold text-center mb-2">{day.name}</h3>
             <div className="h-full">
               {mockPosts
