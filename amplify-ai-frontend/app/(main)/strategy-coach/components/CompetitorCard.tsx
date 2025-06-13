@@ -20,26 +20,26 @@ export function CompetitorCard({ competitor }: CompetitorCardProps) {
     <Card>
       <CardHeader className="flex-row items-center gap-4">
         <Avatar>
-          <AvatarImage src={competitor.avatarUrl} />
+          <AvatarImage src={competitor.logoUrl} />
           <AvatarFallback>{competitor.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <div>
-          <CardTitle>{competitor.name}</CardTitle>
-          <CardDescription>{competitor.username}</CardDescription>
+          <CardTitle className="text-base">{competitor.name}</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="relative aspect-square w-full">
-          <Image
-            src={competitor.recentPostImageUrl}
-            alt={`Post de ${competitor.name}`}
-            fill
-            className="rounded-md object-cover"
-          />
+        <div className="mb-4">
+          <img src={competitor.postImageUrl} alt={`Post de ${competitor.name}`} className="rounded-md object-cover w-full h-48" />
         </div>
-        <div className="flex justify-around text-sm text-muted-foreground mt-4">
-            <div><span className="font-bold text-foreground">{(competitor.followers/1000).toFixed(1)}k</span> Seguidores</div>
-            <div><span className="font-bold text-foreground">{competitor.engagementRate}%</span> Engagement</div>
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold">Estadísticas Clave:</h4>
+          <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+            {competitor.stats.map((stat) => (
+              <li key={stat.label}>
+                {stat.label}: <span className="font-medium text-foreground">{stat.value}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </CardContent>
       <CardFooter>
