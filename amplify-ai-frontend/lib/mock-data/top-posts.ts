@@ -1,17 +1,6 @@
-export interface TopPost {
-  id: number;
-  imageUrl: string;
-  mainStat: {
-    label: 'Alcance' | 'Likes' | 'Comentarios' | 'Guardados';
-    value: string;
-  };
-  secondaryStats: {
-    likes: number;
-    comments: number;
-  };
-}
+import { TopPost } from "@/lib/types";
 
-export const mockTopPosts = [
+export const mockTopPosts: TopPost[] = [
   {
     id: 1,
     imageUrl: "https://picsum.photos/500/500?random=26",
@@ -21,7 +10,7 @@ export const mockTopPosts = [
   {
     id: 2,
     imageUrl: "https://picsum.photos/500/500?random=27",
-    mainStat: { label: 'Guardados', value: '1.8k' },
+    mainStat: { label: 'Likes', value: '2.1k' },
     secondaryStats: { likes: 2100, comments: 150 },
   },
   {
@@ -39,7 +28,7 @@ export const mockTopPosts = [
   {
     id: 5,
     imageUrl: "https://picsum.photos/500/500?random=30",
-    mainStat: { label: 'Guardados', value: '2.2k' },
+    mainStat: { label: 'Alcance', value: '22.k' },
     secondaryStats: { likes: 1900, comments: 180 },
   },
   {

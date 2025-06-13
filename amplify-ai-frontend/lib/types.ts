@@ -148,4 +148,17 @@ export interface DashboardData {
     recommendedActions: AiAction[];
     aiCoachInsights: AiInsight[];
     upcomingPosts: Post[];
+}
+
+export interface TopPost {
+  id: number;
+  imageUrl: string;
+  mainStat: {
+    label: "Alcance" | "Likes" | "Comentarios";
+    value: string;
+  };
+  secondaryStats: {
+    likes: number;
+    comments: number;
+  };
 } 
