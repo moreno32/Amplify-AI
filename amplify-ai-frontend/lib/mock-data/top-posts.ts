@@ -2,7 +2,7 @@ export interface TopPost {
   id: number;
   imageUrl: string;
   mainStat: {
-    label: 'Alcance' | 'Likes' | 'Comentarios';
+    label: 'Alcance' | 'Likes' | 'Comentarios' | 'Guardados';
     value: string;
   };
   secondaryStats: {
@@ -11,41 +11,41 @@ export interface TopPost {
   };
 }
 
-export const topPostsData: TopPost[] = [
+export const mockTopPosts = [
   {
     id: 1,
-    imageUrl: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=500&q=80",
-    mainStat: { label: 'Alcance', value: '25.3k' },
-    secondaryStats: { likes: 2100, comments: 154 },
+    imageUrl: "https://picsum.photos/500/500?random=26",
+    mainStat: { label: 'Alcance', value: '35.1k' },
+    secondaryStats: { likes: 3200, comments: 210 },
   },
   {
     id: 2,
-    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80",
-    mainStat: { label: 'Alcance', value: '22.1k' },
-    secondaryStats: { likes: 1800, comments: 120 },
+    imageUrl: "https://picsum.photos/500/500?random=27",
+    mainStat: { label: 'Guardados', value: '1.8k' },
+    secondaryStats: { likes: 2100, comments: 150 },
   },
   {
     id: 3,
-    imageUrl: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=500&q=80",
-    mainStat: { label: 'Likes', value: '2.5k' },
-    secondaryStats: { likes: 2500, comments: 230 },
+    imageUrl: "https://picsum.photos/500/500?random=28",
+    mainStat: { label: 'Likes', value: '4.5k' },
+    secondaryStats: { likes: 4500, comments: 330 },
   },
   {
     id: 4,
-    imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&q=80",
-    mainStat: { label: 'Comentarios', value: '312' },
-    secondaryStats: { likes: 1500, comments: 312 },
+    imageUrl: "https://picsum.photos/500/500?random=29",
+    mainStat: { label: 'Comentarios', value: '450' },
+    secondaryStats: { likes: 2800, comments: 450 },
   },
   {
     id: 5,
-    imageUrl: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=500&q=80",
-    mainStat: { label: 'Alcance', value: '19.8k' },
-    secondaryStats: { likes: 1600, comments: 98 },
+    imageUrl: "https://picsum.photos/500/500?random=30",
+    mainStat: { label: 'Guardados', value: '2.2k' },
+    secondaryStats: { likes: 1900, comments: 180 },
   },
   {
     id: 6,
-    imageUrl: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=500&q=80",
-    mainStat: { label: 'Likes', value: '2.2k' },
-    secondaryStats: { likes: 2200, comments: 180 },
-  }
+    imageUrl: "https://picsum.photos/500/500?random=31",
+    mainStat: { label: 'Alcance', value: '42.8k' },
+    secondaryStats: { likes: 3800, comments: 310 },
+  },
 ]; 

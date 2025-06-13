@@ -1,4 +1,5 @@
 import { Competitor } from "@/lib/types";
+import { PerformanceMetric } from '@/lib/types';
 
 export const competitiveAnalysisData: { user: Competitor; competitors: Competitor[] } = {
   user: {
@@ -33,4 +34,35 @@ export const competitiveAnalysisData: { user: Competitor; competitors: Competito
       ],
     },
   ],
-}; 
+};
+
+export const mockMetricsData: PerformanceMetric[] = [
+    {
+        id: 'metric-1',
+        title: 'Alcance Total',
+        value: '7,890',
+        change: 12.5,
+        changeType: 'increase',
+    },
+    {
+        id: 'metric-2',
+        title: 'Engagement Rate',
+        value: '4.2%',
+        change: 0.8,
+        changeType: 'increase',
+    },
+    {
+        id: 'metric-3',
+        title: 'Nuevos Seguidores',
+        value: '128',
+        change: 5,
+        changeType: 'decrease',
+    },
+    {
+        id: 'metric-4',
+        title: 'Visitas al Perfil',
+        value: '2,104',
+        change: 22,
+        changeType: 'increase',
+    },
+]; 

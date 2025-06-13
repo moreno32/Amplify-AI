@@ -17,9 +17,9 @@ import { CreateCampaignModal } from '@/components/modals/CreateCampaignModal';
 import React, { useState } from 'react';
 import { PostEditorModal } from '@/components/modals/PostEditorModal';
 import { PostCard } from './components/PostCard';
-import { cn } from '@/lib/utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 const daysOfWeek = [
   'Lunes',
@@ -31,31 +31,39 @@ const daysOfWeek = [
   'Domingo',
 ];
 
+const getWeekDate = (dayIndex: number): string => {
+    const today = new Date();
+    const currentDay = today.getDay();
+    const distance = dayIndex + 1 - currentDay; // +1 because getDay() is 0-indexed on Sunday
+    const date = new Date(today.setDate(today.getDate() + distance));
+    return new Intl.DateTimeFormat('es-ES', { month: 'short', day: 'numeric' }).format(date);
+}
+
 // Simple heatmap data for demonstration
 const heatmapHours: { [key: string]: number } = {
-    'Lunes': 2,
-    'Martes': 5,
-    'Miércoles': 8,
-    'Jueves': 4,
-    'Viernes': 9,
-    'Sábado': 7,
-    'Domingo': 3,
+    'Lunes': 7,
+    'Martes': 9,
+    'Miércoles': 10,
+    'Jueves': 8,
+    'Viernes': 6,
+    'Sábado': 3,
+    'Domingo': 2,
 }
 
 const TimeBlock = ({ title, posts, onPostClick }: { title: string; posts: Post[]; onPostClick: (post: Post) => void; }) => (
-  <div className="mb-4">
-    <p className="text-xs text-muted-foreground uppercase font-semibold mb-2 pl-2">{title}</p>
-    <div className="space-y-2">
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <PostCard key={post.id} post={post} onClick={() => onPostClick(post)} />
-        ))
-      ) : (
-        <div className="h-10" /> // Placeholder for empty block
-      )}
+    <div className="mb-6">
+      <p className="text-sm text-muted-foreground font-semibold mb-3 pl-2">{title}</p>
+      <div className="space-y-2">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} onClick={() => onPostClick(post)} />
+          ))
+        ) : (
+          <div className="h-10" /> // Placeholder for empty block
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 
 export default function CalendarPage() {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
@@ -78,8 +86,12 @@ export default function CalendarPage() {
   const getPostsForDay = (day: string) => {
     const dayPosts = posts.filter((post) => post.dayOfWeek === day);
     const morningPosts = dayPosts.filter(p => parseInt(p.time.split(':')[0]) < 12);
-    const afternoonPosts = dayPosts.filter(p => parseInt(p.time.split(':')[0]) >= 12);
-    return { morningPosts, afternoonPosts };
+    const afternoonPosts = dayPosts.filter(p => {
+        const hour = parseInt(p.time.split(':')[0]);
+        return hour >= 12 && hour < 20;
+    });
+    const nightPosts = dayPosts.filter(p => parseInt(p.time.split(':')[0]) >= 20);
+    return { morningPosts, afternoonPosts, nightPosts };
   };
 
   return (
@@ -121,25 +133,29 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2 items-start">
-        {daysOfWeek.map((day) => {
-          const { morningPosts, afternoonPosts } = getPostsForDay(day);
+      <div className="grid grid-cols-7 gap-4">
+        {daysOfWeek.map((day, index) => {
+          const { morningPosts, afternoonPosts, nightPosts } = getPostsForDay(day);
+          const date = getWeekDate(index);
           return (
             <div
               key={day}
               className={cn(
-                "rounded-lg p-2 transition-colors duration-300",
-                showHeatmap ? `bg-indigo-100/` : 'bg-muted/40',
-                showHeatmap && `opacity-${heatmapHours[day]*10}`
+                "rounded-lg p-2 transition-colors duration-300 h-full flex flex-col",
+                showHeatmap ? `bg-indigo-100/` : 'bg-muted/40'
               )}
               style={{ 
-                backgroundColor: showHeatmap ? `rgba(99, 102, 241, ${heatmapHours[day] / 15})` : undefined
+                backgroundColor: showHeatmap ? `rgba(99, 102, 241, ${heatmapHours[day] / 20})` : undefined
               }}
             >
-              <h3 className="text-sm font-semibold text-center mb-4">{day}</h3>
-              <div>
+              <div className='text-center mb-4'>
+                <h3 className="text-sm font-semibold">{day}</h3>
+                <p className='text-xs text-muted-foreground'>{date}</p>
+              </div>
+              <div className='flex-grow'>
                 <TimeBlock title="Mañana" posts={morningPosts} onPostClick={handlePostClick} />
                 <TimeBlock title="Tarde" posts={afternoonPosts} onPostClick={handlePostClick} />
+                <TimeBlock title="Noche" posts={nightPosts} onPostClick={handlePostClick} />
               </div>
             </div>
           );
