@@ -1,109 +1,60 @@
-# Especificación Detallada: Dashboard "Centro de Mando" de Amplify AI
+# Arquitectura Viva: Dashboard "Centro de Mando"
 
-## A. Concepto: "Tu Vista de Vuelo Estratégica"
+*Última actualización: Refactorización de la columna central para usar el componente modular `DashboardSection`.*
 
-El Dashboard no es una simple colección de métricas. Es un **espacio de trabajo proactivo** que responde tres preguntas clave para el usuario en menos de 5 segundos:
-1.  **¿Cómo voy?** (Métricas de resumen vitales)
-2.  **¿Qué debería hacer ahora?** (Sugerencias y CTAs inteligentes)
-3.  **¿Qué está por venir?** (Próximas publicaciones y alertas)
+## A. Propósito Estratégico: "Tu Vista de Vuelo Estratégica"
 
-Se inspira en la estructura de 3 columnas de `Omoskollo` para una organización impecable y en el uso de tarjetas de `Topic Explorer` para un contenido dinámico y atractivo.
+El Dashboard es el punto de partida del usuario. Su objetivo es ofrecer una visión clara e inmediata del estado de su marca y guiarlo hacia las acciones más importantes. Debe responder a tres preguntas clave en segundos:
+1.  **¿Cómo voy?** (Rendimiento clave)
+2.  **¿Qué debería hacer ahora?** (Acciones recomendadas)
+3.  **¿Qué está por venir?** (Contexto y futuro)
 
-## B. Estructura General y Layout
+## B. Arquitectura y Diseño Implementado: Un Mosaico de Tarjetas Modulares
 
--   **Estructura Principal:** Layout de 3 columnas.
-    -   **Columna Izquierda (Navegación Principal):** `width: 20%` (o colapsable a iconos). `Dark Mode`.
-    -   **Columna Central (Área de Trabajo):** `width: 50%`. `Light Mode`.
-    -   **Columna Derecha (Panel de Contexto y Coach):** `width: 30%`. `Light Mode`.
--   **Fondo General:** Un gris muy claro (`hsl(0 0% 98%)` o `#F9F9FA`).
+La arquitectura del Dashboard se basa en el principio de **modularidad a través de tarjetas**. Cada bloque de información es un componente `Card` de `shadcn/ui`, lo que permite una disposición flexible y un diseño limpio y consistente.
 
----
+### Componente Clave: `DashboardSection.tsx`
+Para estandarizar la presentación de las secciones principales, hemos creado el componente reutilizable `DashboardSection`. Este componente envuelve una `Card` y utiliza el `BlockHeader` centralizado para asegurar la consistencia visual en toda la aplicación.
 
-## C. Columna Izquierda (Navegación Principal)
+**Props de `DashboardSection`:**
+- `icon`: Un componente de ícono de `lucide-react`.
+- `title`: El título principal de la sección.
+- `description?`: Un subtítulo opcional para dar contexto.
+- `children`: El contenido de la sección (normalmente, una parrilla de componentes).
 
-Este es el esqueleto de la aplicación, siempre presente.
+### Flujo de Datos
+El componente principal de la página (`app/(main)/dashboard/page.tsx`) es responsable de obtener los datos (actualmente de `mockDashboardData`) y distribuirlos a los componentes hijos que se encargan de su renderización.
 
-### 1. Estética
--   **Fondo:** `hsl(240 6% 10%)` o `#1A1A1C` (Casi Negro, como en `Omoskollo`).
--   **Color de Texto/Icono (Activo):** Blanco (`#FFFFFF`).
--   **Color de Texto/Icono (Inactivo):** Gris (`hsl(240 2% 46%)` o `#737378`).
+## C. Desglose de Componentes (Implementación Actual)
 
-### 2. Componentes (De arriba a abajo)
--   **Logo Amplify AI:** En la parte superior.
--   **Menú de Navegación (`shadcn/ui Nav`):**
-    -   `[Icono Dashboard 📊]` **Centro de Mando** (Activo en esta vista)
-    -   `[Icono Calendario 📅]` **Calendario**
-    -   `[Icono IA ✨]` **Generador de Contenido**
-    -   `[Icono Inbox ✉️]` **Social Inbox**
-    -   `[Icono Influencer 🌍]` **Buscador de Influencers**
--   **Sección Inferior:**
-    -   `[Icono Ayuda ❓]` **Ayuda y Soporte**
-    -   **Avatar de Usuario:** Con menú desplegable para `Perfil`, `Facturación` y `Cerrar Sesión`.
+El layout se organiza en una parrilla (grid) de dos columnas principales.
 
----
+### Columna Izquierda (Principal)
+Contiene las secciones de acción y rendimiento.
 
-## D. Columna Central (Área de Trabajo Principal)
+-   **`PageHeader.tsx`**: La cabecera de la página, que da la bienvenida al usuario y contiene la acción principal "Crear Nueva Campaña".
 
-Aquí es donde el usuario "vive" y toma acción.
+-   **Sección "Tu Rendimiento de un Vistazo"**:
+    -   **Contenedor**: `DashboardSection` con el ícono `BarChart`.
+    -   **Contenido**: Una parrilla (`grid`) que renderiza un `map` del array `data.performanceMetrics`, mostrando un componente `PerformanceCard.tsx` por cada métrica.
 
-### 1. Cabecera
--   **Saludo Personalizado:** "Hola de nuevo, [Nombre del Usuario] 👋"
--   **Botón CTA Primario:** Un botón grande y prominente de `shadcn/ui Button`.
-    -   **Texto:** `[✨ Crear Nueva Campaña]`
-    -   **Color:** Acento Índigo (`#6444F4`).
+-   **Sección "¿Qué hacemos hoy?"**:
+    -   **Contenedor**: `DashboardSection` con el ícono `Sparkles`.
+    -   **Contenido**: Una parrilla que renderiza un `map` del array `data.recommendedActions`, mostrando un componente `ActionCard.tsx` por cada acción sugerida.
 
-### 2. Sección de Métricas Resumen
--   **Título:** "Tu Rendimiento de un Vistazo"
--   **Layout:** Una cuadrícula de 2x2 con `shadcn/ui Card`.
-    -   **Card 1 (Engagement):** Título "Tasa de Engagement", un número grande (ej. "4.5%"), una pequeña gráfica de tendencia (sparkline) y un indicador de cambio (ej. "▲ 0.5% vs. semana pasada").
-    -   **Card 2 (Alcance):** Título "Alcance Total", número grande, sparkline, indicador de cambio.
-    -   **Card 3 (Actividad):** Título "Posts Programados", número grande (ej. "12 posts este mes") y un link `[Ver Calendario]`.
-    -   **Card 4 (Inbox):** Título "Mensajes Pendientes", número grande (ej. "3") y un link `[Ir al Inbox]`.
+### Columna Derecha (Contextual)
+Proporciona información de apoyo y alertas. *Nota: Esta columna es candidata para ser refactorizada y usar `DashboardSection`.*
 
-### 3. Sección "Acciones Recomendadas por IA"
--   **Título:** "¿Qué hacemos hoy?"
--   **Layout:** Una lista de 2-3 tarjetas de acción (`Card`).
-    -   **Tarjeta de Acción 1 (La más importante):**
-        -   **Icono:** `[Icono Cohete 🚀]`
-        -   **Título:** "Lanzar Campaña de Crecimiento"
-        -   **Descripción:** "Hemos detectado una oportunidad para aumentar tu visibilidad esta semana. ¿Creamos una campaña optimizada?"
-        -   **Botón:** `[Empezar con un clic]`
-    -   **Tarjeta de Acción 2 (Revisión):**
-        -   **Icono:** `[Icono Check ✅]`
-        -   **Título:** "Revisar Contenido Generado"
-        -   **Descripción:** "Hay 4 nuevos posts listos para tu aprobación."
-        -   **Botón:** `[Revisar ahora]`
+-   **Componente `AiCoachFeed.tsx`**:
+    -   **Propósito**: Muestra una lista de `insights` o consejos generados por la IA.
+    -   **Estructura**: Renderiza una `Card` con su propio título y una lista de los `insights` recibidos.
 
----
+-   **Componente `UpcomingPosts.tsx`**:
+    -   **Propósito**: Muestra un adelanto de las publicaciones programadas.
+    -   **Estructura**: Renderiza una `Card` con el título "En la Rampa de Lanzamiento" y una lista de los posts, incluyendo su imagen, contenido y fecha.
 
-## E. Columna Derecha (Panel de Contexto y Coach)
+## D. Backlog de Arquitectura y Mejoras
 
-Este panel es el "cerebro" visible de Amplify AI, siempre dando consejos.
-
-### 1. Perfil de Marca Rápido
--   **Componente:** Una pequeña `Card` en la parte superior.
--   **Contenido:** El logo del usuario, su nombre de marca, y `tags` con el tono definido en el onboarding (ej. `Tono: Cercano`, `Educativo`).
-
-### 2. Feed del "Strategy Coach"
--   **Título:** "💡 Insights del Coach IA"
--   **Layout:** Una lista vertical de pequeñas alertas o notificaciones.
-    -   **Insight 1 (Competitivo):** "Tu competidor `@rival` ha bajado su frecuencia de publicación. ¡Es el momento perfecto para destacar!"
-    -   **Insight 2 (Oportunidad):** "El tema `[tendencia detectada]` está ganando tracción en tu sector. ¿Generamos un post sobre ello?" `[Crear Post]`
-    -   **Insight 3 (Optimización):** "Hemos aprendido que los domingos a las 18:00h es tu mejor hora para publicar. Tu calendario ya está actualizado."
-
-### 3. Próximas Publicaciones
--   **Título:** "En la Rampa de Lanzamiento"
--   **Layout:** Una lista simple con los próximos 2-3 posts.
-    -   **Elemento de lista:** Pequeña miniatura de la imagen, primera línea del copy y la fecha/hora programada. `Hover` muestra un botón para `[Editar]`.
-
-## F. Prompt para Generador de UI (v0.dev)
-
-> A modern SaaS dashboard UI for a tool called "Amplify AI". Use a 3-column layout.
->
-> **Left Column (20% width, dark mode #1A1A1C):** A vertical navigation bar with icons and text for "Centro de Mando", "Calendario", "Social Inbox". The active item is white.
->
-> **Center Column (50% width, light mode #F9F9FA):** This is the main workspace. At the top, a welcome message and a large primary button in vibrant indigo (#6444F4) that says "Crear Nueva Campaña". Below, a 2x2 grid of stat cards (shadcn/ui style) for "Engagement", "Alcance", etc., each with a large number and a small trend line. Below that, a section titled "¿Qué hacemos hoy?" with large, clickable cards suggesting actions like "Lanzar Campaña de Crecimiento".
->
-> **Right Column (30% width, light mode):** This is a context panel. At the top, a small card with the user's brand profile. Below, a feed of "Insights del Coach IA" with a lightbulb icon, showing short, actionable tips. At the bottom, a list of "Próximas Publicaciones".
->
-> **Overall aesthetic:** Clean, spacious, and data-driven, with a professional and friendly feel. Inspired by the layouts of Omoskollo and ContentStudio. Use Inter or Geist font.
+-   **Refactorizar Columna Derecha**: Modificar `AiCoachFeed.tsx` y `UpcomingPosts.tsx` para que utilicen el componente `DashboardSection` y así completar la estandarización de la página.
+-   **Conexión a Datos Reales**: Reemplazar la importación de `mockDashboardData` por una llamada a la API correspondiente para obtener datos dinámicos.
+-   **Implementar Pruebas**: Añadir pruebas unitarias y de integración para los componentes del Dashboard para asegurar su estabilidad.
