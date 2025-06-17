@@ -48,20 +48,20 @@ const NavLink = ({ href, icon: Icon, label }: NavItemProps) => {
   const isActive = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
 
   return (
-    <Link
-      href={href}
+  <Link
+    href={href}
       aria-current={isActive ? 'page' : undefined}
-      className={cn(
+    className={cn(
         'flex items-center gap-3 rounded-md px-3 py-2 text-muted-foreground transition-colors duration-200 hover:bg-muted/50 hover:text-primary',
         {
           'bg-primary text-primary-foreground': isActive,
         }
-      )}
-    >
-      <Icon className="h-4 w-4" />
+    )}
+  >
+    <Icon className="h-4 w-4" />
       <span>{label}</span>
-    </Link>
-  );
+  </Link>
+);
 };
 
 export function Sidebar() {
@@ -132,10 +132,10 @@ export function Sidebar() {
                 <CardDescription className="mb-4">
                   Accede a analíticas avanzadas, creación ilimitada y más.
                 </CardDescription>
-                <Button size="sm" className="w-full">
-                  Upgrade
-                </Button>
-              </CardContent>
+              <Button size="sm" className="w-full">
+                Upgrade
+              </Button>
+            </CardContent>
             )}
           </Card>
         </div>

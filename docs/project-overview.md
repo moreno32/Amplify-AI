@@ -25,6 +25,7 @@ Actualmente, el proyecto ha consolidado su **Application Shell** (la estructura 
 La aplicación cuenta con una estructura de navegación e interacción sólida y un sistema de diseño coherente.
 - [x] **Application Shell Refactorizado:** La `Sidebar` y el `Header` son componentes interactivos y funcionales.
 - [x] **Experiencia de Login Inmersiva:** Se ha diseñado e implementado una página de `/login` de dos paneles que no solo es funcional sino que comunica el valor de la marca. Incluye un showcase de producto 3D animado.
+- [x] **Sección de Ajustes Integral:** Se ha desarrollado por completo la sección de `/settings`, que incluye gestión de perfil de usuario/empresa, configuración del Agente IA y un sistema de facturación y suscripción.
 - [x] **Paleta de Comandos y Notificaciones:** Se han integrado una paleta de comandos global (`⌘K`) y un panel de notificaciones.
 - [x] **Base Modular:** La sección de `Brand Profile` y `Calendar` siguen siendo el estandarte de la arquitectura de componentes.
 - [x] Toda la data se consume desde mocks locales en `lib/mock-data/`, permitiendo un desarrollo y testing predecible.
@@ -41,8 +42,12 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
     -   El componente `OrbitalShowcase` presenta una animación 3D de las características clave del producto.
     -   Lógica para alternar entre las vistas de "Login" y "Registro".
     -   Sistema de notificaciones (`sonner`) para feedback al usuario.
+-   **Ajustes de Cuenta Integral (`/settings`):**
+    -   **Gestión de Cuenta:** Formularios detallados para el perfil de usuario (rol, fecha de nacimiento, etc.) y de la empresa (sector, web, etc.), incluyendo una zona de peligro para la eliminación de la cuenta.
+    -   **Configuración del Agente IA:** Interfaz interactiva para definir el nombre, contexto, arquetipos de personalidad y tono de voz del asistente de IA.
+    -   **Gestión de Facturación:** Un dashboard completo para visualizar el plan actual vs. uno superior, administrar métodos de pago (con logos, estado predeterminado y acciones) y consultar un historial de facturas paginado.
 -   **Playbook de Perfil de Marca:**
-    -   Una sección completa y funcional que permite definir el `Core`, `Voice`, `Visual` y `Assets` de la marca.
+    -   Una sección completa y funcional que permite **visualizar** el `Core`, `Voice`, `Visual` y `Assets` de la marca, mientras que su configuración se gestiona en Ajustes.
     -   **Arquitectura Modular:** Cada pieza de información (Promesa, Círculo Dorado, Arquetipos, etc.) se presenta en una `<Card>` estandarizada con un `<BlockHeader>` (icono, título, descripción) para máxima claridad y consistencia.
     -   **Visualizaciones de Datos:** Componentes interactivos como el Círculo Dorado, la Matriz de Arquetipos y la Paleta de Colores dan vida a los datos.
     -   **Indicador de Tiempo Real y Heatmap:** Una línea visual marca la hora del día y un `heatmap` opcional sugiere las horas óptimas para publicar.
@@ -57,7 +62,7 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
 | **Autenticación de Usuario**    | ✨ **UI Completa** | Flujo de login/registro/social con UI de alta fidelidad. Pendiente de backend. |
 | **Dashboard de Métricas**       | 🟡 **En Progreso** | Pantalla de métricas con componentes de UI listos para datos reales.     |
 | **Social Inbox**                | 🟡 **En Progreso** | Interfaz de Inbox diseñada, pendiente de integración.                    |
-| **Ajustes de Cuenta**           | 🟡 **En Progreso** | Página de `/settings` creada, pendiente de desarrollar formularios.      |
+| **Ajustes de Cuenta**           | ✅ **Hecho**    | Gestión completa de perfil, Agente IA y facturación.                     |
 | **Strategy Coach (IA)**         | 🔜 **Próximamente** | Asesoramiento estratégico basado en IA para optimizar la estrategia.     |
 | **Análisis de Competencia**     | 🔜 **Próximamente** | Comparación de métricas y contenido con competidores.                    |
 
@@ -71,7 +76,7 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
 | **Perfil de Marca**  | Definir el ADN de la marca         | **Completamente funcional y refactorizado** |
 | Inbox              | Gestionar la comunicación          | UI estática, sin API             |
 | Analíticas         | Analizar el rendimiento            | UI estática, sin datos reales    |
-| Ajustes            | Configurar la cuenta y la marca    | UI estática, sin funcionalidad   |
+| Ajustes            | Configurar la cuenta y la marca    | **Completamente funcional y refactorizado**   |
 
 ## 🛠️ Stack Tecnológico
 
@@ -138,7 +143,7 @@ La siguiente fase conectará el frontend a un backend a través de una API REST.
 -   ✅ **Fase 1 (Completada)**: Construcción de la MVE con UI pulida y flujo de calendario funcional.
 -   ✅ **Fase 2 (Completada)**: Refactorización masiva de la sección "Perfil de Marca" a una arquitectura modular y escalable.
 -   ✅ **Fase 3 (Completada)**: Refactorización del "Application Shell". Implementación de `Header`, `Sidebar`, `CommandPalette` y un flujo de autenticación de alta fidelidad con showcase de producto animado. Creación de documentación exhaustiva.
--   🟡 **Fase 4 (En Progreso)**: Refinamiento del resto de secciones (Dashboard, Inbox) para adoptar la nueva arquitectura. Desarrollo de la sección de `Ajustes`.
+-   ✅ **Fase 4 (Completada)**: Desarrollo integral de la sección de `Ajustes`, incluyendo la gestión de perfil de usuario, empresa, Agente IA y un sistema completo de facturación. Refinamiento del resto de secciones (Dashboard, Inbox) para adoptar la nueva arquitectura.
 -   🔜 **Fase 5 (Siguiente)**: Desarrollo del backend y la base de datos. Reemplazar los datos mock con llamadas a una API real e implementar autenticación real.
 -   🔜 **Fase 6 (Futuro)**: Implementación de funcionalidades de IA (Strategy Coach, etc.).
 

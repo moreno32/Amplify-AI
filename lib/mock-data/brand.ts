@@ -3,6 +3,23 @@ import { BrandProfile } from '@/lib/types';
 export const mockBrandProfile: BrandProfile = {
   id: "O2CW",
   name: "O2CW Boutique Gym",
+  firstName: "Analía",
+  lastName: "López",
+  email: "analia.lopez@ejemplo.com",
+  language: "es",
+  role: "Fundadora & CEO",
+  dob: "1988-07-15T00:00:00.000Z",
+  country: "España",
+  gender: "female",
+  timezone: "Europe/Madrid",
+  userDescription: 'Emprendedora apasionada por el fitness y el bienestar, con más de 10 años de experiencia en la industria. Mi misión es ayudar a las personas a transformar sus vidas a través del movimiento consciente y la nutrición inteligente.',
+  companyName: "O2CW Boutique Gym",
+  companyIndustry: "Salud y Bienestar",
+  companyType: "Gimnasio",
+  companySize: "2-10 empleados",
+  companyWebsite: "https://o2cw.com",
+  companyDescription: "Un gimnasio boutique enfocado en el empoderamiento femenino a través del fitness holístico.",
+  targetAudience: "Mujeres (25-45)",
   core: {
     id: "data-_ZajlF3sQ",
     promise: {

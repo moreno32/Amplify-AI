@@ -4,20 +4,27 @@ interface BlockHeaderProps {
     icon: LucideIcon;
     title: string;
     description?: string;
+    children?: React.ReactNode;
 }
 
-export const BlockHeader = ({ icon: Icon, title, description }: BlockHeaderProps) => {
+export function BlockHeader({
+    icon: Icon,
+    title,
+    description,
+    children,
+}: BlockHeaderProps) {
     return (
-        <div className="flex flex-col gap-y-2">
+        <div className="mb-4">
             <div className="flex items-center gap-x-3">
-                <Icon className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-lg font-semibold">{title}</h3>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                </div>
+                <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+                {children && <div className="ml-auto">{children}</div>}
             </div>
             {description && (
-                <p className="text-sm text-muted-foreground ml-8">
-                    {description}
-                </p>
+                <p className="mt-2 text-sm text-muted-foreground">{description}</p>
             )}
         </div>
     );
-}; 
+} 

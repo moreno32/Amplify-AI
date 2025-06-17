@@ -1,48 +1,70 @@
 'use client'
 
 import {
+  BookUser,
+  CreditCard,
+  User,
+  UserCircle,
+  Sparkles,
+} from 'lucide-react'
+
+import { SettingsData } from '@/lib/services/settingsService'
+import { PageHeader } from '@/components/layout/PageHeader'
+import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs'
-import { SettingsData } from '@/lib/services/settingsService'
-import { Book, BrainCircuit, Palette, Voicemail } from 'lucide-react'
-import { CoreTab } from './CoreTab'
-import { VoiceTab } from './VoiceTab'
+import { AccountTab } from './AccountTab'
+import { BrandProfileTab } from './BrandProfileTab'
+import { BillingTab } from './BillingTab'
 
 interface SettingsClientPageProps {
   data: SettingsData
 }
 
+const TABS = [
+  { value: "account", label: "Mi Cuenta", icon: UserCircle },
+  { value: "brand-profile", label: "Agente IA", icon: Sparkles },
+  { value: "billing", label: "Facturación", icon: CreditCard },
+];
+
 export function SettingsClientPage({ data }: SettingsClientPageProps) {
-  // Although tabs have no data yet, we pass it down for future use
   return (
-    <Tabs defaultValue="core">
-      <TabsList>
-        <TabsTrigger value="core">
-          <BrainCircuit className="mr-2 h-4 w-4" />
-          CORE
-        </TabsTrigger>
-        <TabsTrigger value="voice">
-          <Voicemail className="mr-2 h-4 w-4" />
-          VOICE
-        </TabsTrigger>
-        <TabsTrigger value="visual" disabled>
-          <Palette className="mr-2 h-4 w-4" />
-          VISUAL
-        </TabsTrigger>
-        <TabsTrigger value="assets" disabled>
-          <Book className="mr-2 h-4 w-4" />
-          ASSETS
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="core">
-        <CoreTab data={data.core} />
-      </TabsContent>
-      <TabsContent value="voice">
-        <VoiceTab data={data.voice} />
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-6">
+      <PageHeader
+        title="Ajustes"
+        subtitle="Gestiona tu perfil, tu cuenta y la configuración de tu marca."
+      />
+      <Tabs defaultValue="account" className="fade-in">
+        <TabsList>
+          <TabsTrigger value="account">
+            <User className="mr-2 h-4 w-4" />
+            Mi Cuenta
+          </TabsTrigger>
+          <TabsTrigger value="brand-profile">
+            <BookUser className="mr-2 h-4 w-4" />
+            Agente IA
+          </TabsTrigger>
+          <TabsTrigger value="billing">
+            <CreditCard className="mr-2 h-4 w-4" />
+            Facturación
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="account" className="mt-6">
+          <AccountTab data={data} />
+        </TabsContent>
+
+        <TabsContent value="brand-profile" className="mt-6">
+          <BrandProfileTab />
+        </TabsContent>
+
+        <TabsContent value="billing" className="mt-6">
+          <BillingTab />
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 } 

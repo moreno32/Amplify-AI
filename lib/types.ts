@@ -77,6 +77,23 @@ export interface BrandAsset {
 export interface BrandProfile {
   id: string;
   name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  language: 'es' | 'en';
+  role: string;
+  dob: string; // ISO 8601 date string
+  country: string;
+  gender: 'male' | 'female' | 'other' | 'prefer_not_to_say';
+  timezone: string;
+  userDescription: string;
+  companyName: string;
+  companyIndustry: string;
+  companyType: string;
+  companySize: string;
+  companyWebsite: string;
+  companyDescription: string;
+  targetAudience: string;
   core: {
     id: string;
     promise: {
