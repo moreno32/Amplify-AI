@@ -1,60 +1,48 @@
-# Arquitectura Viva: Dashboard "Centro de Mando"
+# Especificación Detallada: Pantalla de "Dashboard"
 
-*Última actualización: Refactorización de la columna central para usar el componente modular `DashboardSection`.*
+## A. Concepto: "Tu Centro de Mando Inteligente"
 
-## A. Propósito Estratégico: "Tu Vista de Vuelo Estratégica"
+El Dashboard es la primera pantalla que ve el usuario al entrar. No debe ser un volcado de datos, sino un **resumen ejecutivo y accionable** de lo que está pasando en su ecosistema digital. Debe responder a tres preguntas clave de un vistazo:
+1.  **¿Qué ha pasado?** (Resumen de actividad reciente)
+2.  **¿Qué está por venir?** (Próximas publicaciones)
+3.  **¿Qué debería hacer ahora?** (Sugerencias de la IA)
 
-El Dashboard es el punto de partida del usuario. Su objetivo es ofrecer una visión clara e inmediata del estado de su marca y guiarlo hacia las acciones más importantes. Debe responder a tres preguntas clave en segundos:
-1.  **¿Cómo voy?** (Rendimiento clave)
-2.  **¿Qué debería hacer ahora?** (Acciones recomendadas)
-3.  **¿Qué está por venir?** (Contexto y futuro)
+## B. Estructura General y Layout
 
-## B. Arquitectura y Diseño Implementado: Un Mosaico de Tarjetas Modulares
+-   **Layout Principal:** Una cuadrícula flexible (`grid`) que se adapta bien a diferentes tamaños de pantalla. Se divide conceptualmente en tres columnas o áreas temáticas.
+-   **Componente Clave:** `DashboardSection`. Este es un componente de layout reutilizable que encapsula una `Card` de `shadcn/ui` y un `BlockHeader`. Su propósito es estandarizar la apariencia de cada bloque o "widget" del dashboard, proporcionando un título, un icono y opcionalmente un botón de acción en la cabecera del bloque.
 
-La arquitectura del Dashboard se basa en el principio de **modularidad a través de tarjetas**. Cada bloque de información es un componente `Card` de `shadcn/ui`, lo que permite una disposición flexible y un diseño limpio y consistente.
+### 1. Columna Izquierda (o sección superior en móvil): El Pulso de la Actividad
+-   **Componente 1: Métricas Clave (`KeyMetrics.tsx`)**
+    -   **Layout:** Una serie de `Card` pequeñas.
+    -   **Contenido:** Muestra 3-4 KPIs vitales (ej. Nuevos Seguidores, Tasa de Engagement, Alcance Total) con un indicador de tendencia (`+X%` o `-Y%`).
+-   **Componente 2: Publicaciones Recientes (`RecentPosts.tsx`)**
+    -   **Layout:** Una `Card` que contiene una lista o un carrusel.
+    -   **Contenido:** Muestra los últimos 3-4 posts publicados, con su imagen en miniatura y la métrica de rendimiento principal (ej. Likes o Alcance).
 
-### Componente Clave: `DashboardSection.tsx`
-Para estandarizar la presentación de las secciones principales, hemos creado el componente reutilizable `DashboardSection`. Este componente envuelve una `Card` y utiliza el `BlockHeader` centralizado para asegurar la consistencia visual en toda la aplicación.
+### 2. Columna Central: El Foco en la Acción Inmediata
+-   **Componente 3: Próximas Publicaciones (`UpcomingPosts.tsx`)**
+    -   **Layout:** Una `Card` con una vista de agenda o lista.
+    -   **Contenido:** Muestra los posts programados para los próximos 3-5 días. Cada elemento debe mostrar la fecha/hora, una miniatura del contenido y el estado (ej. "Programado", "En Revisión").
+    -   **Acción:** Un botón `[Ver Calendario Completo]` que navega a la pantalla de Calendario.
 
-**Props de `DashboardSection`:**
-- `icon`: Un componente de ícono de `lucide-react`.
-- `title`: El título principal de la sección.
-- `description?`: Un subtítulo opcional para dar contexto.
-- `children`: El contenido de la sección (normalmente, una parrilla de componentes).
+### 3. Columna Derecha: La Guía de la IA
+-   **Componente 4: Sugerencias del Coach IA (`AiCoachSuggestions.tsx`)**
+    -   **Layout:** Una `Card` destacada, quizás con un estilo visual ligeramente diferente.
+    -   **Contenido:** Muestra 2-3 "tarjetas de acción" generadas por la IA.
+    -   **Ejemplos de Sugerencias:**
+        -   "💡 **Oportunidad de Engagement:** Tu post sobre 'Yoga Matutino' tuvo un 50% más de comentarios. ¿Creamos una serie sobre este tema?" `[Crear Serie]`
+        -   "📈 **Tendencia de Mercado:** Tu competidor `@rivalzen` está teniendo éxito con Reels sobre 'Meditación Guiada'. ¿Analizamos su estrategia?" `[Analizar Competidor]`
+        -   "✍️ **Contenido por Reutilizar:** Tu artículo de blog '5 Beneficios del Té Verde' puede convertirse en un carrusel para Instagram." `[Generar Carrusel]`
 
-### Flujo de Datos
-El componente principal de la página (`app/(main)/dashboard/page.tsx`) es responsable de obtener los datos (actualmente de `mockDashboardData`) y distribuirlos a los componentes hijos que se encargan de su renderización.
+## C. Arquitectura y Componentes Implementados
 
-## C. Desglose de Componentes (Implementación Actual)
+-   `dashboard/page.tsx`: Es el componente principal de la página. Orquesta el layout y renderiza los diferentes componentes de sección (`KeyMetrics`, `UpcomingPosts`, etc.), pasándoles los datos necesarios como `props`.
+-   `components/shared/DashboardSection.tsx`: Componente de layout reutilizable que renderiza una `Card` con un `BlockHeader` estandarizado. Se usa para envolver cada sección del dashboard.
+-   `components/shared/BlockHeader.tsx`: Componente que muestra el título, icono, descripción y acciones opcionales de una sección. Es utilizado por `DashboardSection`.
 
-El layout se organiza en una parrilla (grid) de dos columnas principales.
+## D. Backlog y Mejoras
 
-### Columna Izquierda (Principal)
-Contiene las secciones de acción y rendimiento.
-
--   **`PageHeader.tsx`**: La cabecera de la página, que da la bienvenida al usuario y contiene la acción principal "Crear Nueva Campaña".
-
--   **Sección "Tu Rendimiento de un Vistazo"**:
-    -   **Contenedor**: `DashboardSection` con el ícono `BarChart`.
-    -   **Contenido**: Una parrilla (`grid`) que renderiza un `map` del array `data.performanceMetrics`, mostrando un componente `PerformanceCard.tsx` por cada métrica.
-
--   **Sección "¿Qué hacemos hoy?"**:
-    -   **Contenedor**: `DashboardSection` con el ícono `Sparkles`.
-    -   **Contenido**: Una parrilla que renderiza un `map` del array `data.recommendedActions`, mostrando un componente `ActionCard.tsx` por cada acción sugerida.
-
-### Columna Derecha (Contextual)
-Proporciona información de apoyo y alertas. *Nota: Esta columna es candidata para ser refactorizada y usar `DashboardSection`.*
-
--   **Componente `AiCoachFeed.tsx`**:
-    -   **Propósito**: Muestra una lista de `insights` o consejos generados por la IA.
-    -   **Estructura**: Renderiza una `Card` con su propio título y una lista de los `insights` recibidos.
-
--   **Componente `UpcomingPosts.tsx`**:
-    -   **Propósito**: Muestra un adelanto de las publicaciones programadas.
-    -   **Estructura**: Renderiza una `Card` con el título "En la Rampa de Lanzamiento" y una lista de los posts, incluyendo su imagen, contenido y fecha.
-
-## D. Backlog de Arquitectura y Mejoras
-
--   **Refactorizar Columna Derecha**: Modificar `AiCoachFeed.tsx` y `UpcomingPosts.tsx` para que utilicen el componente `DashboardSection` y así completar la estandarización de la página.
--   **Conexión a Datos Reales**: Reemplazar la importación de `mockDashboardData` por una llamada a la API correspondiente para obtener datos dinámicos.
--   **Implementar Pruebas**: Añadir pruebas unitarias y de integración para los componentes del Dashboard para asegurar su estabilidad.
+-   **(Prioridad Alta) Conectar a Datos Reales:** Reemplazar todos los datos mock (`mockDashboardData`) por llamadas a los endpoints de la API correspondientes.
+-   **(Prioridad Media) Hacer el Dashboard Personalizable:** Permitir al usuario reorganizar (arrastrar y soltar) los bloques del dashboard para priorizar la información que más le importa.
+-   **(Prioridad Baja) Implementar Funcionalidad de "Ver Más"**: En secciones como "Publicaciones Recientes", añadir un enlace o botón para expandir la vista o navegar a la sección correspondiente para ver el historial completo.
