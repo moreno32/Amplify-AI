@@ -135,6 +135,17 @@ graph TD
 - **Ejemplos:** `Button`, `Card`, `Input`, `Dialog`.
 - **Regla:** Estos componentes son la base de todos los demás. Se utilizan para construir componentes de Nivel 1 y Nivel 2.
 
+### 3.4. Sistema de Diseño (Design Tokens)
+
+Para asegurar la consistencia visual y facilitar el mantenimiento, la aplicación utiliza un sistema de Design Tokens centralizado.
+
+-   **Fuente de la Verdad (Valores):** El archivo `app/globals.css` define todas las variables CSS para los colores, fuentes y radios de la aplicación. Crucialmente, contiene las definiciones para el tema claro (`:root`) y oscuro (`.dark`), permitiendo un theming robusto.
+
+-   **Integración con Tailwind CSS:** El archivo `tailwind.config.ts` consume estas variables CSS. En lugar de valores harcodeados, la configuración del tema de Tailwind apunta a estas variables.
+    -   *Ejemplo:* `colors: { primary: 'var(--primary)' }`
+
+-   **Uso en la Práctica:** Los desarrolladores deben utilizar exclusivamente las clases de utilidad de Tailwind (ej. `bg-primary`, `text-foreground`, `border-border`) en los componentes. Esto desacopla los componentes de los valores de diseño específicos, permitiendo que un cambio en una variable CSS en `globals.css` se propague por toda la aplicación de manera consistente.
+
 ---
 
 ## 4. Arquitectura del Backend (FastAPI)
