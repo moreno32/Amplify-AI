@@ -2,11 +2,9 @@ import { Button } from '@/components/ui/button'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { getBrandProfile } from '@/lib/services/brandProfileService'
 import { RefreshCcw } from 'lucide-react'
-import { toast } from 'sonner'
 import { BrandProfileClientContent } from './components/BrandProfileClientContent'
 
 export default async function BrandProfilePage() {
-  // 1. Data is fetched on the server via the service layer
   const brandProfile = await getBrandProfile()
 
   if (!brandProfile) {
@@ -24,7 +22,6 @@ export default async function BrandProfilePage() {
           </Button>
         }
       />
-      {/* 2. Data is passed down to a client component for interactive rendering */}
       <BrandProfileClientContent brandProfile={brandProfile} />
     </div>
   )

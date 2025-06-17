@@ -1,4 +1,4 @@
-import { brandProfileData } from '@/lib/brand'
+import { mockBrandProfile } from '@/lib/mock-data/brand'
 import { BrandProfile } from '@/lib/types'
 
 /**
@@ -18,5 +18,5 @@ export async function getBrandProfile(): Promise<BrandProfile> {
   // const data = await response.json();
   // return data;
 
-  return brandProfileData
+  return mockBrandProfile
 } 

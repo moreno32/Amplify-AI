@@ -39,10 +39,10 @@ export function DashboardClientContent({ data }: DashboardClientContentProps) {
       </div>
 
       {/* Right Context Column */}
-      <div className="lg:col-span-1 space-y-6">
-        <AiCoachFeed insights={data.aiCoachInsights} />
-        <UpcomingPosts posts={data.upcomingPosts} />
-      </div>
+       <div className="lg:col-span-1 space-y-6">
+         <AiCoachFeed insights={data.aiCoachInsights} />
+         <UpcomingPosts posts={data.upcomingPosts} />
+       </div>
     </div>
   )
 } 
