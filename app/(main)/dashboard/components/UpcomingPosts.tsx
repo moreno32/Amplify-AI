@@ -5,6 +5,8 @@ import { Post } from '@/lib/types';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface UpcomingPostsProps {
   posts: Post[];
@@ -33,7 +35,7 @@ export default function UpcomingPosts({ posts }: UpcomingPostsProps) {
               <div className="flex-grow">
                 <p className="text-sm line-clamp-2">{post.content}</p>
                 <p className="text-xs text-muted-foreground">
-                  {post.date} a las {post.time}
+                  {format(post.startTime, "d 'de' MMMM 'a las' HH:mm", { locale: es })}
                 </p>
               </div>
               <Button asChild variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100">
