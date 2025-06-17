@@ -1,18 +1,9 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
 /**
- * Componente principal que redirige al usuario al dashboard.
- * Este es el punto de entrada de la aplicación.
+ * Punto de entrada principal de la aplicación.
+ * Redirige inmediatamente al usuario al dashboard desde el lado del servidor.
  */
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/dashboard');
-  }, [router]);
-
-  return null; // No es necesario renderizar nada mientras se redirige
+  redirect('/dashboard');
 }
