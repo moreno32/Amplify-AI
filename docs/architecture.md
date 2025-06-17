@@ -102,6 +102,39 @@ La decisión arquitectónica clave es la **abstracción de la capa de datos** a 
 -   `lib/mock-data`: Datos simulados para desarrollo desacoplado.
 -   `lib/types.ts`: Definiciones de tipos de TypeScript compartidas.
 
+### 3.3. Estructura de Componentes (La Pirámide)
+
+Para mantener el código organizado, escalable y con un bajo acoplamiento, los componentes se organizan en una jerarquía de tres niveles, conocida como "La Pirámide de Componentes". La regla principal es: **un componente debe residir en el nivel más específico posible**.
+
+```mermaid
+graph TD
+    subgraph "Nivel 3: Primitivos (Máxima Reutilización)"
+        D["shadcn/ui (Button, Card, Input...)"]
+    end
+    subgraph "Nivel 2: Compartidos (Reutilización Selectiva)"
+        C["@/components/shared (ContentBlock, BlockHeader...)"]
+    end
+    subgraph "Nivel 1: Específicos (Mínima Reutilización)"
+        B["@/app/(main)/feature/components/ (KpiCard, CompetitorGrid...)"]
+    end
+    B --> C --> D
+```
+
+**Nivel 1: Componentes Específicos de Feature (`/app/(main)/[feature]/components/`)**
+- **Definición:** Son componentes que están fuertemente acoplados a una única funcionalidad o página de la aplicación.
+- **Ejemplos:** `KpiCard` (solo para `analytics`), `CompetitorGrid` (solo para `strategy-coach`).
+- **Regla:** Si un componente solo se usa dentro de una *feature*, **DEBE** vivir en el directorio `components` de esa *feature*.
+
+**Nivel 2: Componentes Compartidos (`/components/shared/`)**
+- **Definición:** Componentes de composición que son reutilizados en **al menos dos features distintas**.
+- **Ejemplos:** `ContentBlock` (usado en Dashboard, Analytics, etc.), `PageHeader`.
+- **Regla:** Un componente solo se puede "promocionar" a `shared` cuando se demuestra su necesidad en una segunda *feature*. No se deben crear componentes compartidos de forma especulativa.
+
+**Nivel 3: Componentes Primitivos de UI (`/components/ui/`)**
+- **Definición:** Son los bloques de construcción básicos y sin lógica de negocio, proporcionados por la librería `shadcn/ui`.
+- **Ejemplos:** `Button`, `Card`, `Input`, `Dialog`.
+- **Regla:** Estos componentes son la base de todos los demás. Se utilizan para construir componentes de Nivel 1 y Nivel 2.
+
 ---
 
 ## 4. Arquitectura del Backend (FastAPI)

@@ -3,7 +3,7 @@ import { BlockHeader } from "@/components/shared/BlockHeader";
 import { LucideIcon } from "lucide-react";
 import React from "react";
 
-interface DashboardSectionProps {
+interface ContentBlockProps {
     icon: LucideIcon;
     title: string;
     description?: string;
@@ -11,7 +11,7 @@ interface DashboardSectionProps {
     className?: string;
 }
 
-export const DashboardSection = ({ icon, title, description, children, className }: DashboardSectionProps) => {
+export const ContentBlock = ({ icon, title, description, children, className }: ContentBlockProps) => {
     return (
         <Card className={className}>
             <CardHeader>

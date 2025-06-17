@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { InsightCard } from '@/components/shared/InsightCard'
+import { InsightCard } from './InsightCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { StrategyCoachData, Competitor } from '@/lib/types'
 import { Lightbulb } from 'lucide-react'

@@ -3,7 +3,7 @@ import { KpiCard } from "./KpiCard";
 import { BarChart, Heart, Users, Grid, LineChart, Lightbulb } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AiInsightCard } from "./AiInsightCard";
-import { DashboardSection } from "@/app/(main)/dashboard/components/DashboardSection";
+import { ContentBlock } from "@/components/shared/ContentBlock";
 import { AnalyticsData } from "@/lib/types";
 
 interface MiRendimientoTabProps {
@@ -21,7 +21,7 @@ export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
         ))}
       </div>
 
-      <DashboardSection
+      <ContentBlock
         icon={LineChart}
         title="Evolución de Seguidores y Engagement"
       >
@@ -53,9 +53,9 @@ export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
                 </AreaChart>
             </ResponsiveContainer>
         </div>
-      </DashboardSection>
+      </ContentBlock>
 
-      <DashboardSection
+      <ContentBlock
         icon={Lightbulb}
         title="Conclusión del Coach"
       >
@@ -66,7 +66,7 @@ export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
             <br/><br/>
             <strong>Recomendación:</strong> Lancemos una campaña de 'Interacción' con preguntas y encuestas para activar a tu nueva audiencia.
         </p>
-      </DashboardSection>
+      </ContentBlock>
     </div>
   );
 } 

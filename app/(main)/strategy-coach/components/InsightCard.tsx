@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LucideIcon } from "lucide-react";
 import { cva, VariantProps } from 'class-variance-authority';
-import { BlockHeader } from "./BlockHeader";
+import { BlockHeader } from "@/components/shared/BlockHeader";
 import React from "react";
 
 const insightCardVariants = cva(

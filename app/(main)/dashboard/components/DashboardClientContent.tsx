@@ -4,7 +4,7 @@ import { DashboardData } from '@/lib/types'
 import { BarChart, Sparkles } from 'lucide-react'
 import ActionCard from './ActionCard'
 import AiCoachFeed from './AiCoachFeed'
-import { DashboardSection } from './DashboardSection'
+import { ContentBlock } from '@/components/shared/ContentBlock'
 import PerformanceCard from './PerformanceCard'
 import UpcomingPosts from './UpcomingPosts'
 
@@ -13,19 +13,19 @@ interface DashboardClientContentProps {
 }
 
 export function DashboardClientContent({ data }: DashboardClientContentProps) {
-  return (
+    return (
     <div className="grid gap-6 lg:grid-cols-3">
       {/* Main Content Column */}
       <div className="lg:col-span-2 space-y-6">
-        <DashboardSection icon={BarChart} title="Tu Rendimiento de un Vistazo">
+        <ContentBlock icon={BarChart} title="Tu Rendimiento de un Vistazo">
           <div className="grid gap-4 md:grid-cols-2">
             {data.performanceMetrics.map((metric) => (
               <PerformanceCard key={metric.id} metric={metric} />
             ))}
           </div>
-        </DashboardSection>
+        </ContentBlock>
 
-        <DashboardSection
+        <ContentBlock
           icon={Sparkles}
           title="¿Qué hacemos hoy?"
           description="Acciones rápidas para impulsar tu marca."
@@ -35,7 +35,7 @@ export function DashboardClientContent({ data }: DashboardClientContentProps) {
               <ActionCard key={action.id} action={action} />
             ))}
           </div>
-        </DashboardSection>
+        </ContentBlock>
       </div>
 
       {/* Right Context Column */}

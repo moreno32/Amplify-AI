@@ -1,4 +1,4 @@
-import { DashboardSection } from "@/app/(main)/dashboard/components/DashboardSection";
+import { ContentBlock } from "@/components/shared/ContentBlock";
 import { Competitor } from "@/lib/types";
 import { Users } from "lucide-react";
 import { StrategyCompetitorCard } from "./StrategyCompetitorCard";
@@ -10,7 +10,7 @@ interface CompetitorGridProps {
 
 export const CompetitorGrid = ({ competitors, onCompetitorSelect }: CompetitorGridProps) => {
     return (
-        <DashboardSection
+        <ContentBlock
             icon={Users}
             title="Competidores Clave"
             description="Analiza las estrategias de tus competidores directos."
@@ -26,6 +26,6 @@ export const CompetitorGrid = ({ competitors, onCompetitorSelect }: CompetitorGr
                 </div>
               ))}
             </div>
-        </DashboardSection>
+        </ContentBlock>
     );
 }; 
