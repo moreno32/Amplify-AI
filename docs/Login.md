@@ -1,53 +1,58 @@
 # Especificación de Módulo: "Login y Autenticación"
 
-*Última actualización: Refleja la implementación del flujo de autenticación simple y la página de login funcional.*
+*Última actualización: Refleja la implementación de la pantalla de login de dos paneles con showcase de producto animado y el flujo de registro/login alternable.*
 
-## A. Propósito Estratégico: "La Puerta de Entrada a la Aplicación"
+## A. Propósito Estratégico: "Una Introducción a la Marca"
 
-El flujo de autenticación es el mecanismo de seguridad y personalización que protege la aplicación y da la bienvenida al usuario. Sus objetivos principales son:
+Más que una simple puerta de entrada, la pantalla de login es el primer punto de contacto del usuario con la marca Amplify AI. Sus objetivos son:
 
-1.  **Seguridad:** Asegurar que solo usuarios autorizados puedan acceder a los datos y funcionalidades de la plataforma.
-2.  **Identificación:** Reconocer al usuario para cargar su espacio de trabajo, datos y configuraciones específicas.
-3.  **Experiencia sin Fricción:** Proporcionar un proceso de inicio de sesión rápido, claro e intuitivo.
+1.  **Seguridad y Acceso:** Proporcionar un mecanismo de autenticación seguro y sin fricción.
+2.  **Comunicación de Valor:** Presentar la propuesta de valor fundamental de la aplicación de una manera visualmente atractiva y memorable desde el primer segundo.
+3.  **Establecer un Tono Profesional:** Transmitir una sensación de alta calidad, diseño cuidado y profesionalismo que define la experiencia del producto.
 
 ## B. Arquitectura y Diseño Implementado
 
-El sistema de autenticación se divide en dos partes principales: la interfaz de usuario (la página de login) y la lógica de navegación (layouts y enrutamiento).
+El sistema se divide en un layout específico, una página orquestadora y un componente visual especializado.
 
-### 1. Layout de Autenticación
-Se ha creado un layout específico en `app/(auth)/layout.tsx`. Este layout es minimalista y no incluye los componentes `Sidebar` ni `Header`, proporcionando un entorno limpio y enfocado exclusivamente en el proceso de autenticación.
+### 1. Layout de Autenticación (`app/(auth)/layout.tsx`)
+Un layout minimalista que omite la `Sidebar` y el `Header`, creando un entorno enfocado exclusivamente en el proceso de autenticación.
 
 ### 2. Página de Login (`app/(auth)/login/page.tsx`)
--   **Componente de Cliente:** La página es un `'use client'` para poder manejar el estado del formulario y la interacción del usuario (clics, introducción de texto).
--   **Estructura:** Un diseño de una sola columna, centrado vertical y horizontalmente en la página.
--   **Componentes Clave (`shadcn/ui`):**
-    -   `Card`: Envuelve el formulario para darle una estructura visual clara.
-    -   `CardHeader`, `CardTitle`, `CardDescription`: Presentan el propósito del formulario.
-    -   `CardContent`: Contiene los campos del formulario.
-    -   `Label` e `Input`: Para los campos de "Email" y "Contraseña".
-    -   `Button`: El botón de "Iniciar Sesión" que dispara la lógica de autenticación.
-    -   `Toaster`: Utiliza la librería `sonner` para mostrar notificaciones (toasts) sobre el éxito o fracaso del inicio de sesión.
+La página es un `'use client'` que orquesta la composición y la lógica. Su estructura se divide en un layout de dos paneles:
+
+-   **Panel Izquierdo (Panel de Acción):** Contiene el formulario funcional. Su diseño es limpio y directo.
+    -   **Rol:** Facilitar la acción del usuario (iniciar sesión o registrarse).
+    -   **Texto:** El copy es directo y contextual ("Bienvenido de vuelta", "Introduce tus credenciales...").
+    -   **Componentes Clave:** `Card` para estructurar el formulario, `Input` con visibilidad de contraseña, `Button` de envío y botones para login social (Google/Apple), y un conmutador para alternar entre las vistas de login y registro.
+
+-   **Panel Derecho (Panel de la Promesa):** Un showcase visual inmersivo.
+    -   **Rol:** Comunicar la promesa y el valor de la marca de forma aspiracional.
+    -   **Composición:** Un fondo de gradiente vibrante sobre el cual se presenta, en la parte superior, el titular de marketing ("Marketing inteligente. Crecimiento exponencial.") y, debajo, la animación.
+    -   **Componente Principal:** `OrbitalShowcase`, que renderiza la animación 3D de las tarjetas de características.
+
+### 3. Componente Visual Especializado (`components/auth/OrbitalShowcase.tsx`)
+Para mantener la legibilidad, la complejidad de la animación 3D se ha extraído a su propio componente. Su única responsabilidad es gestionar la lógica de `framer-motion` para la coreografía orbital de las tarjetas de alta fidelidad ("Planifica", "Crea", "Analiza").
 
 ## C. Flujo de Usuario y Lógica de Negocio
 
-El flujo de autenticación actual es una **simulación** diseñada para replicar el comportamiento de un sistema real.
+El flujo actual es una **simulación** que maneja dos estados principales:
 
-1.  **Acceso a la Página:** El usuario navega (o es redirigido) a `/login`.
-2.  **Rellenar Credenciales:** El usuario introduce un email y una contraseña.
-3.  **Intento de Login:** Al hacer clic en "Iniciar Sesión", se ejecuta la función `handleLogin`.
-4.  **Validación Simulada:**
-    -   La función comprueba si los campos de email y contraseña no están vacíos.
-    -   **Éxito:** Si ambos campos tienen contenido, se muestra una notificación de éxito con `toast.success()`, y el usuario es redirigido al `/dashboard` usando `router.push()`.
-    -   **Fallo:** Si alguno de los campos está vacío, se muestra una notificación de error con `toast.error()` y el usuario permanece en la página de login para corregir los datos.
-5.  **Cierre de Sesión:** Desde el `Header` en cualquier parte de la aplicación, la opción "Cerrar Sesión" redirige al usuario de vuelta a `/login` y finaliza su sesión "simulada".
+1.  **Acceso y Vista por Defecto:** El usuario llega a `/login`, que por defecto muestra la vista de "Iniciar Sesión".
+2.  **Interacción con el Formulario:**
+    -   El usuario introduce sus credenciales.
+    -   El usuario puede alternar la vista entre **Login** y **Registro**. Esto cambia dinámicamente el titular de la `Card`, la descripción y el texto del botón principal.
+3.  **Lógica de `handleAuthAction`:**
+    -   **En vista de Login:** Comprueba si los campos no están vacíos. Si es así, muestra un toast de éxito (`sonner`) y redirige al `/dashboard`. Si no, muestra un toast de error.
+    -   **En vista de Registro:** Realiza la misma comprobación. Si es exitosa, muestra un toast de éxito y cambia la vista a "Login", invitando al usuario a iniciar sesión. Si no, muestra un toast de error.
+4.  **Cierre de Sesión:** Desde el menú de usuario en el `Header`, la opción "Cerrar Sesión" redirige de vuelta a `/login`.
 
 ## D. Backlog de Desarrollo y Mejoras
 
--   **(Prioridad Crítica) Implementar Autenticación Real:** Este es el siguiente paso más importante. Se debe reemplazar la lógica simulada por una solución robusta como `NextAuth.js`, `Clerk`, `Supabase Auth` o similar. Esto implicará:
-    -   Gestionar sesiones de usuario reales con tokens (ej. JWT).
-    -   Proteger rutas del lado del servidor y del cliente.
-    -   Implementar el hash seguro de contraseñas.
--   **(Prioridad Media) Añadir Opción de "Recordarme":** Implementar la funcionalidad para mantener la sesión del usuario activa entre visitas.
--   **(Prioridad Media) Añadir Flujo de "Olvidé mi Contraseña":** Crear la página y la lógica para que los usuarios puedan restablecer su contraseña.
--   **(Prioridad Baja) Añadir Inicio de Sesión Social (OAuth):** Permitir a los usuarios iniciar sesión con cuentas de Google, Meta, etc., para un registro más rápido.
--   **(Prioridad Baja) Implementar Página de Registro:** Crear una página y formulario para que nuevos usuarios puedan crear una cuenta.
+La interfaz de usuario está en un estado muy avanzado. El enfoque principal ahora es conectar la lógica de backend.
+
+-   **(Prioridad Crítica) Implementar Autenticación Real:** Reemplazar la lógica simulada por una solución robusta (ej. NextAuth.js, Clerk). Esto incluye la gestión de sesiones con tokens, protección de rutas y hashing de contraseñas.
+-   **(Prioridad Alta) Conectar Lógica de Backend:** Implementar la lógica de servidor para las siguientes características, cuya UI ya existe:
+    -   Funcionalidad de **Registro de Usuario**.
+    -   Funcionalidad de **Inicio de Sesión Social (OAuth)** con Google y Apple.
+    -   Funcionalidad de **"Recuérdame"** para persistir la sesión.
+-   **(Prioridad Media) Crear Flujo de "Olvidé mi Contraseña":** Diseñar e implementar las páginas y la lógica de backend para el restablecimiento de contraseñas.

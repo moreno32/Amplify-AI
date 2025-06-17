@@ -24,7 +24,7 @@ Actualmente, el proyecto ha consolidado su **Application Shell** (la estructura 
 
 La aplicación cuenta con una estructura de navegación e interacción sólida y un sistema de diseño coherente.
 - [x] **Application Shell Refactorizado:** La `Sidebar` y el `Header` son componentes interactivos y funcionales.
-- [x] **Flujo de Autenticación Implementado:** Existe una página de `/login` funcional con lógica de autenticación (simulada) y redirección. El cierre de sesión está implementado.
+- [x] **Experiencia de Login Inmersiva:** Se ha diseñado e implementado una página de `/login` de dos paneles que no solo es funcional sino que comunica el valor de la marca. Incluye un showcase de producto 3D animado.
 - [x] **Paleta de Comandos y Notificaciones:** Se han integrado una paleta de comandos global (`⌘K`) y un panel de notificaciones.
 - [x] **Base Modular:** La sección de `Brand Profile` y `Calendar` siguen siendo el estandarte de la arquitectura de componentes.
 - [x] Toda la data se consume desde mocks locales en `lib/mock-data/`, permitiendo un desarrollo y testing predecible.
@@ -36,10 +36,11 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
     -   `Sidebar` con navegación principal y estado activo.
     -   `CommandPalette` para búsqueda y navegación rápida.
     -   `AlertDialog` para acciones críticas como "Cerrar Sesión", mejorando la UX.
--   **Flujo de Autenticación:**
-    -   Página de `/login` dedicada con formulario y validación.
+-   **Flujo de Autenticación Sofisticado:**
+    -   Página de `/login` de dos paneles: un panel de acción (formulario) y un panel de promesa (showcase de producto).
+    -   El componente `OrbitalShowcase` presenta una animación 3D de las características clave del producto.
+    -   Lógica para alternar entre las vistas de "Login" y "Registro".
     -   Sistema de notificaciones (`sonner`) para feedback al usuario.
-    -   Redirección segura entre las páginas públicas (`/login`) y privadas (`/dashboard`).
 -   **Playbook de Perfil de Marca:**
     -   Una sección completa y funcional que permite definir el `Core`, `Voice`, `Visual` y `Assets` de la marca.
     -   **Arquitectura Modular:** Cada pieza de información (Promesa, Círculo Dorado, Arquetipos, etc.) se presenta en una `<Card>` estandarizada con un `<BlockHeader>` (icono, título, descripción) para máxima claridad y consistencia.
@@ -53,7 +54,7 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
 | **Application Shell**           | ✅ **Hecho**    | Estructura principal de la app (Header, Sidebar, etc.) totalmente funcional. |
 | **Perfil de Marca (Playbook)**  | ✅ **Hecho**    | Define y visualiza el ADN completo de la marca de forma modular.         |
 | **Calendario de Contenido**     | ✅ **Hecho**    | Planifica y visualiza contenido en una vista semanal.                    |
-| **Autenticación de Usuario**    | 🟡 **En Progreso** | Flujo de login/logout funcional, pero con lógica simulada.               |
+| **Autenticación de Usuario**    | ✨ **UI Completa** | Flujo de login/registro/social con UI de alta fidelidad. Pendiente de backend. |
 | **Dashboard de Métricas**       | 🟡 **En Progreso** | Pantalla de métricas con componentes de UI listos para datos reales.     |
 | **Social Inbox**                | 🟡 **En Progreso** | Interfaz de Inbox diseñada, pendiente de integración.                    |
 | **Ajustes de Cuenta**           | 🟡 **En Progreso** | Página de `/settings` creada, pendiente de desarrollar formularios.      |
@@ -72,7 +73,7 @@ La aplicación cuenta con una estructura de navegación e interacción sólida y
 | Analíticas         | Analizar el rendimiento            | UI estática, sin datos reales    |
 | Ajustes            | Configurar la cuenta y la marca    | UI estática, sin funcionalidad   |
 
-## �� Stack Tecnológico
+## 🛠️ Stack Tecnológico
 
 -   **Framework:** Next.js 14+ (App Router)
 -   **Lenguaje:** TypeScript
@@ -136,14 +137,14 @@ La siguiente fase conectará el frontend a un backend a través de una API REST.
 
 -   ✅ **Fase 1 (Completada)**: Construcción de la MVE con UI pulida y flujo de calendario funcional.
 -   ✅ **Fase 2 (Completada)**: Refactorización masiva de la sección "Perfil de Marca" a una arquitectura modular y escalable.
--   ✅ **Fase 3 (Completada)**: Refactorización del "Application Shell". Implementación de `Header`, `Sidebar`, `CommandPalette` y un flujo de autenticación funcional. Creación de documentación exhaustiva.
+-   ✅ **Fase 3 (Completada)**: Refactorización del "Application Shell". Implementación de `Header`, `Sidebar`, `CommandPalette` y un flujo de autenticación de alta fidelidad con showcase de producto animado. Creación de documentación exhaustiva.
 -   🟡 **Fase 4 (En Progreso)**: Refinamiento del resto de secciones (Dashboard, Inbox) para adoptar la nueva arquitectura. Desarrollo de la sección de `Ajustes`.
 -   🔜 **Fase 5 (Siguiente)**: Desarrollo del backend y la base de datos. Reemplazar los datos mock con llamadas a una API real e implementar autenticación real.
 -   🔜 **Fase 6 (Futuro)**: Implementación de funcionalidades de IA (Strategy Coach, etc.).
 
 ## <details><summary>📜 Historial de Desarrollo</summary>
 
-1.  **Refactorización del Application Shell y Autenticación (Julio 2024):** Se llevó a cabo una refactorización completa de la estructura principal de la aplicación. Se implementó un `Header` global, una `Sidebar` mejorada, una paleta de comandos (`⌘K`), y un panel de notificaciones. Se creó un flujo de autenticación simulado con una página de login dedicada, redirecciones y notificaciones al usuario, estableciendo una base sólida para la gestión de sesiones.
+1.  **Refactorización del Application Shell y Autenticación (Julio 2024):** Se llevó a cabo una refactorización completa de la estructura principal de la aplicación. Se implementó un `Header` global, una `Sidebar` mejorada, una paleta de comandos (`⌘K`), y un panel de notificaciones. Se creó un flujo de autenticación de alta fidelidad, culminando en una página de login de dos paneles con un showcase de producto 3D animado para comunicar el valor de la marca.
 2.  **Implementación de Design Tokens (Junio 2024):** Se centralizaron todas las constantes de diseño (colores, tipografía, espaciado) en `tailwind.config.ts`, que a su vez consume variables CSS definidas en `app/globals.css`. Esto establece una única fuente de verdad para el sistema de diseño, mejorando la consistencia y la mantenibilidad del tema claro/oscuro.
 3.  **Refactorización Masiva del Perfil de Marca:** Se transformó la página estática de "Perfil de Marca" en un "Playbook Estratégico" completamente interactivo y modular. Se estableció un sistema de diseño basado en `<Card>` y `<BlockHeader>` que ahora sirve como estándar para toda la aplicación. Se crearon componentes complejos como `GoldenCircle` y `ArchetypeGrid` y se depuraron múltiples errores de CSS, tipos y lógica de estado.
 4.  **Pivote de Concepto:** La identidad del proyecto evolucionó desde una herramienta de contenido específica para un gimnasio ("O2CW") a la plataforma de estrategia de marca más amplia y potente que es "Amplify AI".
@@ -155,7 +156,7 @@ La siguiente fase conectará el frontend a un backend a través de una API REST.
 
 **Sofía, una Brand Strategist en una agencia de marketing:**
 
-1.  Llega a la página de `/login` de **Amplify AI**, introduce sus credenciales y accede a la plataforma.
+1.  Llega a la impresionante página de `/login` de **Amplify AI**, donde entiende inmediatamente la propuesta de valor gracias al showcase animado. Introduce sus credenciales y accede a la plataforma.
 2.  Aterriza en el `Dashboard`. Desde ahí, navega a la sección de **Perfil de Marca** usando la `Sidebar`.
 3.  En la pestaña `Core`, define el `Círculo Dorado` (Por qué, Cómo, Qué) y selecciona los `Arquetipos de Personalidad` de la marca en la matriz interactiva.
 4.  En la pestaña `Voice`, establece el tono, el vocabulario y la gramática que la marca debe usar.

@@ -146,6 +146,16 @@ Para asegurar la consistencia visual y facilitar el mantenimiento, la aplicació
 
 -   **Uso en la Práctica:** Los desarrolladores deben utilizar exclusivamente las clases de utilidad de Tailwind (ej. `bg-primary`, `text-foreground`, `border-border`) en los componentes. Esto desacopla los componentes de los valores de diseño específicos, permitiendo que un cambio en una variable CSS en `globals.css` se propague por toda la aplicación de manera consistente.
 
+### 3.5. Arquitectura de Autenticación (`/app/(auth)`)
+
+La autenticación no es solo una característica, sino un contexto arquitectónico distinto dentro de la aplicación.
+
+-   **Layout de Grupo Dedicado:** Se utiliza un [Layout de Grupo](https://nextjs.org/docs/app/building-your-application/routing/route-groups) de Next.js, `(auth)`, para las páginas relacionadas con la autenticación (ej. `/login`, `/register`, `/forgot-password`). Este grupo tiene su propio `layout.tsx` que **NO** incluye los componentes del "Application Shell" como la `Sidebar` o el `Header`. Esto crea un entorno limpio y enfocado para el usuario.
+
+-   **Páginas Orquestadoras:** Cada página dentro de `(auth)`, como `login/page.tsx`, actúa como un orquestador que compone la interfaz a partir de componentes de UI y, si es necesario, componentes de módulo más complejos.
+
+-   **Componentes de Módulo Específicos:** Siguiendo el Nivel 1 de la "Pirámide de Componentes", la lógica visual compleja se aísla en su propio componente. Un ejemplo clave es `components/auth/OrbitalShowcase.tsx`, que encapsula toda la animación 3D de la página de login, manteniendo el archivo de la página limpio y enfocado en el estado y la lógica del formulario.
+
 ---
 
 ## 4. Arquitectura del Backend (FastAPI)

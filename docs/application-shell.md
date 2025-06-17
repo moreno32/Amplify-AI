@@ -8,7 +8,7 @@ El "Application Shell" es la estructura persistente que envuelve toda la experie
 
 1.  **Orientación Constante:** Proporcionar una navegación global (`Sidebar`) que sea siempre visible y predecible.
 2.  **Acceso Inmediato:** Ofrecer un conjunto de herramientas y acciones globales (`Header`) que el usuario necesita en cualquier punto de su flujo de trabajo (búsqueda, creación, notificaciones, perfil).
-3.  **Contexto y Seguridad:** Gestionar el estado de autenticación del usuario, proveyendo un punto de entrada (`login`) y salida (`logout`) claro y seguro.
+3.  **Contexto y Seguridad:** Servir como el contenedor seguro para el usuario autenticado, proveyendo un punto de salida (`logout`) claro desde el `Header`, mientras que la entrada (`login`) se gestiona en su propio layout dedicado.
 4.  **Consistencia Visual:** Crear un marco coherente y profesional que le da a la aplicación una sensación de estabilidad y calidad, sin importar en qué página se encuentre el usuario.
 
 ## B. Arquitectura y Diseño Implementado: Layouts Anidados y Componentes de Cliente
