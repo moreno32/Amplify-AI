@@ -20,10 +20,10 @@ export default function UpcomingPosts({ posts }: UpcomingPostsProps) {
         {posts.length > 0 ? (
           posts.map((post) => (
             <div key={post.id} className="flex items-center gap-4 group">
-              {post.imageUrl && (
+              {post.image && (
                 <div className="relative h-16 w-16 flex-shrink-0">
                   <Image
-                    src={post.imageUrl}
+                    src={post.image}
                     alt={post.content}
                     fill
                     className="rounded-md object-cover"
@@ -33,7 +33,7 @@ export default function UpcomingPosts({ posts }: UpcomingPostsProps) {
               <div className="flex-grow">
                 <p className="text-sm line-clamp-2">{post.content}</p>
                 <p className="text-xs text-muted-foreground">
-                  {post.date} a las {post.time}
+                  {new Date(post.startTime).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })} a las {new Date(post.startTime).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
               <Button asChild variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100">
