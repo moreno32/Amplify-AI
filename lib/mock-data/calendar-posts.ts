@@ -7,7 +7,7 @@ export const mockPosts: Post[] = [
     status: 'published',
     platform: 'instagram',
     category: 'Motivación',
-    image: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-16T09:00:00'),
     duration: 180, // 3 hours
     notes: 'Post para empezar la semana con energía.'
@@ -18,7 +18,7 @@ export const mockPosts: Post[] = [
     status: 'draft',
     platform: 'facebook',
     category: 'Entrenamiento',
-    image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-18T10:00:00'),
     duration: 120, // 2 hours
     notes: 'Revisar la imagen antes de publicar.'
@@ -29,7 +29,7 @@ export const mockPosts: Post[] = [
     status: 'scheduled',
     platform: 'twitter',
     category: 'Evento',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-21T07:00:00'),
     duration: 120, // 2 hours
     notes: 'Asegurarse de que el enlace de reserva esté activo.'
@@ -40,7 +40,7 @@ export const mockPosts: Post[] = [
     status: 'idea',
     platform: 'instagram',
     category: 'Nutrición',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-18T10:00:00'),
     duration: 120, // 2 hours
     notes: 'Investigar estudios recientes para respaldar el post.'
@@ -51,7 +51,7 @@ export const mockPosts: Post[] = [
     status: 'scheduled',
     platform: 'facebook',
     category: 'Entrenamiento',
-    image: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-22T12:00:00'),
     duration: 120, // 2 hours
     notes: 'Ideal para el día de descanso.'
@@ -62,7 +62,7 @@ export const mockPosts: Post[] = [
     status: 'awaiting-approval',
     platform: 'instagram',
     category: 'Promoción',
-    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&h=400&fit=crop&q=60',
+    imageUrl: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&h=400&fit=crop&q=60',
     startTime: new Date('2025-06-20T11:00:00'),
     duration: 120, // 2 hours
     notes: 'Pendiente de aprobación por el cliente.'

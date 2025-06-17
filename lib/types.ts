@@ -7,7 +7,7 @@ export interface Post {
   status: PostStatus;
   category: PostCategory;
   platform: 'instagram' | 'facebook' | 'twitter';
-  image?: string;
+  imageUrl?: string;
   startTime: Date;
   duration: number; // Duration in minutes
   notes?: string;

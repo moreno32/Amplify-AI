@@ -127,9 +127,9 @@ export const PostEditorModal = ({
                   <span className="ml-3 font-semibold text-sm">O2CW Boutique Gym</span>
                 </div>
 
-                {post?.image && (
+                {post?.imageUrl && (
                   <div className="relative aspect-square">
-                    <Image src={post.image} alt="Preview" fill className="object-cover" />
+                    <Image src={post.imageUrl} alt="Preview" fill className="object-cover" />
                   </div>
                 )}
 
@@ -147,9 +147,9 @@ export const PostEditorModal = ({
               <div>
                 <h3 className="text-lg font-semibold mb-3">Imagen del Post</h3>
                 <div className="relative aspect-video w-full rounded-lg overflow-hidden border bg-muted/20">
-                  {post?.image && !isCreating && (
+                  {post?.imageUrl && !isCreating && (
                     <Image
-                      src={post.image}
+                      src={post.imageUrl}
                       alt="Post image"
                       fill
                       className="object-cover"

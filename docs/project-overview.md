@@ -119,9 +119,10 @@ La siguiente fase conectará el frontend a un backend a través de una API REST.
 
 ## <details><summary>📜 Historial de Desarrollo</summary>
 
-1.  **Refactorización Masiva del Perfil de Marca:** Se transformó la página estática de "Perfil de Marca" en un "Playbook Estratégico" completamente interactivo y modular. Se estableció un sistema de diseño basado en `<Card>` y `<BlockHeader>` que ahora sirve como estándar para toda la aplicación. Se crearon componentes complejos como `GoldenCircle` y `ArchetypeGrid` y se depuraron múltiples errores de CSS, tipos y lógica de estado.
-2.  **Pivote de Concepto:** La identidad del proyecto evolucionó desde una herramienta de contenido específica para un gimnasio ("O2CW") a la plataforma de estrategia de marca más amplia y potente que es "Amplify AI".
-3.  **Estabilización Inicial:** Se solucionaron errores iniciales de ejecución y se estabilizó el proveedor de imágenes, cambiando de `images.unsplash.com` a `picsum.photos`.
+1.  **Implementación de Design Tokens (Junio 2024):** Se centralizaron todas las constantes de diseño (colores, tipografía, espaciado) en `tailwind.config.ts`, que a su vez consume variables CSS definidas en `app/globals.css`. Esto establece una única fuente de verdad para el sistema de diseño, mejorando la consistencia y la mantenibilidad del tema claro/oscuro.
+2.  **Refactorización Masiva del Perfil de Marca:** Se transformó la página estática de "Perfil de Marca" en un "Playbook Estratégico" completamente interactivo y modular. Se estableció un sistema de diseño basado en `<Card>` y `<BlockHeader>` que ahora sirve como estándar para toda la aplicación. Se crearon componentes complejos como `GoldenCircle` y `ArchetypeGrid` y se depuraron múltiples errores de CSS, tipos y lógica de estado.
+3.  **Pivote de Concepto:** La identidad del proyecto evolucionó desde una herramienta de contenido específica para un gimnasio ("O2CW") a la plataforma de estrategia de marca más amplia y potente que es "Amplify AI".
+4.  **Estabilización Inicial:** Se solucionaron errores iniciales de ejecución y se estabilizó el proveedor de imágenes, cambiando de `images.unsplash.com` a `picsum.photos`.
 
 </details>
 

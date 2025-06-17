@@ -84,7 +84,7 @@ use_case: ["Post de lunes por la mañana", "Contenido para 'días difíciles'", 
 narrative_phase: "La Mentoría"
 ---
 - **Estructura:**
-    1.  **Hook (Validación Emocional):** Comienza con una verdad con la que la Heroína pueda identificarse. *Ej: "Hay días en que la motivación no aparece..."*
+    1.  **Hook (Validación Emocional):** Comienza con una verdad con la Heroína pueda identificarse. *Ej: "Hay días en que la motivación no aparece..."*
     2.  **Re-enfoque (El Giro del Mentor):** Gira la narrativa hacia el amor propio. *Ej: "...y es precisamente en esos días donde la constancia se transforma en amor propio."*
     3.  **Afirmación (El Mantra):** Una frase corta y poderosa. *Ej: "Cada paso que das, es por y para ti."*
     4.  **CTA (La Conversación):** Una pregunta que invite a la comunidad a compartir. *Ej: "¿Qué te dices a ti misma para empezar? Cuéntanos 💜"*
@@ -103,6 +103,7 @@ name: "Magenta Vibrante"
 - **HEX:** `#D81B60`
 - **IA Keywords:** `vibrant magenta, fuchsia, energetic pink, empowering, bold`
 - **Uso:** Elementos de acción, acentos de luz, tipografía destacada.
+- **Nota Técnica:** Este color se implementa en la aplicación a través de la variable CSS `--brand-accent` definida en `app/globals.css`. Los componentes lo utilizan a través de clases de Tailwind como `bg-brand-accent`.
 
 ### @VISUAL::Component::Lighting::001
 ---

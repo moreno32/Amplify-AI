@@ -70,9 +70,9 @@ export const PostCard = ({ post, onClick, onDelete }: PostCardProps) => {
             
             {/* Image and Content */}
             <div className="flex-grow flex flex-col min-h-0">
-                {post.image && (
+                {post.imageUrl && (
                     <div className="relative aspect-video w-full my-2 rounded-md overflow-hidden flex-shrink-0">
-                        <Image src={post.image} alt={post.content} layout="fill" className="object-cover" />
+                        <Image src={post.imageUrl} alt={post.content} layout="fill" className="object-cover" />
                     </div>
                 )}
                 <p className="text-sm text-gray-700 break-words flex-shrink min-h-0 overflow-y-auto">{post.content.split('#')[0]}</p>
