@@ -77,7 +77,7 @@ export default function LoginPage() {
                 : 'Empieza a automatizar tu contenido en menos de 5 minutos.'}
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-6">
+          <CardContent className="grid gap-5">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -147,10 +147,15 @@ export default function LoginPage() {
               {view === 'login' ? 'Entrar' : 'Crear Cuenta Gratis'}
             </Button>
 
-            <div className="my-4 flex items-center justify-center">
-              <span className="text-xs text-muted-foreground">
-                O inicia sesión con
-              </span>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">
+                  O inicia sesión con
+                </span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -162,11 +167,13 @@ export default function LoginPage() {
                 <svg
                   role="img"
                   viewBox="0 0 24 24"
-                  className="mr-2 h-4 w-4"
-                  fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="mr-2 h-4 w-4"
                 >
-                  <path d="M12.25,6.17c-1.65,0-3.34,0.92-4.22,2.39a4.4,4.4,0,0,0-.6,3.89,4.73,4.73,0,0,0,2.3,3.23c0.88,0.59,2.08,0.88,3.23,0.5,1.42-.48,2.29-1.94,2.3-1.95a0.35,0.35,0,0,0-.29-0.51,3.13,3.13,0,0,1-1-1.85,0.35,0.35,0,0,0-.39-0.3c-1.55-.16-2.6-1.28-3.09-2.22a4.11,4.11,0,0,1,1.83-3.18,0.35,0.35,0,0,0,0-.56A4.31,4.31,0,0,0,12.25,6.17Zm2.18-3.7a2.53,2.53,0,0,0-2.19,1.21,2.45,2.45,0,0,0,0,2.43,2.53,2.53,0,0,0,2.19,1.2,2.45,2.45,0,0,0,0-2.42A2.53,2.53,0,0,0,14.43,2.47Z" />
+                  <path
+                    d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-1.84.048-3.13 1.2-3.96 2.903-1.464 2.994-.744 7.394 1.176 9.873.816 1.151 1.812 2.535 3.12 2.504 1.2-.03 1.62-.744 3.036-.744 1.416 0 1.776.744 3.036.744 1.344.03 2.112-1.233 2.916-2.456.972-1.498 1.44-3.078 1.44-3.132 0-.03-2.11-1.248-2.14-3.332-.03-2.448 1.764-3.624 1.848-3.708-.96-.996-2.388-1.536-3.684-1.536-2.052 0-3.624 1.332-4.596 1.332zM10.02 3.032c.792-1.02 1.932-1.68 3.132-1.728-.084 1.152-.636 2.22-1.56 2.952-.84.66-1.956 1.32-3.084 1.284.12-1.212.6-2.328 1.512-2.508z"
+                    fill="#1C1C1C"
+                  ></path>
                 </svg>
                 Apple
               </Button>
