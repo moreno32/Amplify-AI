@@ -8,13 +8,15 @@ import { PostCard } from './PostCard';
 interface CalendarGridProps {
   posts: Post[];
   onPostClick: (post: Post) => void;
-  onDeletePost: (post: Post) => void;
+  onDeletePost: (postId: string) => void;
+  isCurrentWeek: boolean;
+  timeIndicatorRef: React.RefObject<HTMLDivElement | null>;
 }
 
 const hours = Array.from({ length: 24 }, (_, i) => i);
 const hourRowHeight = '3.5rem'; // 56px, sync with grid-rows-[56px]
 
-export const CalendarGrid = ({ posts, onPostClick, onDeletePost }: CalendarGridProps) => {
+export const CalendarGrid = ({ posts, onPostClick, onDeletePost, isCurrentWeek, timeIndicatorRef }: CalendarGridProps) => {
 
   const allPostsWithLayout = useMemo(() => {
     return posts.map(post => {
@@ -66,7 +68,11 @@ export const CalendarGrid = ({ posts, onPostClick, onDeletePost }: CalendarGridP
             gridRow: post.gridRow
           }}
         >
-          <PostCard post={post} onClick={onPostClick} onDelete={onDeletePost} />
+          <PostCard 
+            post={post} 
+            onClick={onPostClick} 
+            onDelete={onDeletePost} 
+          />
         </div>
       ))}
     </div>
