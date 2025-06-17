@@ -87,7 +87,7 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
     } else if (isCurrentWeek) {
         scrollToNow()
     }
-  }, [currentDate])
+  }, [currentDate, startOfWeek, endOfWeek, isCurrentWeek, initialData.initialDate])
 
   const handleTodayClick = () => {
     const now = new Date()
