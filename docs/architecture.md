@@ -1,82 +1,127 @@
-# Documento de Arquitectura y Decisiones (ADR) - Amplify AI Frontend
+# Documento de Arquitectura y Decisiones (ADR) - Amplify AI
 
-*Última actualización: Fusión de la documentación de arquitectura general y refactorización de nombres de archivo.*
+*Última actualización: Refactorización completa de la arquitectura para desacoplar Frontend y Backend, y definición del stack tecnológico Full-Stack.*
 
-## 1. Introducción y Visión General
+## 1. Filosofía y Visión General
 
-Este documento describe la arquitectura de software, la estructura y las decisiones tecnológicas clave (ADR - Architecture Decision Records) para el proyecto `amplify-ai-frontend`. Su propósito es servir como una guía centralizada para el equipo de desarrollo, asegurando consistencia, mantenibilidad y un entendimiento común de nuestra base técnica.
+Este documento describe la arquitectura full-stack del proyecto Amplify AI. La filosofía principal es la **separación de responsabilidades** entre un frontend Next.js de alto rendimiento y un backend de API robusto y escalable, permitiendo un desarrollo en paralelo y una integración limpia.
 
-### 1.1. Stack Tecnológico Principal
-El frontend de Amplify AI está construido con **Next.js 15 (App Router)** y **TypeScript**. La interfaz de usuario se basa en un sistema de componentes construido con **shadcn/ui**, que a su vez utiliza **Tailwind CSS** para los estilos y **Radix UI** para las primitivas de componentes accesibles. La iconografía es gestionada por **lucide-react**.
-
-### 1.2. Filosofía y Principios Guía
-
-*   **Modernidad y Rendimiento:** Adoptamos un stack de vanguardia para maximizar el rendimiento percibido por el usuario (renderizado en servidor) y aprovechar las últimas innovaciones del ecosistema.
-*   **Experiencia del Desarrollador (DX):** Las herramientas se eligen por el rendimiento y por la eficiencia que ofrecen al desarrollador.
-*   **Seguridad por Diseño:** La arquitectura debe proteger por defecto los activos sensibles, como las claves de API, utilizando patrones de backend-for-frontend (BFF).
-*   **Componentización y Reutilización:** Construimos la UI a partir de componentes modulares, bien definidos y reutilizables para garantizar la consistencia y acelerar el desarrollo.
+*   **Frontend (Next.js):** Actúa como la capa de presentación. Es responsable de la experiencia de usuario, la renderización de la interfaz y la gestión del estado de la UI. **No contiene lógica de negocio crítica**.
+*   **Backend (FastAPI):** Actúa como el cerebro del sistema. Centraliza toda la lógica de negocio, la comunicación con la base de datos, la gestión de usuarios y la integración con servicios de terceros.
 
 ---
 
-## 2. Estructura de Proyecto y Directorios
+## 2. Arquitectura Full-Stack
 
-### 2.1. Rutas (App Router)
-La aplicación está organizada usando el **App Router** de Next.js. Las rutas principales se encuentran en `amplify-ai-frontend/app/(main)/` y se agrupan lógicamente sin afectar la URL final:
--   `/dashboard`: Página principal o de inicio.
--   `/brand-profile`: El "Playbook Estratégico" o Perfil de Marca.
--   `/calendar`: Calendario de publicaciones.
--   `/influencers`: Búsqueda y gestión de influencers.
--   `/analytics`: Analíticas y rendimiento.
--   `/strategy-coach`: Coach de estrategia.
--   ...y otras secciones como `settings`, `inbox`, etc.
+### 2.1. Diagrama de Arquitectura Global
 
-Cada una de estas carpetas contiene un `page.tsx` que sirve como punto de entrada para esa ruta.
+```mermaid
+graph TD
+    subgraph "Usuario Final"
+        A[Navegador del Usuario]
+    end
 
-### 2.2. Layout Principal
-La aplicación sigue un layout de dashboard clásico, definido en `app/(main)/layout.tsx`, consistente en:
--   **Panel de Navegación Lateral (Sidebar)**: Menú principal persistente.
--   **Área de Contenido Principal**: Contenedor donde se renderiza el contenido de cada página (`children`).
+    subgraph "Plataforma Frontend (Vercel/Render)"
+        B[Next.js App]
+        B -- HTTPS --> C
+    end
 
-### 2.3. Filosofía de Componentes y Reutilización
-La estrategia se centra en la **modularidad** y la **reutilización**, organizando los componentes de la siguiente manera:
--   **`@/components/ui`**: Componentes base de `shadcn/ui` (`<Button>`, `<Card>`, etc.). Son el fundamento de la interfaz.
--   **`@/components/shared`**: Componentes reutilizables que no son de UI base, pero son agnósticos al dominio y se usan en múltiples pantallas (ej: `PageHeader.tsx`, `DashboardSection.tsx`, `InsightCard.tsx`).
--   **`@/components/layout`**: Componentes que definen la estructura principal de la aplicación (ej: `Sidebar.tsx`, `Header.tsx`).
--   **Componentes de Dominio Específico**: Cada sección de la aplicación (p. ej., `analytics`) tiene su propio subdirectorio de componentes (`/app/(main)/analytics/components/`). Aquí residen los componentes que son específicos de esa pantalla (`KpiCard.tsx`). Esta separación mantiene el código organizado y evita que los componentes compartidos se contaminen con lógica de negocio específica.
+    subgraph "Plataforma Backend (Render/Fly.io)"
+        C[API de FastAPI]
+        C -- Conexión Segura --> D
+        C -- Webhooks/API --> E
+    end
 
-### 2.4. Lógica y Tipos
--   **`@/lib`**: Contiene la lógica compartida, utilidades y definiciones.
-    -   `@/lib/types.ts`: Centraliza las definiciones de tipos e interfaces de TypeScript para toda la aplicación.
-    -   `@/lib/mock-data.ts`: Proporciona datos de prueba durante el desarrollo.
-    -   `@/lib/utils.ts`: Para funciones de utilidad genéricas.
+    subgraph "Servicios de Terceros"
+        D[Supabase: DB (Postgres) + Auth + Storage]
+        E[Stripe: Pagos y Suscripciones]
+    end
+
+    A --> B
+```
+
+### 2.2. Stack Tecnológico Detallado
+
+| Capa      | Tecnología        | Propósito                                       |
+|-----------|-------------------|-------------------------------------------------|
+| **Frontend**  | Next.js 15 (App Router) | Framework de React para UI y renderizado.       |
+|           | TypeScript        | Tipado estático para robustez.                  |
+|           | Tailwind CSS      | Estilos a través de clases de utilidad.         |
+|           | shadcn/ui         | Componentes de UI accesibles y personalizables. |
+|           | Zustand           | Gestión de estado global simple (si es necesario). |
+|           | Testing Library   | Pruebas de componentes y UI.                    |
+| **Backend**   | Python 3.11+      | Lenguaje principal.                             |
+|           | FastAPI           | Framework de API de alto rendimiento.           |
+|           | Pydantic          | Validación de datos y "contrato" de API.        |
+|           | SQLAlchemy        | ORM para la interacción con la base de datos.   |
+|           | Pytest, Black, Mypy | Calidad, formato y tipado del código.           |
+| **Base de Datos** | Supabase (PostgreSQL) | Base de datos relacional gestionada.        |
+| **Autenticación** | Supabase Auth     | Gestión de usuarios (Social, Email/Pass). |
+| **Almacenamiento** | Supabase Storage  | Almacenamiento de archivos y assets.       |
+| **Pagos**     | Stripe            | Procesamiento de pagos y suscripciones.       |
+| **CI/CD**     | GitHub Actions    | Automatización de pruebas y despliegues.      |
+| **Hosting**   | Vercel/Render/Fly.io | Plataformas para el despliegue de servicios.  |
 
 ---
 
-## 3. Decisiones de Arquitectura Clave (ADRs)
+## 3. Arquitectura del Frontend (Next.js)
 
-### 3.1. Framework Principal: Next.js 15 con App Router
-*   **Decisión:** Utilizar Next.js 15 y su `App Router`.
-*   **Justificación:** Server Components por defecto para mejor rendimiento, enrutamiento basado en directorios y Route Groups para organización.
-*   **Consecuencias:** El equipo debe comprender la diferencia entre Componentes de Servidor y Componente de Cliente (`"use client"`).
+El frontend sigue un patrón moderno que prioriza el rendimiento y la mantenibilidad.
 
-### 3.2. UI y Componentes: shadcn/ui
-*   **Decisión:** Utilizar `shadcn/ui`.
-*   **Justificación:** Máxima personalización al ser código copiado al proyecto, no una dependencia externa. Accesibilidad garantizada por Radix UI.
-*   **Consecuencias:** La consistencia visual depende del equipo.
+### 3.1. Flujo de Renderizado y Datos (Patrón de Servicio)
 
-### 3.3. Gestión de Estado
-*   **Decisión:** Adoptar una estrategia de estado dual: **Zustand** para estado global y **React Hook Form** para formularios.
-*   **Directrices:**
-    *   **Zustand:** Solo para estado global compartido entre componentes no relacionados (info de usuario, tema).
-    *   **React Hook Form:** Para todos los formularios de entrada de datos.
-    *   **Hooks de React:** Es la opción por defecto. Usar siempre el estado más local posible.
+La decisión arquitectónica clave es la **abstracción de la capa de datos** a través de un "Service Layer".
 
-### 3.4. Flujo de Datos y Llamadas a API (Patrón BFF)
-*   **Decisión:** Implementar un patrón **Backend-for-Frontend (BFF)** utilizando las **Route Handlers** de Next.js (`/app/api`).
-*   **Justificación y Flujo Obligatorio:**
-    1.  **NUNCA** llamar a una API externa con claves secretas desde un Componente de Cliente.
-    2.  El componente cliente (`"use client"`) hace `fetch` a una ruta de API interna de nuestro proyecto (ej. `fetch('/api/chat')`).
-    3.  El Route Handler (`/app/api/chat/route.ts`), que se ejecuta **solo en el servidor**, recibe la petición.
-    4.  El handler usa la clave secreta (`process.env.AI_API_KEY`) para llamar al servicio externo de forma segura.
-    5.  El handler procesa la respuesta y la devuelve al cliente.
-*   **Consecuencias:** Este patrón es mandatorio. Cualquier desviación introduce un riesgo de seguridad grave. 
+1.  **Server Component (`/app/(main)/**/page.tsx`):**
+    *   Una página es, por defecto, un **React Server Component (RSC)**.
+    *   Su única responsabilidad es **orquestar la obtención de datos** para la carga inicial.
+    *   Llama a una función del **Service Layer** (ej. `getDashboardData()`).
+    *   **No contiene JSX de presentación complejo**.
+    *   Pasa los datos obtenidos como `props` a un Client Component.
+
+2.  **Service Layer (`/lib/services/*.ts`):**
+    *   Este es el **único lugar** donde se define cómo obtener datos.
+    *   Cada servicio (ej. `dashboardService.ts`) exporta funciones asíncronas (ej. `getDashboardData`).
+    *   **Actualmente**, estas funciones leen de los `mock-data`.
+    *   **En el futuro**, estas funciones harán una llamada `fetch` al endpoint correspondiente de la API de FastAPI.
+    *   Este patrón asegura que si el backend cambia, **solo necesitamos actualizar el servicio**, no los componentes.
+
+3.  **Client Component (`/app/(main)/**/components/*ClientPage.tsx`):**
+    *   Marcado con `"use client"`.
+    *   Recibe los datos iniciales como `props`.
+    *   **Contiene toda la interactividad**: estado (hooks), manejadores de eventos, y renderizado de la UI.
+    *   Si necesita realizar una **mutación** (Crear, Actualizar, Borrar), llama a funciones de un servicio (ej. `postService.updatePost()`) que a su vez harán la llamada `POST`, `PUT`, o `DELETE` a la API de FastAPI.
+
+### 3.2. Estructura de Directorios Clave
+
+-   `app/(main)/*`: Rutas principales de la aplicación.
+    -   `page.tsx`: El Server Component que carga los datos.
+    -   `components/*ClientPage.tsx`: El Client Component que renderiza la UI.
+    -   `components/*`: Otros componentes específicos de esa sección.
+-   `lib/services`: La capa de abstracción de datos. El punto de integración con el Backend.
+-   `lib/mock-data`: Datos simulados para desarrollo desacoplado.
+-   `lib/types.ts`: Definiciones de tipos de TypeScript compartidas.
+
+---
+
+## 4. Arquitectura del Backend (FastAPI)
+
+El backend está diseñado para ser un monolito de API limpio, seguro y fácil de mantener.
+
+### 4.1. Responsabilidades
+
+*   **Endpoints de API:** Expone una API RESTful documentada automáticamente (gracias a FastAPI y Pydantic) para que el frontend la consuma.
+*   **Lógica de Negocio:** Centraliza todas las reglas de negocio (ej. cómo se calcula una métrica, qué implica una suscripción, etc.).
+*   **Autenticación y Autorización:** Valida los tokens de JWT (generados por Supabase Auth) en cada petición protegida.
+*   **Interacción con la Base de Datos:** Es el único componente del sistema que puede comunicarse directamente con la base de datos de Supabase.
+*   **Integración Segura con Terceros:** Gestiona las claves secretas y la comunicación con servicios como Stripe.
+
+### 4.2. Flujo de una Petición Autenticada
+
+1.  El usuario inicia sesión en el frontend. El cliente de Supabase en el frontend gestiona el flujo de OAuth/contraseña y recibe un **JWT (JSON Web Token)**.
+2.  Para cada llamada a un endpoint protegido, el frontend Next.js añade este JWT al encabezado `Authorization: Bearer <token>`.
+3.  La API de FastAPI recibe la petición y, a través de una `Dependency`, valida el JWT con las claves públicas de Supabase.
+4.  Si el token es válido, extrae el `user_id` y procesa la petición.
+5.  Si el token no es válido, devuelve un error `401 Unauthorized`.
+
+Este flujo asegura que la API es **stateless** y que cada endpoint puede protegerse de forma individual y robusta. 

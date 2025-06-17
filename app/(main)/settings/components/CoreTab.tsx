@@ -5,8 +5,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { BrandProfile } from '@/lib/types';
 
-export function CoreTab() {
+interface CoreTabProps {
+  data: BrandProfile['core'];
+}
+
+export function CoreTab({ data }: CoreTabProps) {
+  // Data is passed for future forms, but not used in the current static view.
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <Card>

@@ -212,4 +212,40 @@ export interface CompetitorContentAnalysis {
     action: string;
     cta: string;
   };
+}
+
+// Types for Analytics Section
+export interface Kpi {
+  title: string;
+  value: string;
+  change: string;
+  changeType: 'increase' | 'decrease';
+}
+
+export interface ChartDataPoint {
+  name: string;
+  [key: string]: string | number;
+}
+
+export interface UserCompetitorMetrics {
+  followers: number;
+  engagementRate: number;
+  postFrequency: number;
+}
+
+export interface AnalyticsData {
+  performance: {
+    kpis: Kpi[];
+    chartData: ChartDataPoint[];
+  };
+  competitors: {
+    user: UserCompetitorMetrics;
+    list: Competitor[];
+  };
+  topPosts: TopPost[];
+}
+
+export interface StrategyCoachData {
+  competitors: Competitor[];
+  analysis: Record<string, CompetitorContentAnalysis>;
 } 

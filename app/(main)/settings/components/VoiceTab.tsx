@@ -6,8 +6,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { BrandProfile } from '@/lib/types';
 
-export function VoiceTab() {
+interface VoiceTabProps {
+  data: BrandProfile['voice'];
+}
+
+export function VoiceTab({ data }: VoiceTabProps) {
   return (
     <Card>
       <CardHeader>

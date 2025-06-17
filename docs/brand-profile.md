@@ -44,4 +44,10 @@ El componente principal (`brand-profile/page.tsx`) obtiene todos los datos neces
 
 -   **(Prioridad Alta) Conectar a API**: Reemplazar `brandProfileData` con llamadas reales a una API para obtener y **guardar** la información del perfil de marca. Esto implicará añadir formularios y lógica de mutación de datos.
 -   **(Prioridad Media) Refactorizar `BlockHeader` a `DashboardSection`**: Para una consistencia aún mayor, evaluar si las secciones que usan `BlockHeader` pueden ser envueltas en el componente `DashboardSection`, que ya encapsula una `<Card>` y el `BlockHeader`. Esto simplificaría el layout de cada pestaña.
--   **(Prioridad Baja) Añadir Funcionalidad de Edición "Inline"**: Explorar cómo el usuario podría editar los campos directamente en la vista sin tener que navegar a un formulario separado, mejorando la experiencia de usuario. 
+-   **(Prioridad Baja) Añadir Funcionalidad de Edición "Inline"**: Explorar cómo el usuario podría editar los campos directamente en la vista sin tener que navegar a un formulario separado, mejorando la experiencia de usuario.
+
+## D. Flujo de Datos y Arquitectura
+
+-   **Carga de Datos:** La página principal (`page.tsx`) es un **Componente de Servidor** que llama al servicio `getBrandProfile()` para obtener todo el perfil de la marca.
+-   **Renderizado Interactivo:** Los datos se pasan al **Componente de Cliente** `BrandProfileClientContent.tsx`, que gestiona las pestañas y renderiza el contenido correspondiente, pasando los datos específicos a cada `*Tab`.
+-   **Integración Futura:** La conexión al backend solo requiere actualizar `brandProfileService.ts` para que apunte a la API de FastAPI, sin necesidad de cambiar la UI. 

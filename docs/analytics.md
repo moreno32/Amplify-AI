@@ -136,4 +136,12 @@ La página principal delega la responsabilidad de obtener y manejar los datos a 
 
 -   **(Prioridad Alta) Refactorizar Pestañas Restantes**: Aplicar el patrón `DashboardSection` a las pestañas `AnalisisCompetitivoTab` y `TopPostsTab` para completar la estandarización de la pantalla.
 -   **(Prioridad Media) Conectar a la API de Analíticas**: Reemplazar todos los datos mock por llamadas reales a la API, incluyendo la lógica para que el selector de fechas (`DatePickerWithRange`) dispare nuevas peticiones.
--   **(Prioridad Baja) Optimizar Gráficos con `recharts`**: Investigar la carga perezosa (lazy loading) de los componentes de gráficos, ya que `recharts` puede ser una librería pesada. 
+-   **(Prioridad Baja) Optimizar Gráficos con `recharts`**: Investigar la carga perezosa (lazy loading) de los componentes de gráficos, ya que `recharts` puede ser una librería pesada.
+
+## D. Flujo de Datos y Arquitectura
+
+-   **Carga de Datos en Servidor:** La página principal (`page.tsx`) actúa como un **Componente de Servidor**. Su única función es invocar al servicio `getAnalyticsData()` para obtener un objeto único con todos los datos necesarios para las tres pestañas.
+-   **Renderizado en Cliente:** Los datos consolidados se pasan al `AnalyticsClientContent.tsx`. Este **Componente de Cliente** maneja la lógica de las pestañas y distribuye los datos específicos a cada componente hijo (`MiRendimientoTab`, etc.).
+-   **Preparado para Backend:** La integración con la API de FastAPI se limita a actualizar la función `getAnalyticsData()` para que realice una única llamada `fetch` al endpoint `GET /api/v1/analytics`, sin tocar la interfaz de usuario.
+
+-   **Componentes de Pestaña:** `MiRendimientoTab`, `AnalisisCompetitivoTab`, `TopPostsTab`. Cada uno encapsula la lógica y la visualización de su sección correspondiente. 

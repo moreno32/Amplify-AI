@@ -1,9 +1,13 @@
 import { TopPostCard } from "./TopPostCard";
 import { AiInsightCard } from "./AiInsightCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mockTopPosts } from "@/lib/mock-data/top-posts";
+import { TopPost } from "@/lib/types";
 
-export function TopPostsTab() {
+interface TopPostsTabProps {
+  data: TopPost[];
+}
+
+export function TopPostsTab({ data }: TopPostsTabProps) {
   return (
     <div className="space-y-6 mt-4">
       <div className="flex justify-end">
@@ -20,7 +24,7 @@ export function TopPostsTab() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {mockTopPosts.map((post) => (
+        {data.map((post) => (
           <TopPostCard key={post.id} post={post} />
         ))}
       </div>

@@ -41,8 +41,14 @@ El Dashboard es la primera pantalla que ve el usuario al entrar. No debe ser un 
 -   `components/shared/DashboardSection.tsx`: Componente de layout reutilizable que renderiza una `Card` con un `BlockHeader` estandarizado. Se usa para envolver cada sección del dashboard.
 -   `components/shared/BlockHeader.tsx`: Componente que muestra el título, icono, descripción y acciones opcionales de una sección. Es utilizado por `DashboardSection`.
 
-## D. Backlog y Mejoras
+## D. Flujo de Datos y Arquitectura
 
--   **(Prioridad Alta) Conectar a Datos Reales:** Reemplazar todos los datos mock (`mockDashboardData`) por llamadas a los endpoints de la API correspondientes.
+- **Carga de Datos del Lado del Servidor:** La página (`page.tsx`) es un Componente de Servidor (`async function`). Su responsabilidad es llamar al servicio `getDashboardData()` desde `@/lib/services/dashboardService.ts` para obtener todos los datos necesarios para el dashboard de una sola vez.
+- **Renderizado en el Cliente:** Los datos obtenidos se pasan como `props` a un único Componente de Cliente (`DashboardClientContent.tsx`). Este componente se encarga de toda la lógica de renderizado y de pasar los datos específicos a cada widget (como `PerformanceCard`, `UpcomingPosts`, etc.).
+- **Preparado para Backend:** La integración con la API de FastAPI solo requerirá modificar la función `getDashboardData()` para que haga una llamada `fetch` en lugar de leer datos locales, sin necesidad de alterar ningún componente de la interfaz.
+
+## E. Backlog y Mejoras
+
+-   **(Prioridad Alta) Conectar el Servicio a la API:** Implementar la llamada `fetch` dentro de `dashboardService.ts` al endpoint `GET /api/v1/dashboard` del backend de FastAPI.
 -   **(Prioridad Media) Hacer el Dashboard Personalizable:** Permitir al usuario reorganizar (arrastrar y soltar) los bloques del dashboard para priorizar la información que más le importa.
 -   **(Prioridad Baja) Implementar Funcionalidad de "Ver Más"**: En secciones como "Publicaciones Recientes", añadir un enlace o botón para expandir la vista o navegar a la sección correspondiente para ver el historial completo.

@@ -1,20 +1,17 @@
-'use client';
+import { Button } from '@/components/ui/button'
+import { DatePickerWithRange } from '@/components/ui/date-range-picker'
+import { Download } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
+import { getAnalyticsData } from '@/lib/services/analyticsService'
+import { AnalyticsClientContent } from './components/AnalyticsClientContent'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { DatePickerWithRange } from '@/components/ui/date-range-picker';
-import { Download } from 'lucide-react';
-import { PageHeader } from '@/components/layout/PageHeader';
+export default async function AnalyticsPage() {
+  // 1. Data is fetched on the server via the service layer
+  const analyticsData = await getAnalyticsData()
 
-// Placeholder components for tab content
-import { MiRendimientoTab } from './components/MiRendimientoTab';
-import { AnalisisCompetitivoTab } from './components/AnalisisCompetitivoTab';
-import { TopPostsTab } from './components/TopPostsTab';
-
-export default function AnalyticsPage() {
   return (
     <div>
-      <PageHeader 
+      <PageHeader
         title="Análisis de Rendimiento"
         subtitle="Mide el impacto de tu contenido y estrategia."
         actions={
@@ -27,22 +24,8 @@ export default function AnalyticsPage() {
           </div>
         }
       />
-      <Tabs defaultValue="mi-rendimiento">
-        <TabsList className="bg-transparent p-0 h-auto space-x-4">
-          <TabsTrigger value="mi-rendimiento">📊 Mi Rendimiento</TabsTrigger>
-          <TabsTrigger value="analisis-competitivo">⚔️ Análisis Competitivo</TabsTrigger>
-          <TabsTrigger value="top-posts">🏆 Top Posts</TabsTrigger>
-        </TabsList>
-        <TabsContent value="mi-rendimiento" className="pt-4">
-          <MiRendimientoTab />
-        </TabsContent>
-        <TabsContent value="analisis-competitivo" className="pt-4">
-          <AnalisisCompetitivoTab />
-        </TabsContent>
-        <TabsContent value="top-posts" className="pt-4">
-          <TopPostsTab />
-        </TabsContent>
-      </Tabs>
+      {/* 2. All data is passed down to a single client component */}
+      <AnalyticsClientContent data={analyticsData} />
     </div>
-  );
+  )
 } 

@@ -4,30 +4,20 @@ import { BarChart, Heart, Users, Grid, LineChart, Lightbulb } from "lucide-react
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AiInsightCard } from "./AiInsightCard";
 import { DashboardSection } from "@/app/(main)/dashboard/components/DashboardSection";
+import { AnalyticsData } from "@/lib/types";
 
-const kpiData = [
-    { title: "Alcance", value: "87,345", change: "+12.5%", changeType: 'increase' as const, icon: <BarChart className="h-4 w-4 text-muted-foreground" /> },
-    { title: "Tasa de Engagement", value: "4.1%", change: "+0.8%", changeType: 'increase' as const, icon: <Heart className="h-4 w-4 text-muted-foreground" /> },
-    { title: "Nuevos Seguidores", value: "1,204", change: "+20.1%", changeType: 'increase' as const, icon: <Users className="h-4 w-4 text-muted-foreground" /> },
-    { title: "Posts Publicados", value: "12", change: "-15%", changeType: 'decrease' as const, icon: <Grid className="h-4 w-4 text-muted-foreground" /> },
-];
+interface MiRendimientoTabProps {
+  data: AnalyticsData['performance'];
+}
 
-const chartData = [
-  { name: 'Ene', Seguidores: 4000, Engagement: 2.4 },
-  { name: 'Feb', Seguidores: 3000, Engagement: 3.9 },
-  { name: 'Mar', Seguidores: 2000, Engagement: 2.8 },
-  { name: 'Abr', Seguidores: 2780, Engagement: 3.0 },
-  { name: 'May', Seguidores: 1890, Engagement: 4.8 },
-  { name: 'Jun', Seguidores: 2390, Engagement: 3.8 },
-  { name: 'Jul', Seguidores: 3490, Engagement: 4.3 },
-];
+export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
+  const { kpis, chartData } = data;
 
-export function MiRendimientoTab() {
   return (
     <div className="space-y-6 mt-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {kpiData.map((kpi) => (
-          <KpiCard key={kpi.title} {...kpi} />
+        {kpis.map((kpi) => (
+          <KpiCard key={kpi.title} title={kpi.title} value={kpi.value} change={kpi.change} changeType={kpi.changeType} icon={<BarChart className="h-4 w-4 text-muted-foreground" />} />
         ))}
       </div>
 

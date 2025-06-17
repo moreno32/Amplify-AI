@@ -82,8 +82,6 @@ Esta sección contiene las características definidas en la especificación inic
     -   Comentarios en los posts (el icono `MessageCircle` actualmente no tiene función).
     -   Menú de más opciones (el icono `MoreHorizontal` actualmente no tiene función).
 
----
-
 ## E. Estado de Funcionalidades Clave (Checklist)
 
 Este es un resumen del estado actual de las funcionalidades principales solicitadas para tener una referencia rápida.
@@ -98,3 +96,19 @@ Este es un resumen del estado actual de las funcionalidades principales solicita
     -   *Detalle: El botón abre un modal para crear un nuevo post. La funcionalidad está conectada.*
 -   **Horas Óptimas (Heatmap):** `✅ Implementado`
     -   *Detalle: El interruptor muestra/oculta un mapa de calor simulado sobre la cuadrícula del calendario.*
+
+## E. Flujo de Datos y Arquitectura Híbrida
+
+A diferencia de otras secciones, el calendario es altamente interactivo y requiere un manejo de estado complejo en el cliente.
+
+-   **Carga Inicial (Servidor):** La página (`page.tsx`) es un **Componente de Servidor**. Llama al servicio `getInitialCalendarData()` para obtener los posts de la semana actual y la fecha. Esto asegura una carga inicial ultra-rápida.
+-   **Gestión Interactiva (Cliente):** Los datos iniciales se pasan al `CalendarClientPage.tsx`. Este **Componente de Cliente** se encarga de todo lo demás:
+    -   Gestionar el estado de los posts, la navegación entre semanas, y los modales.
+    -   Llamar a las funciones del `postService` (ej. `updatePost`, `createPost`) para realizar cambios, que a su vez harán las llamadas a la API de FastAPI.
+-   **Servicios:**
+    -   `calendarService.ts`: Para la carga inicial.
+    -   `postService.ts`: Para todas las operaciones de mutación (CRUD).
+
+## F. Backlog y Mejoras
+
+-   **(Prioridad Alta) Implementar las llamadas a la API de FastAPI** en `postService.ts` para todas las operaciones CRUD.

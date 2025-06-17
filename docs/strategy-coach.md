@@ -67,6 +67,8 @@ Cuando el usuario selecciona un competidor específico, la pantalla se reconfigu
 -   **Ejemplo de Texto:** "💡 **Lección Táctica:** `@competidor` basa su crecimiento en **Reels educativos publicados los martes por la mañana**. Su hashtag `#trucosdecocina` es el que más tracción les genera. **Plan de Acción Propuesto:** Podemos 'contraprogramar' publicando un Reel tuyo sobre un tema similar el lunes por la noche, adelantándonos a su audiencia. Usaremos una variación de su hashtag de éxito para captar parte de su tráfico."
 -   **Botón CTA:** `[Crear un Reel para el Lunes]`
 
+### 4. Análisis de Contenido de Competidor (`ContentAnalysisTab.tsx`):** Un componente que muestra un desglose detallado de la estrategia de contenido de un competidor seleccionado.
+
 ---
 
 ## E. Objetivo Final: El Aprendizaje Continuo
@@ -130,4 +132,10 @@ La página maneja un estado local (`useState`) para controlar la pestaña activa
 
 -   **(Prioridad Alta) Implementar Vista de Detalle de Competidor**: La pestaña `ContentAnalysisTab` actualmente solo recibe un ID. Se debe desarrollar completamente para mostrar un análisis detallado del competidor seleccionado.
 -   **(Prioridad Media) Conectar a API de Mercado**: Reemplazar `mockCompetitors` con una llamada real a la API para obtener los datos de los competidores.
--   **(Prioridad Baja) Refinar Estilos de `InsightCard`**: Añadir más variantes (ej. "error", "success") a `InsightCard` a medida que surjan nuevas necesidades en la aplicación. 
+-   **(Prioridad Baja) Refinar Estilos de `InsightCard`**: Añadir más variantes (ej. "error", "success") a `InsightCard` a medida que surjan nuevas necesidades en la aplicación.
+
+## D. Flujo de Datos y Arquitectura
+
+-   **Carga de Datos en Servidor:** La página `page.tsx` es un **Componente de Servidor**. Invoca a `getStrategyCoachData()` para obtener todos los datos necesarios de una vez: la lista de competidores y el análisis de contenido de cada uno.
+-   **Renderizado Interactivo (Cliente):** Los datos se pasan al `StrategyCoachClientPage.tsx`. Este **Componente de Cliente** maneja la lógica de las pestañas y el estado de la selección del competidor, pasando los datos relevantes a los componentes hijos (`CompetitorGrid`, `ContentAnalysisTab`).
+-   **Integración con API:** La conexión al backend se centraliza en el `strategyCoachService.ts`. Solo se necesitará actualizar su función para que haga una llamada `fetch` al endpoint `GET /api/v1/strategy-coach` de la API de FastAPI. 

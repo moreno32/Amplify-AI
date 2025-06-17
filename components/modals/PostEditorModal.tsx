@@ -3,7 +3,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
+  DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Post } from '@/lib/types';
 import { motion } from 'framer-motion';
@@ -17,12 +18,25 @@ import { Instagram, Facebook, Wand2, RefreshCcw, Upload, CalendarIcon } from 'lu
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface PostEditorModalProps {
   post: Post | null;
   isOpen: boolean;
+  isCreating: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onPostUpdate: (updates: Partial<Post>) => void;
+  onPostDelete: (postId: string) => void;
 }
 
 const overlayVariants = {
@@ -39,19 +53,33 @@ const formatDate = (date: Date) => {
     return format(date, "eeee, d 'de' MMMM", { locale: es });
 }
 
-export const PostEditorModal = ({ post, isOpen, onOpenChange, onPostUpdate }: PostEditorModalProps) => {
+export const PostEditorModal = ({
+  post,
+  isOpen,
+  isCreating,
+  onOpenChange,
+  onPostUpdate,
+  onPostDelete,
+}: PostEditorModalProps) => {
   const [activePlatform, setActivePlatform] = React.useState<'instagram' | 'facebook'>('instagram');
-  const [editedContent, setEditedContent] = React.useState(post?.content || '');
+  const [editedContent, setEditedContent] = React.useState('');
 
   React.useEffect(() => {
-    if (post) {
-      setEditedContent(post.content);
+    if (isOpen) {
+      setEditedContent(isCreating || !post ? '' : post.content);
     }
-  }, [post]);
+  }, [isOpen, isCreating, post]);
 
   const handleSave = () => {
     onPostUpdate({ content: editedContent });
     onOpenChange(false);
+  };
+
+  const handleDelete = () => {
+    if (post) {
+      onPostDelete(post.id);
+      onOpenChange(false);
+    }
   };
 
   return (
@@ -73,9 +101,18 @@ export const PostEditorModal = ({ post, isOpen, onOpenChange, onPostUpdate }: Po
         >
           <DialogHeader className="p-6 pb-4 border-b">
             <DialogTitle className="flex items-center gap-2">
-              {post ? 'Editando Post' : 'Crear Nuevo Post'}
-              {post && <Badge variant="secondary">{post.status}</Badge>}
+              {isCreating ? 'Crear Nuevo Post' : 'Editando Post'}
+              {!isCreating && post && (
+                <Badge variant="secondary">{post.status}</Badge>
+              )}
             </DialogTitle>
+            <DialogDescription>
+              {isCreating
+                ? 'Rellena los detalles para crear y programar un nuevo post.'
+                : `Estás modificando el post programado para el ${
+                    post ? formatDate(post.startTime) : ''
+                  }.`}
+            </DialogDescription>
           </DialogHeader>
 
           <div className="flex-1 grid grid-cols-1 md:grid-cols-3 min-h-0">
@@ -109,8 +146,8 @@ export const PostEditorModal = ({ post, isOpen, onOpenChange, onPostUpdate }: Po
             <div className="flex flex-col gap-8 p-8 overflow-y-auto md:col-span-2">
               <div>
                 <h3 className="text-lg font-semibold mb-3">Imagen del Post</h3>
-                <div className="relative aspect-video w-full rounded-lg overflow-hidden border">
-                  {post?.image && (
+                <div className="relative aspect-video w-full rounded-lg overflow-hidden border bg-muted/20">
+                  {post?.image && !isCreating && (
                     <Image
                       src={post.image}
                       alt="Post image"
@@ -149,7 +186,11 @@ export const PostEditorModal = ({ post, isOpen, onOpenChange, onPostUpdate }: Po
                 <p className="text-base text-muted-foreground flex items-center gap-2">
                   <CalendarIcon className="h-4 w-4" />
                   <span>
-                    {post ? `Programado para: ${formatDate(post.startTime)} a las ${format(post.startTime, 'HH:mm')}` : 'Se programará a la fecha/hora seleccionada'}
+                    {isCreating || !post
+                      ? 'Se programará a la fecha/hora seleccionada en el calendario.'
+                      : `Programado para: ${formatDate(
+                          post.startTime
+                        )} a las ${format(post.startTime, 'HH:mm')}`}
                   </span>
                 </p>
               </div>
@@ -177,12 +218,36 @@ export const PostEditorModal = ({ post, isOpen, onOpenChange, onPostUpdate }: Po
               </div>
             </div>
           </div>
-          <DialogFooter className="p-4 border-t bg-background mt-auto">
-            <Button variant="ghost">Guardar como Borrador</Button>
-            <Button onClick={handleSave}>
-              <RefreshCcw className="mr-2 h-4 w-4" />
-              Aprobar y Programar
-            </Button>
+          <DialogFooter className="p-4 border-t bg-background mt-auto flex justify-between">
+            <div>
+              {!isCreating && (
+                 <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive">Eliminar Post</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Esta acción no se puede deshacer. El post será eliminado permanentemente.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>Sí, eliminar</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <Button variant="ghost" onClick={() => onOpenChange(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleSave}>
+                {isCreating ? 'Crear y Programar' : 'Guardar Cambios'}
+              </Button>
+            </div>
           </DialogFooter>
         </motion.div>
       </DialogContent>

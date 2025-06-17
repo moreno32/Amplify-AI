@@ -2,8 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { competitors, userMetrics } from '@/lib/mock-data/competitors';
-import { Competitor } from '@/lib/types';
+import { AnalyticsData, Competitor } from '@/lib/types';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -31,12 +30,12 @@ const MetricComparison = ({ label, userValue, competitorValue }: { label: string
 };
 
 
-const CompetitorCard = ({ competitor }: { competitor: Competitor }) => (
+const CompetitorCard = ({ competitor, userMetrics }: { competitor: Competitor, userMetrics: AnalyticsData['competitors']['user'] }) => (
     <Card className="min-w-[300px] max-w-[320px] flex-shrink-0">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div className="flex items-center gap-2">
                 <Avatar>
-                    <AvatarImage src={competitor.logo} alt={competitor.name} />
+                    <AvatarImage src={competitor.logoUrl} alt={competitor.name} />
                     <AvatarFallback>{competitor.name.substring(1, 3)}</AvatarFallback>
                 </Avatar>
                 <CardTitle className="text-lg font-semibold">{competitor.name}</CardTitle>
@@ -44,18 +43,18 @@ const CompetitorCard = ({ competitor }: { competitor: Competitor }) => (
         </CardHeader>
         <CardContent>
             <div className="relative aspect-square w-full my-4">
-                <Image src={competitor.recentPostImage} alt={`Post de ${competitor.name}`} fill className="rounded-md object-cover" />
+                <Image src={competitor.postImageUrl} alt={`Post de ${competitor.name}`} fill className="rounded-md object-cover" />
             </div>
             <div className="space-y-2">
-                <MetricComparison label="Seguidores" userValue={userMetrics.followers} competitorValue={competitor.metrics.followers} />
-                <MetricComparison label="Tasa de Engagement" userValue={userMetrics.engagementRate} competitorValue={competitor.metrics.engagementRate} />
-                <MetricComparison label="Frecuencia (posts/sem)" userValue={userMetrics.postFrequency} competitorValue={competitor.metrics.postFrequency} />
+                <MetricComparison label="Seguidores" userValue={userMetrics.followers} competitorValue={competitor.stats.find(s => s.label === 'Seguidores')?.value as unknown as number || 0} />
+                <MetricComparison label="Tasa de Engagement" userValue={userMetrics.engagementRate} competitorValue={competitor.stats.find(s => s.label === 'Tasa de Engagement')?.value as unknown as number || 0} />
+                <MetricComparison label="Frecuencia (posts/sem)" userValue={userMetrics.postFrequency} competitorValue={competitor.stats.find(s => s.label === 'Frecuencia (posts/sem)')?.value as unknown as number || 0} />
             </div>
         </CardContent>
     </Card>
 );
 
-const UserCard = () => (
+const UserCard = ({ userMetrics }: { userMetrics: AnalyticsData['competitors']['user'] }) => (
      <Card className="min-w-[300px] max-w-[320px] flex-shrink-0 bg-primary/5 border-primary/20">
         <CardHeader className="pb-2">
              <CardTitle className="text-lg font-semibold">Tu Rendimiento</CardTitle>
@@ -71,13 +70,16 @@ const UserCard = () => (
     </Card>
 )
 
+interface AnalisisCompetitivoTabProps {
+  data: AnalyticsData['competitors'];
+}
 
-export const AnalisisCompetitivoTab = () => {
+export const AnalisisCompetitivoTab = ({ data }: AnalisisCompetitivoTabProps) => {
     return (
         <div className="space-y-6">
             <div className="flex overflow-x-auto space-x-4 pb-4">
-                <UserCard />
-                {competitors.map(c => <CompetitorCard key={c.id} competitor={c} />)}
+                <UserCard userMetrics={data.user} />
+                {data.list.map(c => <CompetitorCard key={c.id} competitor={c} userMetrics={data.user} />)}
             </div>
             
             <Card className="bg-amber-100/40 border-amber-200/60 dark:bg-amber-950/20 dark:border-amber-900/40">

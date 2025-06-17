@@ -105,3 +105,9 @@ Aquí es donde la IA muestra que "recuerda" al cliente.
 > **Right Panel (25% width):** A context panel for the selected contact. It shows their basic profile info. Below that, a crucial "AI Coach Insights" card. This card has a lightbulb icon and gives real-time, context-aware advice for the current conversation, like "This is a new customer, be extra welcoming!" or "This customer is loyal, thank them!".
 >
 > **Overall aesthetic:** Clean, responsive, and highly functional, inspired by modern messaging apps like Intercom and ContentStudio's inbox. The design should feel familiar but smarter, with the AI assistance seamlessly integrated. Use Inter/Geist font.
+
+## C. Flujo de Datos y Arquitectura
+
+-   **Carga Inicial de Datos (Servidor):** `inbox/page.tsx` es un **Componente de Servidor** que obtiene la lista inicial de conversaciones llamando al servicio `getInboxData()`.
+-   **Renderizado y Estado (Cliente):** Los datos se pasan a `InboxClientPage.tsx`. Este **Componente de Cliente** maneja todo el estado, incluyendo cuál es la conversación seleccionada, y orquesta los tres paneles.
+-   **Integración con API:** Para conectar con el backend, solo será necesario modificar `inboxService.ts` para que obtenga las conversaciones desde la API de FastAPI. Las interacciones futuras (enviar un mensaje, resolver una conversación) llamarán a funciones específicas en este servicio.
