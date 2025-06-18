@@ -22,6 +22,21 @@ interface BrandProfileClientContentProps {
   brandProfile: BrandProfile
 }
 
+// A helper function to safely extract HSL values for CSS variables
+const getHslValues = (color: string | undefined): string => {
+  if (!color) return '0 0% 0%';
+  // This is a simplified conversion, a real app might use a library like `colord`
+  // For now, let's assume hex and provide a placeholder conversion
+  if (color.startsWith('#')) {
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    // This is not a real HSL conversion, just for placeholder purposes.
+    return `${r} ${g} ${b}`; 
+  }
+  return '0 0% 50%'; // default
+};
+
 export function BrandProfileClientContent({
   brandProfile,
 }: BrandProfileClientContentProps) {
@@ -31,30 +46,16 @@ export function BrandProfileClientContent({
     })
   }, [])
 
-  // Helper to extract HSL values from an HSL string like 'hsl(222.2 47.4% 11.2%)'
-  const getHslValues = (hslString: string | undefined) => {
-    if (!hslString) return '0 0% 0%'
-    const match = hslString.match(
-      /(\d+(\.\d+)?)\s*(\d+(\.\d+)?)%\s*(\d+(\.\d+)?)%/
-    )
-    return match ? `${match[1]} ${match[3]}% ${match[5]}%` : '0 0% 0%'
-  }
-
-  // Define brand colors as CSS variables for dynamic theming
   const brandStyle = {
     '--brand-primary':
-      brandProfile.visual.colorPalette.find((c) => c.role === 'Primario')
-        ?.color || '#000000',
+      brandProfile.visual?.colorPalette?.find((c) => c.role === 'Primario')?.color || '#6D28D9',
     '--brand-primary-hsl': getHslValues(
-      brandProfile.visual.colorPalette.find((c) => c.role === 'Primario')
-        ?.color
+      brandProfile.visual?.colorPalette?.find((c) => c.role === 'Primario')?.color
     ),
     '--brand-secondary':
-      brandProfile.visual.colorPalette.find((c) => c.role === 'Secundario')
-        ?.color || '#4A4A4A',
+      brandProfile.visual?.colorPalette?.find((c) => c.role === 'Secundario')?.color || '#DB2777',
     '--brand-accent':
-      brandProfile.visual.colorPalette.find((c) => c.role === 'Acento')
-        ?.color || '#8E24AA',
+      brandProfile.visual?.colorPalette?.find((c) => c.role === 'Acento')?.color || '#F59E0B',
   } as React.CSSProperties
 
   return (

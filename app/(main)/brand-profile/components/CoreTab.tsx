@@ -6,17 +6,18 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { BlockHeader } from '@/components/shared/BlockHeader';
 import { BrandPromiseHero } from './BrandPromiseHero';
 import { GoldenCircle } from './GoldenCircle';
-import { ArchetypeGrid } from './ArchetypeGrid';
-import { Rituals } from './Rituals';
 import { HeroJourney } from './HeroJourney';
 import { KairosVerdictCard } from './KairosVerdictCard';
+import { Rituals } from './Rituals';
 import { Target, Users, Rss, Milestone, HeartHandshake } from 'lucide-react';
 
 interface CoreTabProps {
     data: BrandProfile['core'];
 }
 
-export const CoreTab = ({ data }: CoreTabProps) => {
+export function CoreTab({ data }: CoreTabProps) {
+    if (!data) return null; // Return early if no core data
+
     return (
         <div className="space-y-8">
             <Card>
@@ -28,33 +29,54 @@ export const CoreTab = ({ data }: CoreTabProps) => {
                     />
                 </CardHeader>
                 <CardContent className="p-6 text-center">
-                    <BrandPromiseHero main={data.promise.main} slogan={data.promise.slogan} />
+                    <BrandPromiseHero 
+                        main={data.promise?.main ?? 'Define tu promesa principal'}
+                        slogan={data.promise?.slogan ?? 'y el eslogan que la acompaña.'}
+                    />
                 </CardContent>
             </Card>
+
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <BlockHeader 
+                            icon={Users} 
+                            title="Arquetipo y Tono"
+                            description="La personalidad de tu marca y cómo se comunica con el mundo."
+                        />
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <KairosVerdictCard 
+                            archetype={data.archetype?.name ?? 'Arquetipo'}
+                            tone={data.archetype?.tone ?? 'Tono'}
+                            keywords={data.archetype?.keywords ?? []}
+                        />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <BlockHeader 
+                            icon={Milestone} 
+                            title="El Viaje del Héroe"
+                            description="La estructura narrativa que conecta emocionalmente con tu audiencia."
+                        />
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <HeroJourney journey={data.heroJourney} />
+                    </CardContent>
+                </Card>
+            </div>
 
             <Card>
                 <CardHeader>
                     <BlockHeader 
                         icon={Target} 
-                        title="Filosofía de Marca"
-                        description="El corazón de nuestra marca. Define nuestro propósito, nuestras acciones y nuestros resultados."
-                    />
-                </CardHeader>
-                <CardContent className="pt-0">
-                    <GoldenCircle data={data.goldenCircle} />
-                </CardContent>
-            </Card>
-            
-            <Card>
-                <CardHeader>
-                    <BlockHeader 
-                        icon={Users} 
-                        title="Arquetipos de Personalidad"
-                        description="Las personalidades que guían nuestra voz y narrativa para conectar auténticamente."
+                        title="El Círculo Dorado"
+                        description="El propósito fundamental que impulsa cada acción de tu marca."
                     />
                 </CardHeader>
                 <CardContent className="p-6">
-                    <ArchetypeGrid data={data.archetypeMatrix} />
+                    <GoldenCircle goldenCircle={data.goldenCircle} />
                 </CardContent>
             </Card>
 
@@ -70,26 +92,6 @@ export const CoreTab = ({ data }: CoreTabProps) => {
                     <Rituals data={data.contentPillars} />
                 </CardContent>
             </Card>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                <div className="lg:col-span-2 h-full">
-                    <KairosVerdictCard content={data.aiCoachVerdict.content} />
-                </div>
-                <div className="lg:col-span-3 h-full">
-                     <Card className="h-full">
-                        <CardHeader>
-                            <BlockHeader 
-                                icon={Milestone} 
-                                title="El Viaje de la Heroína"
-                                description="Las etapas clave que una clienta experimenta en su relación con nuestra marca."
-                            />
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <HeroJourney data={data.heroJourney} />
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
         </div>
     );
-}; 
+} 

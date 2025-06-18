@@ -1,22 +1,77 @@
-import { mockBrandProfile } from '@/lib/mock-data/brand'
-import { BrandProfile } from '@/lib/types'
+// This service will be responsible for fetching and updating brand profile data.
+// For now, it uses mock data. In the future, it will interact with the Supabase API.
 
-/**
- * Simulates fetching brand profile data from an API.
- * In the future, this function will make a network request to the FastAPI backend
- * to get the complete brand profile for the logged-in user.
- * For now, it returns mock data after a short delay.
- *
- * @returns {Promise<BrandProfile>} A promise that resolves with the brand profile data.
- */
-export async function getBrandProfile(): Promise<BrandProfile> {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 300))
+import { createClient } from '@/lib/supabase/server';
+import { BrandProfile } from '@/lib/types';
+import { cookies } from 'next/headers';
 
-  // In the future, this will be an API call:
-  // const response = await fetch('/api/v1/brand-profile');
-  // const data = await response.json();
-  // return data;
+// Helper function to get the current user's company
+async function getUserCompany(supabase: ReturnType<typeof createClient>) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
 
-  return mockBrandProfile
-} 
+    const { data: memberData, error: memberError } = await supabase
+        .from('company_members')
+        .select('company_id')
+        .eq('user_id', user.id)
+        .single();
+
+    if (memberError || !memberData) {
+        throw new Error('Could not find company for the current user.');
+    }
+
+    return memberData.company_id;
+}
+
+export const brandProfileService = {
+  getBrandProfile: async (): Promise<BrandProfile> => {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      // This will be caught by the an error boundary
+      throw new Error('User not authenticated. Could not fetch brand profile.');
+    }
+
+    const { data: memberData, error: memberError } = await supabase
+      .from('company_members')
+      .select('company_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (memberError || !memberData) {
+      console.error('Error fetching company membership:', memberError);
+      throw new Error('Could not find company for the current user.');
+    }
+
+    const { data: companyData, error: companyError } = await supabase
+      .from('companies')
+      .select('*')
+      .eq('id', memberData.company_id)
+      .single();
+
+    if (companyError || !companyData) {
+      console.error('Error fetching company data:', companyError);
+      throw new Error('Failed to fetch brand profile data.');
+    }
+
+    // Deconstruct the brand_identity JSONB and merge it with the rest
+    // of the company data to match the legacy BrandProfile type structure
+    // that the UI components expect.
+    const { brand_identity, ...restOfCompanyData } = companyData;
+
+    const profile: BrandProfile = {
+      ...restOfCompanyData,
+      core: brand_identity?.core ?? {},
+      voice: brand_identity?.voice ?? {},
+      visual: brand_identity?.visual ?? {},
+      assets: brand_identity?.assets ?? {},
+    };
+
+    return profile;
+  },
+}; 

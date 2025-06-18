@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  devIndicators: false,
+  devIndicators: {
+    buildActivity: false,
+  },
   images: {
     remotePatterns: [
       {
@@ -23,6 +25,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
-
-// Forzando re-build en Vercel 1
+export default nextConfig; 

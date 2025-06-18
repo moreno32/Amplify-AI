@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { getBrandProfile } from '@/lib/services/brandProfileService'
+import { brandProfileService } from '@/lib/services/brandProfileService'
 import { RefreshCcw } from 'lucide-react'
 import { BrandProfileClientContent } from './components/BrandProfileClientContent'
 
 export default async function BrandProfilePage() {
-  const brandProfile = await getBrandProfile()
+  const brandProfile = await brandProfileService.getBrandProfile()
 
   if (!brandProfile) {
     return <div>Cargando el alma de tu marca...</div>

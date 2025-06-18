@@ -1,12 +1,26 @@
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import React from 'react';
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/login')
+  }
+
   return (
     <div className="grid h-screen w-full grid-cols-[220px_1fr] grid-rows-[auto_1fr] overflow-hidden">
       <div className="row-span-2 border-r">
