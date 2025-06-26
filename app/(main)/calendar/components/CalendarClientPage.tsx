@@ -42,7 +42,7 @@ import {
 } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { CalendarPageData } from '@/lib/services/calendarService'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 
 interface CalendarClientPageProps {
   initialData: CalendarPageData
@@ -56,7 +56,6 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
   const [currentDate, setCurrentDate] = useState(new Date(initialData.initialDate))
   const [isCreating, setIsCreating] = useState(false)
   const [showOptimalHours, setShowOptimalHours] = useState(false)
-  const { toast } = useToast()
 
   const timeIndicatorRef = useRef<HTMLDivElement>(null)
 
@@ -84,11 +83,7 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
       setPosts(fetchedPosts)
       } catch (error) { 
         console.error("Error fetching posts for week:", error)
-        toast({
-            title: "Error",
-            description: "No se pudieron cargar los posts para esta semana.",
-            variant: "destructive",
-        })
+        toast.error("No se pudieron cargar los posts para esta semana.")
       }
       setIsLoading(false)
       if (isCurrentWeek) {
@@ -136,10 +131,10 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
       const result = await createCalendarPostAction(updates);
       if (result.data) {
         setPosts((prev) => [...prev, result.data!].sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()));
-        toast({ title: "Éxito", description: "Post creado correctamente." });
+        toast.success("Post creado correctamente.");
       } else if (result.error) {
         console.error("Error creating post:", result.error);
-        toast({ title: "Error", description: result.error, variant: "destructive" });
+        toast.error(result.error);
       }
     } else if (selectedPost) {
       const result = await updateCalendarPostAction(selectedPost.id, updates);
@@ -147,12 +142,12 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
       setPosts((prevPosts) =>
           prevPosts.map((p) => (p.id === result.data!.id ? result.data! : p))
         );
-        toast({ title: "Éxito", description: "Post actualizado correctamente." });
+        toast.success("Post actualizado correctamente.");
       } else if (result.error) {
         console.error("Error updating post:", result.error);
-        toast({ title: "Error", description: result.error, variant: "destructive" });
+        toast.error(result.error);
       } else {
-        toast({ title: "Aviso", description: "No se realizaron cambios en el post." });
+        toast.info("No se realizaron cambios en el post.");
       }
     }
     setIsLoading(false);
@@ -164,10 +159,10 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
     const result = await deleteCalendarPostAction(postId);
     if (result.success) {
       setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
-      toast({ title: "Éxito", description: "Post eliminado correctamente." });
+      toast.success("Post eliminado correctamente.");
     } else {
       console.error("Error deleting post:", result.error);
-      toast({ title: "Error", description: result.error || "No se pudo eliminar el post.", variant: "destructive" });
+      toast.error(result.error || "No se pudo eliminar el post.");
     }
     setIsLoading(false);
     handleCloseModal();
@@ -180,10 +175,10 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
       setPosts((prevPosts) =>
         prevPosts.map((p) => (p.id === postId ? result.data! : p))
       );
-      toast({ title: "Éxito", description: "Post reprogramado correctamente." });
+      toast.success("Post reprogramado correctamente.");
     } else if (result.error) {
       console.error("Error updating post on drag:", result.error);
-      toast({ title: "Error", description: result.error, variant: "destructive" });
+      toast.error(result.error);
     }
     setIsLoading(false);
   }
