@@ -47,9 +47,7 @@ export function CoreTab({ data }: CoreTabProps) {
                     </CardHeader>
                     <CardContent className="p-6">
                         <KairosVerdictCard 
-                            archetype={data.archetype?.name ?? 'Arquetipo'}
-                            tone={data.archetype?.tone ?? 'Tono'}
-                            keywords={data.archetype?.keywords ?? []}
+                            content={data.aiCoachVerdict?.content ?? 'El veredicto del coach de IA aparecerá aquí.'}
                         />
                     </CardContent>
                 </Card>
@@ -62,7 +60,7 @@ export function CoreTab({ data }: CoreTabProps) {
                         />
                     </CardHeader>
                     <CardContent className="p-6">
-                        <HeroJourney journey={data.heroJourney} />
+                        <HeroJourney data={data.heroJourney} />
                     </CardContent>
                 </Card>
             </div>
@@ -76,7 +74,7 @@ export function CoreTab({ data }: CoreTabProps) {
                     />
                 </CardHeader>
                 <CardContent className="p-6">
-                    <GoldenCircle goldenCircle={data.goldenCircle} />
+                    <GoldenCircle data={data.goldenCircle} />
                 </CardContent>
             </Card>
 
