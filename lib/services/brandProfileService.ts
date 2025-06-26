@@ -1,105 +1,97 @@
 // This service will be responsible for fetching and updating brand profile data.
 // For now, it uses mock data. In the future, it will interact with the Supabase API.
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/client';
 import { BrandProfile } from '@/lib/types';
-import { cookies } from 'next/headers';
 import { mockBrandProfile } from '../mock-data/brand';
 
 // Helper function to get the current user's company
-async function getUserCompany(supabase: ReturnType<typeof createClient>) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('User not authenticated');
+async function getUserCompany(supabase: ReturnType<typeof createClient>): Promise<string> {
+    try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            console.warn("No user authenticated in brandProfileService, returning demo ID");
+            return 'demo-company-id';
+        }
 
-    const { data: memberData, error: memberError } = await supabase
-        .from('company_members')
-        .select('company_id')
-        .eq('user_id', user.id)
-        .single();
+        const { data: memberData, error: memberError } = await supabase
+            .from('company_members')
+            .select('company_id')
+            .eq('user_id', user.id)
+            .single();
 
-    if (memberError || !memberData) {
-        throw new Error('Could not find company for the current user.');
+        if (memberError || !memberData) {
+            console.warn("Could not find company for the current user in brandProfileService, returning demo ID");
+            return 'demo-company-id';
+        }
+
+        return memberData.company_id;
+    } catch (error) {
+        console.error("Error in getUserCompany (brandProfileService):", error);
+        return 'demo-company-id';
     }
-
-    return memberData.company_id;
 }
 
 export const brandProfileService = {
   getBrandProfile: async (): Promise<BrandProfile> => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    try {
+      const supabase = createClient();
+      const companyId = await getUserCompany(supabase);
 
-    if (!user) {
-      throw new Error('User not authenticated. Could not fetch brand profile.');
-    }
-
-    const { data: memberData, error: memberError } = await supabase
-      .from('company_members')
-      .select('company_id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (memberError || !memberData) {
-      console.error('Error fetching company membership:', memberError);
-      throw new Error('Could not find company for the current user.');
-    }
-
-    const { data: companyData, error: companyError } = await supabase
-      .from('companies')
-      .select('*') // Fetches all columns, including new ones
-      .eq('id', memberData.company_id)
-      .single();
-
-    if (companyError || !companyData) {
-      console.error('Error fetching company data:', companyError);
-      throw new Error('Failed to fetch brand profile data.');
-    }
-
-    const { brand_identity, ...restOfCompanyData } = companyData;
-
-    // Construct the BrandProfile object to match the UI expectations
-    const profile: BrandProfile = {
-      id: restOfCompanyData.id, // company ID
-      name: restOfCompanyData.name, // company name from DB
-      companyName: restOfCompanyData.name, // For consistency with mock type
-      companyIndustry: restOfCompanyData.company_industry, // New field
-      companyType: restOfCompanyData.company_type,
-      companySize: restOfCompanyData.company_size,
-      companyWebsite: restOfCompanyData.company_website,
-      companyDescription: restOfCompanyData.company_description, // New field
-      targetAudience: restOfCompanyData.target_audience,
-      language: restOfCompanyData.language,
-      timezone: restOfCompanyData.timezone,
-      // User-specific fields are not part of the 'companies' table directly,
-      // so we provide defaults or empty values if they are expected by BrandProfile type
-      // but not stored in 'companies' table.
-      // These would ideally come from a 'users' table or similar.
-      firstName: '', // Default or fetch from user profile if needed elsewhere
-      lastName: '',  // Default
-      email: '',    // Default
-      role: '',      // Default
-      dob: '',        // Default
-      country: '',    // Default
-      gender: 'prefer_not_to_say', //Default
-      userDescription: '', // Default
+      // Si es demo, simplemente devolver los mocks
+      if (companyId === 'demo-company-id') {
+          console.warn("Using mock brand profile data.");
+          return mockBrandProfile;
+      }
       
-      // Nested brand identity fields
-      core: brand_identity?.core ?? {},
-      voice: brand_identity?.voice ?? {},
-      visual: brand_identity?.visual ?? {},
-      assets: brand_identity?.assets ?? {},
-    };
+      const { data: companyData, error: companyError } = await supabase
+        .from('companies')
+        .select('*') // Fetches all columns, including new ones
+        .eq('id', companyId)
+        .single();
 
-    return profile;
+      if (companyError || !companyData) {
+        console.error('Error fetching company data, falling back to mock data:', companyError);
+        return mockBrandProfile;
+      }
+
+      const { brand_identity, ...restOfCompanyData } = companyData;
+
+      const profile: BrandProfile = {
+        id: restOfCompanyData.id,
+        name: restOfCompanyData.name,
+        companyName: restOfCompanyData.name,
+        companyIndustry: restOfCompanyData.company_industry,
+        companyType: restOfCompanyData.company_type,
+        companySize: restOfCompanyData.company_size,
+        companyWebsite: restOfCompanyData.company_website,
+        companyDescription: restOfCompanyData.company_description,
+        targetAudience: restOfCompanyData.target_audience,
+        language: restOfCompanyData.language,
+        timezone: restOfCompanyData.timezone,
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        dob: '',
+        country: '',
+        gender: 'prefer_not_to_say',
+        userDescription: '',
+        core: brand_identity?.core ?? {},
+        voice: brand_identity?.voice ?? {},
+        visual: brand_identity?.visual ?? {},
+        assets: brand_identity?.assets ?? {},
+      };
+
+      return profile;
+    } catch (error) {
+      console.error('Catastrophic error in getBrandProfile, falling back to mock data:', error);
+      return mockBrandProfile;
+    }
   },
 
   updateBrandProfile: async (profileData: Partial<BrandProfile>): Promise<{ success: boolean; error?: any }> => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createClient();
 
     try {
       const companyId = await getUserCompany(supabase);
