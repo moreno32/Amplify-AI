@@ -79,24 +79,17 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
     async function loadPostsForWeek() {
       setIsLoading(true)
       try {
-      const fetchedPosts = await postService.getPosts(startOfWeek, endOfWeek)
-      setPosts(fetchedPosts)
-      } catch (error) { 
+        const fetchedPosts = await postService.getPosts(startOfWeek, endOfWeek)
+        setPosts(fetchedPosts)
+      } catch (error) {
         console.error("Error fetching posts for week:", error)
         toast.error("No se pudieron cargar los posts para esta semana.")
       }
       setIsLoading(false)
-      if (isCurrentWeek) {
-        scrollToNow()
-      }
     }
 
-    if (!isSameWeek(currentDate, new Date(initialData.initialDate), { weekStartsOn: 1})) {
-        loadPostsForWeek()
-    } else if (isCurrentWeek) {
-        scrollToNow()
-    }
-  }, [currentDate, startOfWeek, endOfWeek, isCurrentWeek, initialData.initialDate, toast])
+    loadPostsForWeek()
+  }, [currentDate])
 
   const handleTodayClick = () => {
     const now = new Date()
