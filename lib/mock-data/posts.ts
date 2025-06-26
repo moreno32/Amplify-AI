@@ -3,12 +3,12 @@ import { Post } from '@/lib/types';
 export const mockPosts: Post[] = [
   {
     id: 'b7a3c3d8-1b3e-4e4a-9a0a-4c2d7f1b3e7c',
-    content: 'La motivación te pone en marcha, el hábito te mantiene en marcha.',
+    content: 'La motivación te pone en marcha, el hábito te mantiene en marcha. ¡Feliz Lunes!',
     status: 'published',
     category: 'Motivación',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=500&h=800&fit=crop&q=60',
-    startTime: new Date('2024-06-17T09:00:00'),
+    startTime: new Date('2024-06-24T09:00:00'),
     duration: 180,
     metrics: { likes: 1256, comments: 112, reach: 15234 }
   },
@@ -19,7 +19,7 @@ export const mockPosts: Post[] = [
     category: 'Entrenamiento',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1581009137052-c61a4962b712?w=500&h=500&fit=crop&q=60',
-    startTime: new Date('2024-06-18T18:00:00'),
+    startTime: new Date('2024-06-25T18:00:00'),
     duration: 120,
     metrics: { likes: 0, comments: 0, reach: 0 }
   },
@@ -30,7 +30,7 @@ export const mockPosts: Post[] = [
     category: 'Evento',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&h=500&fit=crop&q=60',
-    startTime: new Date('2024-06-19T12:00:00'),
+    startTime: new Date('2024-06-29T11:00:00'),
     duration: 240,
     metrics: { likes: 0, comments: 0, reach: 0 }
   },
@@ -41,7 +41,7 @@ export const mockPosts: Post[] = [
     category: 'Motivación',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1607962837359-5e7e89f86776?w=500&h=500&fit=crop&q=60',
-    startTime: new Date('2024-06-20T09:00:00'),
+    startTime: new Date('2024-06-26T09:00:00'),
     duration: 180,
     metrics: { likes: 0, comments: 0, reach: 0 }
   },
@@ -52,7 +52,7 @@ export const mockPosts: Post[] = [
     category: 'Promoción',
     platform: 'facebook',
     imageUrl: 'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=500&h=500&fit=crop&q=60',
-    startTime: new Date('2024-06-20T09:00:00'),
+    startTime: new Date('2024-06-26T10:00:00'),
     duration: 120,
     metrics: { likes: 0, comments: 0, reach: 0 }
   },
@@ -63,7 +63,7 @@ export const mockPosts: Post[] = [
     category: 'Entrenamiento',
     platform: 'instagram',
     imageUrl: 'https://images.unsplash.com/photo-1623874514711-0f321325f318?w=500&h=500&fit=crop&q=60',
-    startTime: new Date('2024-06-21T19:00:00'),
+    startTime: new Date('2024-06-28T19:00:00'),
     duration: 180,
     metrics: { likes: 987, comments: 76, reach: 11200 }
   },
