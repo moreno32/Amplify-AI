@@ -53,7 +53,7 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
-  const [currentDate, setCurrentDate] = useState(new Date(initialData.initialDate))
+  const [currentDate, setCurrentDate] = useState(new Date('2024-06-24T12:00:00'))
   const [isCreating, setIsCreating] = useState(false)
   const [showOptimalHours, setShowOptimalHours] = useState(false)
 
