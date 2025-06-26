@@ -44,7 +44,7 @@ El Dashboard es la primera pantalla que ve el usuario al entrar. No debe ser un 
 ## D. Flujo de Datos y Arquitectura
 
 - **Carga de Datos del Lado del Servidor:** La página (`page.tsx`) es un Componente de Servidor (`async function`). Su responsabilidad es llamar al servicio `getDashboardData()` desde `@/lib/services/dashboardService.ts` para obtener todos los datos necesarios para el dashboard de una sola vez.
-- **Renderizado en el Cliente:** Los datos obtenidos se pasan como `props` a un único Componente de Cliente (`DashboardClientContent.tsx`). Este componente se encarga de toda la lógica de renderizado y de pasar los datos específicos a cada widget (como `PerformanceCard`, `UpcomingPosts`, etc.).
+- **Renderizado en el Cliente:** Los datos obtenidos se pasan como `props` a un único Componente de Cliente (`DashboardClientContent.tsx`). Este componente se encarga de toda la lógica de renderizado y de pasar los datos específicos a cada widget (como `StatCard`, `UpcomingPosts`, etc.).
 - **Preparado para Backend:** La integración con la API de FastAPI solo requerirá modificar la función `getDashboardData()` para que haga una llamada `fetch` en lugar de leer datos locales, sin necesidad de alterar ningún componente de la interfaz.
 
 ## E. Backlog y Mejoras

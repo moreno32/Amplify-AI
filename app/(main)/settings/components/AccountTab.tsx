@@ -154,10 +154,14 @@ export function AccountTab({ data }: AccountTabProps) {
           {/* User Info Card */}
           <motion.div variants={itemVariants}>
             <DashboardSection
+              title="Tus datos personales."
+            >
+              <BlockHeader
+                icon={User}
               title="Usuario"
               description="Tus datos personales."
-            >
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              />
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 pt-6">
                 <FormField label="Nombre" htmlFor="firstName">
                   <Input
                     id="firstName"
@@ -200,7 +204,7 @@ export function AccountTab({ data }: AccountTabProps) {
                  </FormField>
                  <FormField label="Sexo" htmlFor="gender">
                      <Select value={formData.gender ?? 'prefer_not_to_say'} onValueChange={(v) => handleChange('gender', v)}>
-                         <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                         <SelectTrigger id="gender" className="w-full"><SelectValue /></SelectTrigger>
                          <SelectContent>
                              <SelectItem value="female">Femenino</SelectItem>
                              <SelectItem value="male">Masculino</SelectItem>
@@ -210,14 +214,14 @@ export function AccountTab({ data }: AccountTabProps) {
                      </Select>
                  </FormField>
                  <FormField label="Idioma" htmlFor="language">
-                    <Select value={formData.language ?? 'es'} onValueChange={(v) => handleChange('language', v)}>
-                        <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                    <Select value={formData.language ?? 'es'} onValuechange={(v) => handleChange('language', v)}>
+                        <SelectTrigger id="language" className="w-full"><SelectValue /></SelectTrigger>
                         <SelectContent><SelectItem value="es">Español</SelectItem><SelectItem value="en">English</SelectItem></SelectContent>
                     </Select>
                  </FormField>
                  <FormField label="Zona Horaria" htmlFor="timezone">
                    <Select value={formData.timezone ?? ''} onValueChange={(v) => handleChange('timezone', v)}>
-                       <SelectTrigger className="w-full"><SelectValue placeholder="Elige tu zona"/></SelectTrigger>
+                       <SelectTrigger id="timezone" className="w-full"><SelectValue placeholder="Elige tu zona"/></SelectTrigger>
                        <SelectContent>
                            <SelectItem value="Europe/Madrid">Europa/Madrid (GMT+2)</SelectItem>
                            <SelectItem value="America/Mexico_City">Ciudad de México (GMT-6)</SelectItem>
@@ -229,7 +233,7 @@ export function AccountTab({ data }: AccountTabProps) {
                  </FormField>
                  <FormField label="País" htmlFor="country">
                     <Select value={formData.country ?? ''} onValueChange={(v) => handleChange('country', v)}>
-                        <SelectTrigger className="w-full"><SelectValue placeholder="Elige tu país"/></SelectTrigger>
+                        <SelectTrigger id="country" className="w-full"><SelectValue placeholder="Elige tu país"/></SelectTrigger>
                         <SelectContent><SelectItem value="España">España</SelectItem><SelectItem value="México">México</SelectItem><SelectItem value="Argentina">Argentina</SelectItem><SelectItem value="Colombia">Colombia</SelectItem><SelectItem value="USA">USA</SelectItem></SelectContent>
                     </Select>
                  </FormField>
@@ -250,50 +254,61 @@ export function AccountTab({ data }: AccountTabProps) {
 
           {/* Company Info Card */}
           <motion.div variants={itemVariants}>
-            <DashboardSection title="Empresa">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
+            <DashboardSection
+              title="Los datos de tu empresa."
+            >
+              <BlockHeader
+                icon={Building}
+                title="Empresa"
+                description="Información pública y de configuración de tu empresa."
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
                 <FormField label="Nombre de la Empresa" htmlFor="companyName" className="md:col-span-2">
-                  <Input id="companyName" value={formData.companyName ?? ''} onChange={(e) => handleChange('companyName', e.target.value)} />
+                  <Input
+                    id="companyName"
+                    value={formData.companyName ?? ''}
+                    onChange={(e) => handleChange('companyName', e.target.value)}
+                  />
                 </FormField>
-                <FormField label="Sector" htmlFor="companyIndustry">
-                  <Select value={formData.companyIndustry ?? ''} onValueChange={(v) => handleChange('companyIndustry', v)}>
-                    <SelectTrigger className="w-full"><SelectValue placeholder="Elige un sector" /></SelectTrigger>
-                    <SelectContent>{Object.keys(subsectorOptions).map(sector => <SelectItem key={sector} value={sector}>{sector}</SelectItem>)}</SelectContent>
-                  </Select>
-                </FormField>
-                <FormField label="Subsector" htmlFor="companyType">
-                    <Select value={formData.companyType ?? ''} onValueChange={(v) => handleChange('companyType', v)} disabled={availableSubsectors.length === 0}>
-                        <SelectTrigger className="w-full"><SelectValue placeholder="Primero elige un sector" /></SelectTrigger>
+                <FormField label="Industria" htmlFor="companyIndustry">
+                    <Select value={formData.companyIndustry ?? ''} onValueChange={(v) => handleChange('companyIndustry', v)}>
+                        <SelectTrigger id="companyIndustry" className="w-full"><SelectValue placeholder="Selecciona una industria" /></SelectTrigger>
                         <SelectContent>
-                            {availableSubsectors.map((sub) => ( <SelectItem key={sub} value={sub}>{sub}</SelectItem> ))}
+                            {Object.keys(subsectorOptions).map(sector => (
+                                <SelectItem key={sector} value={sector}>{sector}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </FormField>
-                <FormField label="Tamaño" htmlFor="companySize">
-                  <Select value={formData.companySize ?? ''} onValueChange={(v) => handleChange('companySize', v)}>
-                    <SelectTrigger className="w-full"><SelectValue placeholder="Elige el tamaño" /></SelectTrigger>
-                    <SelectContent><SelectItem value="Yo solo">Yo solo</SelectItem><SelectItem value="2-10 empleados">2-10 empleados</SelectItem><SelectItem value="11-50 empleados">11-50 empleados</SelectItem><SelectItem value="50+">50+</SelectItem></SelectContent>
-                  </Select>
-                </FormField>
-                <FormField label="Mercado Objetivo" htmlFor="targetAudience">
-                    <Select value={formData.targetAudience ?? ''} onValueChange={(v) => handleChange('targetAudience', v)}>
-                        <SelectTrigger className="w-full"><SelectValue placeholder="Selecciona un mercado" /></SelectTrigger>
+                <FormField label="Subsector o tipo" htmlFor="companyType">
+                    <Select value={formData.companyType ?? ''} onValueChange={(v) => handleChange('companyType', v)} disabled={!formData.companyIndustry || availableSubsectors.length === 0}>
+                        <SelectTrigger id="companyType" className="w-full"><SelectValue placeholder="Selecciona un tipo" /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="Jóvenes (18-25)">Jóvenes (18-25)</SelectItem>
-                            <SelectItem value="Adultos Jóvenes (25-40)">Adultos Jóvenes (25-40)</SelectItem>
-                            <SelectItem value="Adultos (40-60)">Adultos (40-60)</SelectItem>
-                            <SelectItem value="Familias">Familias</SelectItem>
-                            <SelectItem value="Empresas (B2B)">Empresas (B2B)</SelectItem>
-                            <SelectItem value="Público General">Público General</SelectItem>
+                            {availableSubsectors.map(subsector => (
+                                <SelectItem key={subsector} value={subsector}>{subsector}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </FormField>
                 <FormField label="Sitio Web" htmlFor="companyWebsite" className="md:col-span-2">
-                  <div className="relative"><Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input id="companyWebsite" type="url" value={formData.companyWebsite ?? ''} onChange={(e) => handleChange('companyWebsite', e.target.value)} className="pl-10" /></div>
+                  <Input
+                    id="companyWebsite"
+                    type="url"
+                    placeholder="https://tuempresa.com"
+                    value={formData.companyWebsite ?? ''}
+                    onChange={(e) => handleChange('companyWebsite', e.target.value)}
+                  />
                 </FormField>
-                <FormField label="Descripción de la Empresa" htmlFor="companyDescription" className="md:col-span-2">
-                  <Textarea id="companyDescription" value={formData.companyDescription ?? ''} onChange={(e) => handleChange('companyDescription', e.target.value)} rows={3} maxLength={MAX_DESC_LENGTH} />
-                  <p className="text-xs text-right text-muted-foreground">{(formData.companyDescription?.length ?? 0)}/{MAX_DESC_LENGTH}</p>
+                <FormField label="Describe tu empresa" htmlFor="companyDescription" className="md:col-span-2">
+                  <Textarea
+                    id="companyDescription"
+                    value={formData.companyDescription ?? ''}
+                    onChange={(e) => handleChange('companyDescription', e.target.value)}
+                    maxLength={MAX_DESC_LENGTH}
+                    className="h-24"
+                    placeholder="Describe brevemente a qué se dedica tu empresa."
+                  />
+                  <p className="text-xs text-muted-foreground text-right">{formData.companyDescription?.length || 0} / {MAX_DESC_LENGTH}</p>
                 </FormField>
               </div>
             </DashboardSection>
@@ -301,91 +316,98 @@ export function AccountTab({ data }: AccountTabProps) {
 
           {/* Security Card */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
-            <DashboardSection title="Seguridad">
-              <BlockHeader icon={Lock} title="Seguridad" description="Gestiona tu contraseña y la seguridad de tu cuenta." />
-              {!isChangingPassword ? (
-                <div className="flex flex-col sm:flex-row items-center justify-between p-4 border rounded-lg bg-background">
-                    <div>
-                        <h4 className="font-semibold">Contraseña</h4>
-                        <p className="text-sm text-muted-foreground">Última actualización hace 2 meses</p>
-                    </div>
-                    <Button variant="outline" onClick={() => setIsChangingPassword(true)}>Cambiar Contraseña</Button>
-                </div>
-              ) : (
-                <div className="p-4 border rounded-lg space-y-4">
-                  <h4 className="font-semibold">Cambiar Contraseña</h4>
-                  <div className="space-y-4">
-                    <FormField label="Contraseña Actual">
-                      <div className="relative">
-                        <Input type={showPasswords.current ? 'text' : 'password'} value={passwords.currentPassword} onChange={e => handlePasswordChange('currentPassword', e.target.value)} />
-                        <button type="button" onClick={() => setShowPasswords(p => ({ ...p, current: !p.current }))} className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground">
-                          {showPasswords.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </button>
-                      </div>
-                    </FormField>
-                    <FormField label="Nueva Contraseña">
-                      <div className="relative">
-                        <Input type={showPasswords.new ? 'text' : 'password'} value={passwords.newPassword} onChange={e => handlePasswordChange('newPassword', e.target.value)} />
-                        <button type="button" onClick={() => setShowPasswords(p => ({ ...p, new: !p.new }))} className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground">
-                          {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </button>
-                      </div>
-                      <p className="text-xs text-muted-foreground">La contraseña debe tener al menos 8 caracteres.</p>
-                    </FormField>
-                     <FormField label="Confirmar Nueva Contraseña">
-                        <div className="relative">
-                            <Input type={showPasswords.confirm ? 'text' : 'password'} value={passwords.confirmPassword} onChange={e => handlePasswordChange('confirmPassword', e.target.value)} />
-                             <button type="button" onClick={() => setShowPasswords(p => ({ ...p, confirm: !p.confirm }))} className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground">
-                                {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                            </button>
+            <DashboardSection
+              title="Seguridad"
+            >
+              <BlockHeader
+                icon={Lock}
+                title="Seguridad de la Cuenta"
+                description="Gestiona tu contraseña y otros ajustes de seguridad."
+              />
+              <div className="pt-6">
+                {!isChangingPassword ? (
+                    <Button onClick={() => setIsChangingPassword(true)}>Cambiar Contraseña</Button>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                        <FormField label="Contraseña Actual">
+                            <div className="relative">
+                                <Input type={showPasswords.current ? 'text' : 'password'} value={passwords.currentPassword} onChange={(e) => handlePasswordChange('currentPassword', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setShowPasswords(p => ({ ...p, current: !p.current }))}>
+                                    {showPasswords.current ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                            </div>
+                        </FormField>
+                        <FormField label="Nueva Contraseña">
+                           <div className="relative">
+                                <Input type={showPasswords.new ? 'text' : 'password'} value={passwords.newPassword} onChange={(e) => handlePasswordChange('newPassword', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setShowPasswords(p => ({ ...p, new: !p.new }))}>
+                                    {showPasswords.new ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                            </div>
+                        </FormField>
+                        <FormField label="Confirmar Nueva Contraseña">
+                            <div className="relative">
+                                <Input type={showPasswords.confirm ? 'text' : 'password'} value={passwords.confirmPassword} onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)} />
+                                <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setShowPasswords(p => ({ ...p, confirm: !p.confirm }))}>
+                                    {showPasswords.confirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                            </div>
+                        </FormField>
+                        <div className="flex gap-2">
+                            <Button onClick={handleSavePassword} disabled={!isPasswordFormValid || isPasswordSaving}>{isPasswordSaving ? 'Guardando...' : 'Guardar'}</Button>
+                            <Button variant="ghost" onClick={() => setIsChangingPassword(false)}>Cancelar</Button>
                         </div>
-                    </FormField>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="ghost" onClick={() => setIsChangingPassword(false)}>Cancelar</Button>
-                    <Button onClick={handleSavePassword} disabled={!isPasswordFormValid || isPasswordSaving}>
-                      {isPasswordSaving ? 'Guardando...' : 'Guardar Contraseña'}
-                    </Button>
-                  </div>
-                </div>
-              )}
+                    </div>
+                )}
+              </div>
             </DashboardSection>
           </motion.div>
-          
-           {/* Danger Zone Card */}
-          <motion.div variants={itemVariants} className="lg:col-span-2">
-            <DashboardSection title="Zona de Peligro">
-              <BlockHeader 
-                icon={AlertTriangle} 
-                title="Zona de Peligro" 
-                description="Acciones irreversibles. Por favor, proceda con cuidado."
-                className="text-destructive"
+            
+          {/* Delete Account Card */}
+          <motion.div variants={itemVariants}>
+            <DashboardSection
+              title="Borrar Cuenta"
+            >
+              <BlockHeader
+                icon={AlertTriangle}
+                title="Eliminar Cuenta"
+                description="Esta acción es irreversible y eliminará todos tus datos."
               />
-              <div className="flex flex-col sm:flex-row items-center justify-between p-4 border border-destructive/50 rounded-lg bg-destructive/5">
-                <div>
-                  <h4 className="font-semibold text-destructive">Eliminar Cuenta</h4>
-                  <p className="text-sm text-destructive/80">Esta acción eliminará permanentemente tu cuenta y todos tus datos.</p>
-                </div>
+              <div className="pt-6">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Para confirmar, escribe <strong>&quot;BORRAR MI CUENTA&quot;</strong> en el campo de abajo.
+                </p>
+                <Input
+                  id="deleteConfirmation"
+                  value={deleteConfirmation}
+                  onChange={(e) => setDeleteConfirmation(e.target.value)}
+                  className="mb-4"
+                  placeholder="BORRAR MI CUENTA"
+                />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive">Eliminar mi cuenta</Button>
+                    <Button
+                      variant="destructive"
+                      disabled={deleteConfirmation !== 'BORRAR MI CUENTA'}
+                    >
+                      Eliminar mi cuenta permanentemente
+                    </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Esta acción no se puede deshacer. Para confirmar, escribe <strong>{formData.email ?? 'tu email'}</strong> en el campo de abajo.
+                        Esta acción no se puede deshacer. Esto eliminará permanentemente
+                        tu cuenta y todos los datos asociados de nuestros servidores.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <Input 
-                      value={deleteConfirmation}
-                      onChange={(e) => setDeleteConfirmation(e.target.value)}
-                      placeholder={formData.email ?? ''}
-                    />
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction disabled={deleteConfirmation !== formData.email}>
-                        Entiendo, eliminar mi cuenta
+                      <AlertDialogAction
+                        onClick={() => toast.info('Funcionalidad de borrado no implementada aún.')}
+                        className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                      >
+                        Sí, entiendo, borrar mi cuenta
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -393,16 +415,10 @@ export function AccountTab({ data }: AccountTabProps) {
               </div>
             </DashboardSection>
           </motion.div>
-
         </motion.div>
       </div>
 
-      <SettingsSaveFooter
-        isLoading={isLoading}
-        isModified={isModified}
-        onSave={handleSave}
-        saveText="Guardar Cambios Generales"
-      />
+      <SettingsSaveFooter isModified={isModified} onSave={handleSave} onCancel={() => setIsModified(false)} isLoading={isLoading} />
     </>
   )
 }

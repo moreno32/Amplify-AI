@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { KpiCard } from "./KpiCard";
-import { BarChart, Heart, Users, Grid, LineChart, Lightbulb } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { AiInsightCard } from "./AiInsightCard";
+import { StatCard } from "@/components/shared/StatCard";
+import { mockMetricsData } from "@/lib/mock-data/metrics";
+import { BarChart, Lightbulb, LineChart, Users, Heart, Grid } from "lucide-react";
+import { InfoCard } from "@/components/shared/InfoCard";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ContentBlock } from "@/components/shared/ContentBlock";
 import { AnalyticsData } from "@/lib/types";
 
@@ -14,10 +14,17 @@ export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
   const { kpis, chartData } = data;
 
   return (
-    <div className="space-y-6 mt-4">
+    <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((kpi) => (
-          <KpiCard key={kpi.title} title={kpi.title} value={kpi.value} change={kpi.change} changeType={kpi.changeType} icon={<BarChart className="h-4 w-4 text-muted-foreground" />} />
+        {mockMetricsData.map((kpi) => (
+          <StatCard 
+            key={kpi.title} 
+            title={kpi.title} 
+            value={kpi.value} 
+            change={`${kpi.change}%`}
+            changeType={kpi.changeType} 
+            icon={<BarChart className="h-4 w-4 text-muted-foreground" />} 
+          />
         ))}
       </div>
 
@@ -55,18 +62,18 @@ export function MiRendimientoTab({ data }: MiRendimientoTabProps) {
         </div>
       </ContentBlock>
 
-      <ContentBlock
-        icon={Lightbulb}
-        title="Conclusión del Coach"
+      <InfoCard
+        variant="primary"
+        icon={<Lightbulb className="h-6 w-6 text-primary" />}
+        title="Análisis de IA"
+        actionButton={{
+          label: "Ver posts relacionados",
+        }}
       >
-        <p className="text-muted-foreground">
-            Tu crecimiento de seguidores se aceleró un 30% después de la campaña{' '}
-            <strong className="text-primary/90">'Promo Verano'</strong>, 
-            pero tu tasa de engagement se ha mantenido estable.
-            <br/><br/>
-            <strong>Recomendación:</strong> Lancemos una campaña de 'Interacción' con preguntas y encuestas para activar a tu nueva audiencia.
+        <p className="text-sm">
+          Tu <strong>tasa de engagement</strong> ha subido un <strong>0.8%</strong>. Esto se debe principalmente a tus posts en formato "Reel", que están funcionando un <strong>25% mejor</strong> que las imágenes estáticas.
         </p>
-      </ContentBlock>
+      </InfoCard>
     </div>
   );
 } 

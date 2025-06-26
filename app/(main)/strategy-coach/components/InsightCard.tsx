@@ -30,6 +30,9 @@ interface InsightCardProps extends React.HTMLAttributes<HTMLDivElement>, Variant
   }
 }
 
+/**
+ * @deprecated This component is deprecated. Use <InfoCard /> instead.
+ */
 export const InsightCard = ({ variant, icon, title, description, cta, className, ...props }: InsightCardProps) => {
   return (
     <Card className={insightCardVariants({ variant, className })} {...props}>

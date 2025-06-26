@@ -26,7 +26,7 @@ Esta pantalla transforma datos brutos en inteligencia accionable. El objetivo no
 Aquí el usuario obtiene una radiografía de su propia cuenta.
 
 ### 1. KPIs Principales (Inspirado en SocialBee)
--   **Layout:** Una cuadrícula de 4 `shadcn/ui Card` en la parte superior.
+-   **Layout:** Una cuadrícula de 4 componentes `StatCard` en la parte superior.
 -   **Card 1: Alcance:** Número grande, `+X% vs. período anterior`, y un pequeño icono de gráfico de barras.
 -   **Card 2: Tasa de Engagement:** Número en porcentaje, `+X% vs. período anterior`, icono de corazón/comentario.
 -   **Card 3: Nuevos Seguidores:** Número grande, `+X% vs. período anterior`, icono de usuario.
@@ -39,7 +39,7 @@ Aquí el usuario obtiene una radiografía de su propia cuenta.
 -   **Interactividad:** Al pasar el cursor sobre el gráfico, un `tooltip` muestra los datos exactos de ese día.
 
 ### 3. ⭐ El Insight del Coach IA ⭐
--   **Componente:** Una `Card` destacada, justo debajo del gráfico, con un icono `💡`.
+-   **Componente:** Una `InfoCard` destacada, justo debajo del gráfico, con la variante `primary` y un icono `💡`.
 -   **Propósito:** La IA interpreta los datos de esta pestaña y ofrece una conclusión y una acción.
 -   **Ejemplo de Texto:** "💡 **Conclusión del Coach:** Tu crecimiento de seguidores se aceleró un 30% después de la campaña 'Promo Verano', pero tu tasa de engagement se ha mantenido estable. **Recomendación:** Lancemos una campaña de 'Interacción' con preguntas y encuestas para activar a tu nueva audiencia."
 -   **Botón CTA:** `[Crear Campaña de Interacción]`
@@ -116,7 +116,7 @@ La arquitectura de la página de Análisis es un excelente ejemplo de nuestra es
 **Componentes Clave Utilizados:**
 -   **`PageHeader.tsx`**: Se utiliza para el título principal y las acciones globales de la página (selector de fecha y exportación).
 -   **`DashboardSection.tsx`**: Este componente, creado para el Dashboard, se ha reutilizado aquí con éxito para encapsular las secciones principales de la pestaña "Mi Rendimiento", asegurando una cabecera y estructura consistentes.
--   **`KpiCard.tsx`**: Un componente específico de esta sección para mostrar las métricas clave (KPIs) en un formato de tarjeta uniforme.
+-   **`StatCard.tsx`**: (Anteriormente `KpiCard`) Un componente genérico y reutilizable (`components/shared`) que se usa para mostrar las métricas clave (KPIs) en un formato de tarjeta uniforme.
 
 **Flujo de Datos:**
 La página principal delega la responsabilidad de obtener y manejar los datos a cada componente de pestaña (`MiRendimientoTab`, `AnalisisCompetitivoTab`, etc.). Actualmente, estos datos provienen de mocks, y el siguiente paso es conectarlos a un endpoint de API.
@@ -128,9 +128,9 @@ La página principal delega la responsabilidad de obtener y manejar los datos a 
 -   **Lógica**: La lógica de cada pestaña está completamente contenida en sus respectivos componentes.
 
 **`components/MiRendimientoTab.tsx`**
--   **KPIs**: Renderiza una parrilla de componentes `KpiCard`.
+-   **KPIs**: Renderiza una parrilla de componentes `StatCard`.
 -   **Gráfico de Evolución**: Esta sección está ahora envuelta en un `<DashboardSection>`, que le proporciona el título estandarizado "Evolución de Seguidores y Engagement" a través del `BlockHeader`.
--   **Conclusión del Coach**: Esta sección también utiliza `<DashboardSection>` para su cabecera, reemplazando la necesidad de un componente `AiInsightCard` personalizado y unificando el diseño.
+-   **Conclusión del Coach**: Esta sección también utiliza un `InfoCard` con la variante `primary`, eliminando la necesidad de un componente personalizado y unificando el diseño.
 
 ### 3. Backlog de Arquitectura y Mejoras
 

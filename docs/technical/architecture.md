@@ -124,19 +124,19 @@ graph TD
         C["@/components/shared (ContentBlock, BlockHeader...)"]
     end
     subgraph "Nivel 1: Específicos (Mínima Reutilización)"
-        B["@/app/(main)/feature/components/ (KpiCard, CompetitorGrid...)"]
+        B["@/app/(main)/feature/components/ (StatCard, CompetitorGrid...)"]
     end
     B --> C --> D
 ```
 
 **Nivel 1: Componentes Específicos de Feature (`/app/(main)/[feature]/components/`)**
 - **Definición:** Son componentes que están fuertemente acoplados a una única funcionalidad o página de la aplicación.
-- **Ejemplos:** `KpiCard` (solo para `analytics`), `CompetitorGrid` (solo para `strategy-coach`), o las pestañas completas de ajustes como `AccountTab.tsx` y `BillingTab.tsx`, que solo tienen sentido dentro de la ruta `/settings`.
+- **Ejemplos:** `InsightCard` (solo para `strategy-coach`), `CompetitorGrid` (solo para `strategy-coach`), o las pestañas completas de ajustes como `AccountTab.tsx` y `BillingTab.tsx`, que solo tienen sentido dentro de la ruta `/settings`.
 - **Regla:** Si un componente solo se usa dentro de una *feature*, **DEBE** vivir en el directorio `components` de esa *feature*.
 
 **Nivel 2: Componentes Compartidos (`/components/shared/`)**
 - **Definición:** Componentes de composición que son reutilizados en **al menos dos features distintas**.
-- **Ejemplos:** `PageHeader`, `DashboardSection` (utilizado para encapsular bloques de contenido en `Ajustes` y otras páginas), `FormField` (para crear campos de formulario consistentes) y `SettingsSaveFooter` (para los botones de guardar cambios).
+- **Ejemplos:** `PageHeader`, `DashboardSection` (utilizado para encapsular bloques de contenido en varias páginas), `StatCard` y `InfoCard` (usados en `Dashboard` y `Analytics`), `FormField` (para crear campos de formulario consistentes) y `SettingsSaveFooter` (para los botones de guardar cambios).
 - **Regla:** Un componente solo se puede "promocionar" a `shared` cuando se demuestra su necesidad en una segunda *feature*. No se deben crear componentes compartidos de forma especulativa.
 
 **Nivel 3: Componentes Primitivos de UI (`/components/ui/`)**

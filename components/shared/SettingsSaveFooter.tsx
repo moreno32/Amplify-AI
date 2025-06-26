@@ -7,6 +7,7 @@ interface SettingsSaveFooterProps {
   isLoading: boolean;
   isModified: boolean;
   onSave: () => void;
+  onCancel?: () => void;
   saveText?: string;
 }
 
@@ -14,6 +15,7 @@ export function SettingsSaveFooter({
   isLoading, 
   isModified, 
   onSave, 
+  onCancel,
   saveText = "Guardar Cambios" 
 }: SettingsSaveFooterProps) {
   if (!isModified) return null;
@@ -25,7 +27,17 @@ export function SettingsSaveFooter({
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 20, opacity: 0 }}
         transition={{ duration: 0.2 }}
+        className="flex items-center gap-x-4"
       >
+        {onCancel && (
+          <Button
+            onClick={onCancel}
+            disabled={isLoading}
+            variant="ghost"
+          >
+            Cancelar
+          </Button>
+        )}
         <Button
           onClick={onSave}
           disabled={isLoading || !isModified}

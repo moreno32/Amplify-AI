@@ -1,61 +1,73 @@
 'use client'
 
+import { DashboardSection } from '@/components/shared/DashboardSection'
 import { DashboardData } from '@/lib/types'
-import { BarChart, Sparkles } from 'lucide-react'
-import ActionCard from './ActionCard'
-import AiCoachFeed from './AiCoachFeed'
-import { ContentBlock } from '@/components/shared/ContentBlock'
-import PerformanceCard from './PerformanceCard'
+import { StatCard } from '@/components/shared/StatCard'
 import UpcomingPosts from './UpcomingPosts'
+import { Rocket, CheckCircle } from 'lucide-react';
+import { InfoCard } from '@/components/shared/InfoCard';
+import AiCoachFeed from './AiCoachFeed';
 
 interface DashboardClientContentProps {
   data: DashboardData
 }
 
+const iconMap: { [key: string]: React.ElementType } = {
+  Rocket,
+  CheckCircle,
+};
+
 export function DashboardClientContent({ data }: DashboardClientContentProps) {
+  const { performanceMetrics, upcomingPosts, recommendedActions, aiCoachInsights } = data
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Hola de nuevo, Dani 👋
-        </h1>
-        <p className="text-muted-foreground">
-          Tienes{' '}
-          <strong className="text-accent-foreground">3 comentarios nuevos</strong>{' '}
-          y <strong className="text-accent-foreground">1 post publicado</strong>{' '}
-          desde tu última visita.
-        </p>
-      </div>
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Content Column */}
-        <div className="lg:col-span-2 space-y-6">
-          <ContentBlock icon={BarChart} title="Tu Rendimiento de un Vistazo">
-            <div className="grid gap-4 md:grid-cols-2">
-              {data.performanceMetrics.map((metric) => (
-                <PerformanceCard key={metric.id} metric={metric} />
+    <div className="flex-1 space-y-8">
+      <DashboardSection title="Rendimiento General">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {performanceMetrics.map((metric) => (
+            <StatCard
+              key={metric.id}
+              title={metric.title}
+              value={metric.value}
+              change={`${metric.change}%`}
+              changeType={metric.changeType}
+              changeDescription="vs. semana pasada"
+              link={metric.link}
+            />
               ))}
             </div>
-          </ContentBlock>
+      </DashboardSection>
 
-          <ContentBlock
-            icon={Sparkles}
-            title="¿Qué hacemos hoy?"
-            description="Acciones rápidas para impulsar tu marca."
-          >
-            <div className="grid gap-4 md:grid-cols-2">
-              {data.recommendedActions.map((action) => (
-                <ActionCard key={action.id} action={action} />
-              ))}
-            </div>
-          </ContentBlock>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <DashboardSection title="Próximos Posts">
+            <UpcomingPosts posts={upcomingPosts} />
+          </DashboardSection>
         </div>
-
-        {/* Right Context Column */}
-         <div className="lg:col-span-1 space-y-6">
-           <AiCoachFeed insights={data.aiCoachInsights} />
-           <UpcomingPosts posts={data.upcomingPosts} />
+        <div className="lg:col-span-1">
+          <DashboardSection title="Acciones Recomendadas">
+            <div className="space-y-4">
+              {recommendedActions.map((item) => {
+                const Icon = iconMap[item.icon];
+                return (
+                  <InfoCard
+                    key={item.id}
+                    icon={Icon && <Icon className="h-8 w-8 text-blue-500" />}
+                    title={item.title}
+                    actionButton={{ label: item.buttonLabel }}
+                  >
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </InfoCard>
+                )
+              })}
+            </div>
+          </DashboardSection>
          </div>
       </div>
+
+      <DashboardSection title="Consejos del AI Coach">
+        <AiCoachFeed insights={aiCoachInsights} />
+      </DashboardSection>
     </div>
   )
 } 

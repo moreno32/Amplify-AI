@@ -1,30 +1,24 @@
 'use client'
 
-import { useState, useRef, KeyboardEvent } from 'react'
+import { useState, useRef, KeyboardEvent, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import {
   BrainCircuit,
-  Lightbulb,
   Mic,
   Sparkles,
   X,
 } from 'lucide-react'
+import { produce } from 'immer'
+
 import { DashboardSection } from '@/components/shared/DashboardSection'
 import { BlockHeader } from '@/components/shared/BlockHeader'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { SettingsSaveFooter } from '@/components/shared/SettingsSaveFooter'
-
-const RECOMMENDED_ARCHETYPES = [
-  'El Educador (Claro y experto)',
-  'El Conector (Cercano y comunitario)',
-  'El Entretenedor (Divertido y amigable)',
-  'El Visionario (Inspirador y vanguardista)',
-  'El Protector (Confiable y seguro)',
-  'El Provocador (Audaz y directo)',
-]
+import { BrandProfile } from '@/lib/types'
+import { updateBrandProfile } from '../actions'
 
 const RECOMMENDED_TONES = [
     'Conversacional',
@@ -52,59 +46,50 @@ const itemVariants = {
 
 const MAX_CONTEXT_LENGTH = 500;
 
-export function BrandProfileTab() {
-  const [agentName, setAgentName] = useState('AmplifyBot')
-  const [companyContext, setCompanyContext] = useState('Amplify-AI es una plataforma SaaS B2B que utiliza IA para ayudar a las marcas a definir su estrategia de contenido, generar posts y analizar su rendimiento. Nuestro público objetivo son startups tecnológicas, agencias de marketing y marcas personales que buscan optimizar su presencia en redes sociales.')
-  const [selectedArchetypes, setSelectedArchetypes] = useState<string[]>(['El Visionario (Inspirador y vanguardista)', 'El Educador (Claro y experto)'])
-  const [selectedTones, setSelectedTones] = useState<string[]>(['Profesional', 'Entusiasta', 'Directo'])
-  const [isLoading, setIsLoading] = useState(false)
-  const [isModified, setIsModified] = useState(false)
-  const archetypeInputRef = useRef<HTMLInputElement>(null)
+interface BrandProfileTabProps {
+  data: BrandProfile;
+}
+
+export function BrandProfileTab({ data }: BrandProfileTabProps) {
+  const [formData, setFormData] = useState(data);
+  const [isModified, setIsModified] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const toneInputRef = useRef<HTMLInputElement>(null)
 
-  const handleStateChange = <T,>(setter: (value: T) => void) => (value: T) => {
-    setter(value);
+  useEffect(() => {
+    setFormData(data);
+    setIsModified(false);
+  }, [data]);
+
+  const handleFieldChange = (path: string, value: any) => {
+    setFormData(produce(draft => {
+      let current: any = draft;
+      const keys = path.split('.');
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (current[key] === undefined || current[key] === null) {
+          current[key] = {};
+        }
+        current = current[key];
+      }
+      current[keys[keys.length - 1]] = value;
+    }));
     if (!isModified) setIsModified(true);
   };
   
-  const setAgentNameHandler = handleStateChange(setAgentName);
-  const setCompanyContextHandler = handleStateChange(setCompanyContext);
-
-  // Archetype Handlers
-  const addArchetype = (archetype: string) => {
-    const trimmed = archetype.trim()
-    if (trimmed && !selectedArchetypes.includes(trimmed)) {
-      setSelectedArchetypes([...selectedArchetypes, trimmed])
-      if (!isModified) setIsModified(true);
-    }
-  }
-  const removeArchetype = (archetype: string) => {
-    setSelectedArchetypes(selectedArchetypes.filter((a) => a !== archetype))
-    if (!isModified) setIsModified(true);
-  }
-  const handleArchetypeKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault()
-      addArchetype(event.currentTarget.value)
-      event.currentTarget.value = ''
-    }
-  }
-  const handleRecommendedArchetypeClick = (archetype: string) => {
-    if (selectedArchetypes.includes(archetype)) removeArchetype(archetype)
-    else addArchetype(archetype)
-  }
-
   // Tone Handlers
   const addTone = (tone: string) => {
     const trimmed = tone.trim()
-    if (trimmed && !selectedTones.includes(trimmed)) {
-      setSelectedTones([...selectedTones, trimmed])
-      if (!isModified) setIsModified(true);
+    const currentTones = formData.voice?.tone ?? [];
+    if (trimmed && !currentTones.includes(trimmed)) {
+      const newTones = [...currentTones, trimmed];
+      handleFieldChange('voice.tone', newTones);
     }
   }
   const removeTone = (tone: string) => {
-    setSelectedTones(selectedTones.filter((t) => t !== tone))
-    if (!isModified) setIsModified(true);
+    const currentTones = formData.voice?.tone ?? [];
+    const newTones = currentTones.filter((t) => t !== tone)
+    handleFieldChange('voice.tone', newTones);
   }
   const handleToneKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' || event.key === ',') {
@@ -114,17 +99,37 @@ export function BrandProfileTab() {
     }
   }
   const handleRecommendedToneClick = (tone: string) => {
-    if (selectedTones.includes(tone)) removeTone(tone)
+    const currentTones = formData.voice?.tone ?? [];
+    if (currentTones.includes(tone)) removeTone(tone)
     else addTone(tone)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    
+    // We only send the fields that are actually editable in this form
+    const payload: Partial<BrandProfile> = {
+      companyDescription: formData.companyDescription,
+      voice: {
+        // We must spread the original data to not wipe out other fields like vocabulary
+        ...data.voice, 
+        persona: {
+            ...data.voice.persona, 
+            name: formData.voice?.persona?.name ?? '',
+        },
+        tone: formData.voice?.tone ?? [],
+      }
+    };
+
+    const result = await updateBrandProfile(payload);
+
+    setIsLoading(false)
+    if (result.success) {
       setIsModified(false)
-      toast.success('Personalidad del Agente IA guardada')
-    }, 1500)
+      toast.success(result.message)
+    } else {
+      toast.error(result.message ?? 'An unknown error occurred.')
+    }
   }
 
   return (
@@ -143,9 +148,9 @@ export function BrandProfileTab() {
               description="Dale una identidad única a tu asistente de IA."
             />
             <Input
-              value={agentName}
-              onChange={(e) => setAgentNameHandler(e.target.value)}
-              placeholder="Ej: AmplifyBot, Kai, Sparky..."
+              value={formData.voice?.persona?.name ?? ''}
+              onChange={(e) => handleFieldChange('voice.persona.name', e.target.value)}
+              placeholder="Ej: Kairos, BrandBot, Sparky..."
             />
           </DashboardSection>
         </motion.div>
@@ -155,68 +160,22 @@ export function BrandProfileTab() {
             <BlockHeader
               icon={BrainCircuit}
               title="Contexto Empresarial"
-              description="Dale a la IA información clave sobre tu negocio y metas."
+              description="Dale a la IA información clave sobre tu negocio y metas. Esto se usa en todo el sistema."
             />
              <div className="space-y-2">
               <Textarea
-                value={companyContext}
-                onChange={(e) => setCompanyContextHandler(e.target.value)}
+                value={formData.companyDescription ?? ''}
+                onChange={(e) => handleFieldChange('companyDescription', e.target.value)}
                 placeholder="Ej: Somos una marca de moda sostenible B2C. Buscamos conectar con un público joven y consciente..."
                 rows={4}
                 maxLength={MAX_CONTEXT_LENGTH}
               />
-               <p className="text-xs text-right text-muted-foreground">{companyContext.length}/{MAX_CONTEXT_LENGTH}</p>
+               <p className="text-xs text-right text-muted-foreground">{(formData.companyDescription?.length ?? 0)}/{MAX_CONTEXT_LENGTH}</p>
             </div>
           </DashboardSection>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <DashboardSection title="Personalidad del Agente">
-            <BlockHeader
-              icon={Lightbulb}
-              title="Personalidad del Agente"
-              description="Define su arquetipo para darle un carácter consistente."
-            />
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-sm font-medium text-muted-foreground mb-2">Arquetipos Recomendados</h4>
-                <div className="flex flex-wrap gap-2">
-                  {RECOMMENDED_ARCHETYPES.map((archetype) => (
-                    <Badge
-                      key={archetype}
-                      variant={selectedArchetypes.includes(archetype) ? 'default' : 'secondary'}
-                      onClick={() => handleRecommendedArchetypeClick(archetype)}
-                      className="cursor-pointer hover:bg-primary/80 transition-colors"
-                    >
-                      {archetype}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <div>
-                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Arquetipos Definidos</h4>
-                <div className="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[40px]">
-                  {selectedArchetypes.map((archetype) => (
-                    <Badge key={archetype} variant="default" className="flex items-center gap-1">
-                      {archetype}
-                      <button onClick={() => removeArchetype(archetype)} className="rounded-full hover:bg-background/50">
-                        <X className="h-3 w-3" />
-                      </button>
-                    </Badge>
-                  ))}
-                  <Input
-                    ref={archetypeInputRef}
-                    onKeyDown={handleArchetypeKeyDown}
-                    placeholder="Añadir arquetipo..."
-                    className="flex-1 bg-transparent border-none focus:ring-0 h-auto p-0"
-                  />
-                </div>
-              </div>
-            </div>
-          </DashboardSection>
-        </motion.div>
-
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="lg:col-span-2">
           <DashboardSection title="Tono de Comunicación">
             <BlockHeader
               icon={Mic}
@@ -230,7 +189,7 @@ export function BrandProfileTab() {
                   {RECOMMENDED_TONES.map((tone) => (
                     <Badge
                       key={tone}
-                      variant={selectedTones.includes(tone) ? 'default' : 'secondary'}
+                      variant={(formData.voice?.tone ?? []).includes(tone) ? 'default' : 'secondary'}
                       onClick={() => handleRecommendedToneClick(tone)}
                       className="cursor-pointer hover:bg-primary/80 transition-colors"
                     >
@@ -242,7 +201,7 @@ export function BrandProfileTab() {
               <div>
                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Tonos Definidos</h4>
                 <div className="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[40px]">
-                  {selectedTones.map((tone) => (
+                  {(formData.voice?.tone ?? []).map((tone) => (
                     <Badge key={tone} variant="default" className="flex items-center gap-1">
                       {tone}
                       <button onClick={() => removeTone(tone)} className="rounded-full hover:bg-background/50">
@@ -250,7 +209,7 @@ export function BrandProfileTab() {
                       </button>
                     </Badge>
                   ))}
-                  <Input
+                   <Input
                     ref={toneInputRef}
                     onKeyDown={handleToneKeyDown}
                     placeholder="Añadir tono..."
@@ -261,14 +220,18 @@ export function BrandProfileTab() {
             </div>
           </DashboardSection>
         </motion.div>
+
       </motion.div>
-      
-      <SettingsSaveFooter
-        isLoading={isLoading}
-        isModified={isModified}
-        onSave={handleSave}
-        saveText="Guardar Personalidad"
-      />
+      {isModified && (
+        <SettingsSaveFooter
+          onSave={handleSave}
+          onCancel={() => {
+            setFormData(data)
+            setIsModified(false)
+          }}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   )
 } 

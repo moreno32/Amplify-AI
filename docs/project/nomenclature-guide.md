@@ -40,8 +40,8 @@ Cada sección principal de la aplicación corresponde a una carpeta dentro de `a
 
 | Sección | Ruta | Componente Orquestador | Componentes Clave |
 | :--- | :--- | :--- | :--- |
-| **Dashboard** | `/dashboard` | `DashboardClientContent.tsx` | `PerformanceCard`, `UpcomingPosts`, `AiCoachFeed` |
-| **Analytics** | `/analytics` | `AnalyticsClientContent.tsx` | `MiRendimientoTab`, `TopPostsTab`, `KpiCard` |
+| **Dashboard** | `/dashboard` | `DashboardClientContent.tsx` | `StatCard`, `UpcomingPosts`, `AiCoachFeed` |
+| **Analytics** | `/analytics` | `AnalyticsClientContent.tsx` | `MiRendimientoTab`, `TopPostsTab`, `StatCard` |
 | **Calendar** | `/calendar` | `CalendarClientPage.tsx` | `CalendarGrid`, `PostCard` |
 | **Inbox** | `/inbox` | `InboxClientPage.tsx` | `ConversationList`, `ChatThread`, `ContactContext` |
 | **Brand Profile** | `/brand-profile`| `BrandProfileClientContent.tsx` | `CoreTab`, `VisualTab`, `VoiceTab`, `GoldenCircle` |

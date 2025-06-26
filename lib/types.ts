@@ -11,6 +11,11 @@ export interface Post {
   startTime: Date;
   duration: number; // Duration in minutes
   notes?: string;
+  metrics?: {
+    likes: number;
+    comments: number;
+    reach: number;
+  };
 }
 
 export interface User {
@@ -34,14 +39,32 @@ export interface Competitor {
   stats: CompetitorStat[];
 }
 
+export interface CompetitorContentAnalysis {
+  id: string;
+  name: string;
+  performanceData: { month: string; user: number; competitor: number }[];
+  postTypes: { name: string; value: number; color: string }[];
+  thematicPillars: { theme: string; posts: number }[];
+  publishingPattern: { [key: string]: number };
+  successfulHashtags: { text: string; value: number }[];
+  aiCoachInsight: {
+    title: string;
+    lesson: string;
+    action: string;
+    cta: string;
+  };
+  positiveKeywords: string[];
+  negativeKeywords: string[];
+  sentiment: 'positive' | 'neutral' | 'negative';
+}
+
 export interface Influencer {
   id: string;
   name: string;
-  username: string;
-  avatarUrl: string;
   followers: number;
-  engagementRate: number;
-  affinityScore: number;
+  engagement: string;
+  platform: 'instagram' | 'tiktok' | 'youtube';
+  avatarUrl: string;
   tags: string[];
 }
 
@@ -140,7 +163,7 @@ export interface BrandProfile {
     };
   };
   voice: {
-    persona: { name: string; description: string };
+    persona: { name: string; description: string; archetypes?: string[] };
     tone: string[];
     vocabulary: string[];
     grammar: string;
@@ -203,7 +226,7 @@ export interface DashboardData {
 }
 
 export interface TopPost {
-  id: number;
+  id: string;
   imageUrl: string;
   mainStat: {
     label: "Alcance" | "Likes" | "Comentarios";
@@ -212,22 +235,6 @@ export interface TopPost {
   secondaryStats: {
     likes: number;
     comments: number;
-  };
-}
-
-export interface CompetitorContentAnalysis {
-  id: string;
-  name: string;
-  performanceData: { month: string; user: number; competitor: number }[];
-  postTypes: { name: string; value: number; color: string }[];
-  thematicPillars: { theme: string; posts: number }[];
-  publishingPattern: { [key: string]: number };
-  successfulHashtags: { text: string; value: number }[];
-  aiCoachInsight: {
-    title: string;
-    lesson: string;
-    action: string;
-    cta: string;
   };
 }
 
@@ -265,4 +272,10 @@ export interface AnalyticsData {
 export interface StrategyCoachData {
   competitors: Competitor[];
   analysis: Record<string, CompetitorContentAnalysis>;
+}
+
+export interface MarketInsight {
+  id: string;
+  title: string;
+  // ... resto del archivo
 } 

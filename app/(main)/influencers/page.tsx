@@ -1,10 +1,10 @@
 import { PageHeader } from '@/components/layout/PageHeader'
-import { getInfluencers } from '@/lib/services/influencerService'
+import { influencerService } from '@/lib/services/influencerService'
 import { InfluencerClientPage } from './components/InfluencerClientPage'
 import { InfluencerFilters } from './components/InfluencerFilters'
 
 export default async function InfluencersPage() {
-  const influencers = await getInfluencers()
+  const influencers = await influencerService.getInfluencers()
 
   return (
     <>

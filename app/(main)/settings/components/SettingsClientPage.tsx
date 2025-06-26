@@ -58,7 +58,7 @@ export function SettingsClientPage({ data }: SettingsClientPageProps) {
         </TabsContent>
 
         <TabsContent value="brand-profile" className="mt-6">
-          <BrandProfileTab />
+          <BrandProfileTab data={data} />
         </TabsContent>
 
         <TabsContent value="billing" className="mt-6">

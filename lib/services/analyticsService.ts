@@ -1,9 +1,11 @@
-import { competitors, userMetrics } from '@/lib/mock-data/competitors'
-import { mockTopPosts } from '@/lib/mock-data/top-posts'
-import { AnalyticsData } from '@/lib/types'
+// import { competitors, userMetrics } from '@/lib/mock-data/competitors' // Ya no se usa para la lista
+import { userMetrics } from '@/lib/mock-data/competitors' // Aún usamos las métricas mock del usuario
+import { AnalyticsData, Kpi, Post, TopPost } from '@/lib/types'
+import { postService } from './postService'
+import { competitorService } from './competitorService' // Importar el servicio de competidores
 
-// Data for MiRendimientoTab
-const kpiData = [
+// Mantenemos los datos mock para lo que aún no podemos calcular
+const mockKpiData = [
   {
     title: 'Alcance',
     value: '87,345',
@@ -22,15 +24,9 @@ const kpiData = [
     change: '+20.1%',
     changeType: 'increase' as const,
   },
-  {
-    title: 'Posts Publicados',
-    value: '12',
-    change: '-15%',
-    changeType: 'decrease' as const,
-  },
 ]
 
-const chartData = [
+const mockChartData = [
   { name: 'Ene', Seguidores: 4000, Engagement: 2.4 },
   { name: 'Feb', Seguidores: 3000, Engagement: 3.9 },
   { name: 'Mar', Seguidores: 2000, Engagement: 2.8 },
@@ -40,26 +36,67 @@ const chartData = [
   { name: 'Jul', Seguidores: 3490, Engagement: 4.3 },
 ]
 
-/**
- * Simulates fetching all analytics data from an API.
- * In the future, this function will make a network request to the FastAPI backend.
- * For now, it returns a composition of mock data after a short delay.
- *
- * @returns {Promise<AnalyticsData>} A promise that resolves with all analytics data.
- */
-export async function getAnalyticsData(): Promise<AnalyticsData> {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 600))
+// Función para mapear un Post a un TopPost
+function mapPostToTopPost(post: Post): TopPost {
+  if (!post.metrics) {
+    // Esto no debería pasar si filtramos bien, pero es un resguardo
+    return {
+      id: post.id,
+      imageUrl: post.imageUrl || '/placeholder.svg',
+      mainStat: { label: 'Likes', value: 'N/A' },
+      secondaryStats: { likes: 0, comments: 0 }
+    }
+  }
 
   return {
+    id: post.id, // El tipo TopPost tiene id: number, pero lo adaptaremos para usar el string id del Post.
+    imageUrl: post.imageUrl || '/placeholder.svg', // Proveer un placeholder si no hay imagen
+    mainStat: {
+      label: 'Likes', // Podríamos hacerlo dinámico, pero por ahora Likes es un buen default
+      value: post.metrics.likes.toLocaleString('es-ES'),
+    },
+    secondaryStats: {
+      likes: post.metrics.likes,
+      comments: post.metrics.comments,
+    },
+  };
+}
+
+export async function getAnalyticsData(): Promise<AnalyticsData> {
+  // Obtenemos los posts y competidores en paralelo para más eficiencia
+  const [allCompanyPosts, competitorsList] = await Promise.all([
+    postService.getPosts(),
+    competitorService.getCompetitors()
+  ]);
+
+  // 1. Calcular KPI "Posts Publicados"
+  const publishedPostsCount = allCompanyPosts.filter(p => p.status === 'published').length;
+  const publishedPostsKpi: Kpi = {
+    title: 'Posts Publicados',
+    value: publishedPostsCount.toString(),
+    change: '', 
+    changeType: 'increase',
+  };
+
+  const finalKpis = [...mockKpiData, publishedPostsKpi];
+
+  // 2. Calcular Top Posts
+  const topPostsData: TopPost[] = allCompanyPosts
+    .filter(p => p.status === 'published' && p.metrics && p.metrics.likes > 0)
+    .sort((a, b) => (b.metrics?.likes ?? 0) - (a.metrics?.likes ?? 0))
+    .slice(0, 4) 
+    .map(mapPostToTopPost);
+  
+  // 3. Ensamblar todos los datos
+  return {
     performance: {
-      kpis: kpiData,
-      chartData: chartData,
+      kpis: finalKpis,
+      chartData: mockChartData, 
     },
     competitors: {
-      user: userMetrics,
-      list: competitors,
+      user: userMetrics, // Mantenemos las métricas del usuario como mock
+      list: competitorsList, // Usamos la lista real de la DB
     },
-    topPosts: mockTopPosts,
+    topPosts: topPostsData, 
   }
 } 

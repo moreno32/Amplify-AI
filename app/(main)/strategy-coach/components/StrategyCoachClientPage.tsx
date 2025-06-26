@@ -2,26 +2,23 @@
 
 import { useState } from 'react'
 import { InsightCard } from './InsightCard'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { StrategyCoachData, Competitor } from '@/lib/types'
-import { Lightbulb } from 'lucide-react'
 import { CompetitorGrid } from './CompetitorGrid'
 import { ContentAnalysisTab } from './ContentAnalysisTab'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Lightbulb } from 'lucide-react'
+import { StrategyCoachData, Competitor } from '@/lib/types'
 
 interface StrategyCoachClientPageProps {
-  initialData: StrategyCoachData
+  initialData: StrategyCoachData;
 }
 
-export function StrategyCoachClientPage({
-  initialData,
-}: StrategyCoachClientPageProps) {
-  const [selectedCompetitor, setSelectedCompetitor] =
-    useState<Competitor | null>(null)
+export function StrategyCoachClientPage({ initialData }: StrategyCoachClientPageProps) {
   const [activeTab, setActiveTab] = useState('market-overview')
+  const [selectedCompetitor, setSelectedCompetitor] = useState<Competitor | null>(null)
 
   const handleCompetitorSelect = (competitor: Competitor) => {
-    setSelectedCompetitor(competitor)
-    setActiveTab('content-analysis')
+    setSelectedCompetitor(competitor);
+    setActiveTab("content-analysis");
   }
 
   return (
@@ -72,11 +69,7 @@ export function StrategyCoachClientPage({
         />
       </TabsContent>
       <TabsContent value="content-analysis">
-        {selectedCompetitor && (
-          <ContentAnalysisTab
-            competitorId={selectedCompetitor.name.toLowerCase().replace(' ', '')}
-          />
-        )}
+        {selectedCompetitor && <ContentAnalysisTab data={initialData.contentAnalysis} />}
       </TabsContent>
     </Tabs>
   )

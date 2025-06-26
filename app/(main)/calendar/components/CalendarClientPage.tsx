@@ -4,6 +4,11 @@ import { useState, useEffect, useRef } from 'react'
 import { Post } from '@/lib/types'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { PostEditorModal } from '@/components/modals/PostEditorModal'
+import {
+  createCalendarPostAction,
+  updateCalendarPostAction,
+  deleteCalendarPostAction,
+} from '../actions'
 import { postService } from '@/lib/services/postService'
 import {
   addDays,
@@ -37,6 +42,7 @@ import {
 } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { CalendarPageData } from '@/lib/services/calendarService'
+import { useToast } from '@/components/ui/use-toast'
 
 interface CalendarClientPageProps {
   initialData: CalendarPageData
@@ -44,12 +50,13 @@ interface CalendarClientPageProps {
 
 export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
   const [posts, setPosts] = useState<Post[]>(initialData.initialPosts)
-  const [isLoading, setIsLoading] = useState(false) // No longer loading on init
+  const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [currentDate, setCurrentDate] = useState(new Date(initialData.initialDate))
   const [isCreating, setIsCreating] = useState(false)
   const [showOptimalHours, setShowOptimalHours] = useState(false)
+  const { toast } = useToast()
 
   const timeIndicatorRef = useRef<HTMLDivElement>(null)
 
@@ -70,28 +77,34 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
   }
 
   useEffect(() => {
-    // Only fetch posts when the week changes, not on initial load
     async function loadPostsForWeek() {
       setIsLoading(true)
+      try {
       const fetchedPosts = await postService.getPosts(startOfWeek, endOfWeek)
       setPosts(fetchedPosts)
+      } catch (error) { 
+        console.error("Error fetching posts for week:", error)
+        toast({
+            title: "Error",
+            description: "No se pudieron cargar los posts para esta semana.",
+            variant: "destructive",
+        })
+      }
       setIsLoading(false)
       if (isCurrentWeek) {
         scrollToNow()
       }
     }
 
-    // We compare against the initial date to avoid re-fetching on the first render
     if (!isSameWeek(currentDate, new Date(initialData.initialDate), { weekStartsOn: 1})) {
         loadPostsForWeek()
     } else if (isCurrentWeek) {
         scrollToNow()
     }
-  }, [currentDate, startOfWeek, endOfWeek, isCurrentWeek, initialData.initialDate])
+  }, [currentDate, startOfWeek, endOfWeek, isCurrentWeek, initialData.initialDate, toast])
 
   const handleTodayClick = () => {
     const now = new Date()
-    // Si ya estamos en la semana actual, solo hacemos scroll. Si no, cambiamos de semana y el useEffect se encargará.
     if (isSameWeek(currentDate, now, { weekStartsOn: 1 })) {
       scrollToNow()
     } else {
@@ -117,40 +130,62 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
     setIsCreating(false)
   }
 
-  const handleSavePost = (updates: Partial<Post>) => {
+  const handleSavePost = async (updates: Partial<Post>) => {
+    setIsLoading(true);
     if (isCreating) {
-      postService.createPost(updates).then((newPost) => {
-        if (newPost) {
-          setPosts((prev) => [...prev, newPost])
-        }
-      })
+      const result = await createCalendarPostAction(updates);
+      if (result.data) {
+        setPosts((prev) => [...prev, result.data!].sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()));
+        toast({ title: "Éxito", description: "Post creado correctamente." });
+      } else if (result.error) {
+        console.error("Error creating post:", result.error);
+        toast({ title: "Error", description: result.error, variant: "destructive" });
+      }
     } else if (selectedPost) {
-      const updatedPost = { ...selectedPost, ...updates }
-      postService.updatePost(updatedPost.id, updates)
+      const result = await updateCalendarPostAction(selectedPost.id, updates);
+      if (result.data) {
       setPosts((prevPosts) =>
-        prevPosts.map((p) => (p.id === updatedPost.id ? updatedPost : p))
-      )
+          prevPosts.map((p) => (p.id === result.data!.id ? result.data! : p))
+        );
+        toast({ title: "Éxito", description: "Post actualizado correctamente." });
+      } else if (result.error) {
+        console.error("Error updating post:", result.error);
+        toast({ title: "Error", description: result.error, variant: "destructive" });
+      } else {
+        toast({ title: "Aviso", description: "No se realizaron cambios en el post." });
+      }
     }
-
+    setIsLoading(false);
     handleCloseModal()
   }
 
   const handleDeletePost = async (postId: string) => {
-    const success = await postService.deletePost(postId)
-    if (success) {
-      setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId))
+    setIsLoading(true);
+    const result = await deleteCalendarPostAction(postId);
+    if (result.success) {
+      setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
+      toast({ title: "Éxito", description: "Post eliminado correctamente." });
+    } else {
+      console.error("Error deleting post:", result.error);
+      toast({ title: "Error", description: result.error || "No se pudo eliminar el post.", variant: "destructive" });
     }
+    setIsLoading(false);
+    handleCloseModal();
   }
 
   const handleDragEnd = async (postId: string, newStartTime: Date) => {
-    const updatedPost = await postService.updatePost(postId, {
-      startTime: newStartTime,
-    })
-    if (updatedPost) {
+    setIsLoading(true);
+    const result = await updateCalendarPostAction(postId, { startTime: newStartTime });
+    if (result.data) {
       setPosts((prevPosts) =>
-        prevPosts.map((p) => (p.id === postId ? updatedPost : p))
-      )
+        prevPosts.map((p) => (p.id === postId ? result.data! : p))
+      );
+      toast({ title: "Éxito", description: "Post reprogramado correctamente." });
+    } else if (result.error) {
+      console.error("Error updating post on drag:", result.error);
+      toast({ title: "Error", description: result.error, variant: "destructive" });
     }
+    setIsLoading(false);
   }
 
   return (
@@ -160,7 +195,6 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
         subtitle="Planifica, crea y visualiza tu contenido semanal."
         actions={
           <div className="flex items-center gap-4">
-            {/* Left side */}
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={handleTodayClick}>
                 Hoy
@@ -186,7 +220,6 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
 
             <div className="flex-grow" />
 
-            {/* Right side */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Switch
@@ -242,18 +275,26 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
         }
       />
       <div className="mt-4 flex-grow rounded-lg shadow-sm border flex flex-col overflow-hidden">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full">
-            <p>Cargando calendario...</p>
+        {isLoading && (
+            <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-50">
+                <p>Procesando...</p>
           </div>
-        ) : (
-          <>
-            {/* Day Headers */}
+        )}
+        {isModalOpen && (
+          <PostEditorModal
+            isOpen={isModalOpen}
+            onOpenChange={handleCloseModal}
+            onPostUpdate={handleSavePost}
+            onPostDelete={handleDeletePost}
+            post={selectedPost}
+            isCreating={isCreating}
+          />
+        )}
             <div
               className="grid grid-cols-[5rem_repeat(7,minmax(0,1fr))] shrink-0 border-b"
               style={{ scrollbarGutter: 'stable' }}
             >
-              <div className="border-r bg-background"></div> {/* Empty corner */}
+          <div className="border-r bg-background"></div>
               {days.map((day) => (
                 <div
                   key={day.toString()}
@@ -284,7 +325,6 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
               className="flex-grow overflow-auto"
               style={{ scrollbarGutter: 'stable' }}
             >
-              {/* Calendar Body */}
               <CalendarGrid
                 posts={posts}
                 onPostClick={handlePostClick}
@@ -294,19 +334,7 @@ export function CalendarClientPage({ initialData }: CalendarClientPageProps) {
                 showOptimalHours={showOptimalHours}
               />
             </div>
-          </>
-        )}
       </div>
-      {isModalOpen && (
-        <PostEditorModal
-          post={selectedPost}
-          isCreating={isCreating}
-          isOpen={isModalOpen}
-          onOpenChange={handleCloseModal}
-          onPostUpdate={handleSavePost}
-          onPostDelete={handleDeletePost}
-        />
-      )}
     </>
   )
 } 
