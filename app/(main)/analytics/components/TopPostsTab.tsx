@@ -1,14 +1,17 @@
 import { InfoCard } from "@/components/shared/InfoCard";
 import { TopPostCard } from "./TopPostCard";
-import { mockTopPosts } from "@/lib/mock-data/top-posts";
 import { Lightbulb } from "lucide-react";
 import { TopPost } from "@/lib/types";
 
-export function TopPostsTab() {
+interface TopPostsTabProps {
+  data: TopPost[];
+}
+
+export function TopPostsTab({ data }: TopPostsTabProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-4">
-        {mockTopPosts.map((post: TopPost) => (
+        {data.map((post: TopPost) => (
           <TopPostCard key={post.id} post={post} />
         ))}
       </div>
