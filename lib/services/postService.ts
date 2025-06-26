@@ -1,10 +1,15 @@
 import { Post, PostStatus, PostCategory } from '@/lib/types';
-import { createClient } from '@/lib/supabase/server';
-import { cookies } from 'next/headers';
+import { createClient as createBrowserClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 
+// Helper function to create appropriate Supabase client
+function getSupabaseClient() {
+  // Always use browser client for now to avoid server/client conflicts
+  return createBrowserClient();
+}
+
 // Helper function to get company ID for the current user
-async function getCompanyIdForCurrentUser(supabase: ReturnType<typeof createClient>): Promise<string> {
+async function getCompanyIdForCurrentUser(supabase: ReturnType<typeof createBrowserClient>): Promise<string> {
   const { data: { user }, error: userError } = await supabase.auth.getUser();
   if (userError || !user) {
     throw new Error('User not authenticated or error fetching user.');
@@ -49,7 +54,7 @@ function mapDbRowToPost(row: any): Post {
 
 // Helper to get ID from a dimension table
 async function getDimensionId(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ReturnType<typeof createBrowserClient>,
   dimensionTable: 'dim_post_status' | 'dim_post_categories' | 'dim_content_types' | 'dim_platforms',
   name: string
 ): Promise<number | null> {
@@ -71,7 +76,7 @@ async function getDimensionId(
 
 // Helper to get social_account_id
 async function getSocialAccountId(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ReturnType<typeof createBrowserClient>,
   platformName: string, // e.g., 'instagram'
   companyId: string
 ): Promise<string | null> {
@@ -110,8 +115,7 @@ export const postService = {
    * En una implementación real, se usarían startDate y endDate para filtrar en el backend.
    */
   async getPosts(startDate?: Date, endDate?: Date): Promise<Post[]> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     const company_id = await getCompanyIdForCurrentUser(supabase);
 
     let query = supabase
@@ -182,8 +186,7 @@ export const postService = {
    * Actualiza un post existente, principalmente su fecha de inicio.
    */
   async updatePost(postId: string, updates: Partial<Post>): Promise<Post | null> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     const company_id = await getCompanyIdForCurrentUser(supabase);
 
     // Primero, verificar que el post existe y pertenece a la compañía
@@ -259,8 +262,7 @@ export const postService = {
    * Crea un nuevo post.
    */
   async createPost(postData: Partial<Post>): Promise<Post> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     const company_id = await getCompanyIdForCurrentUser(supabase);
 
     if (!postData.platform || !postData.status || !postData.category || !postData.startTime || !postData.content) {
@@ -327,8 +329,7 @@ export const postService = {
    * Obtiene un solo post por su ID.
    */
   async getPostById(postId: string): Promise<Post | null> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     const company_id = await getCompanyIdForCurrentUser(supabase);
 
     const selectQuery = `
@@ -380,8 +381,7 @@ export const postService = {
   },
 
   async deletePost(postId: string): Promise<boolean> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     const company_id = await getCompanyIdForCurrentUser(supabase);
 
     // Verificar que el post pertenece a la compañía antes de borrar
@@ -414,8 +414,7 @@ export const postService = {
   },
 
   async seedPostsForCompany(companyId: string, postsToSeed: Post[]): Promise<{ seeded: number; errors: any[] }> {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = getSupabaseClient();
     let seededCount = 0;
     const errorDetails: any[] = [];
 
